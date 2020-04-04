@@ -22,6 +22,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <hackman.trevor.copycat.ui.color_button.ColorButton
+        android:id="@+id/color_button_top_left"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/color_button_margin"
@@ -32,6 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <hackman.trevor.copycat.ui.color_button.ColorButton
+        android:id="@+id/color_button_top_right"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/color_button_margin"
@@ -42,6 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <hackman.trevor.copycat.ui.color_button.ColorButton
+        android:id="@+id/color_button_bottom_left"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/color_button_margin"
@@ -52,6 +55,7 @@
         app:layout_constraintTop_toTopOf="@id/horizontal_guide" />
 
     <hackman.trevor.copycat.ui.color_button.ColorButton
+        android:id="@+id/color_button_bottom_right"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/color_button_margin"

@@ -1,22 +1,28 @@
 package hackman.trevor.copycat
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.sound.SoundManager
-import kotlinx.android.synthetic.main.activity_main.*
+import hackman.trevor.copycat.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
+    private val injectorViewModel: Inject by viewModels<InjectorViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val ads = AdManager(this)
         val sounds = SoundManager(this)
+        injectorViewModel.inject(ads, sounds)
 
-        setContentView(R.layout.activity_main)
-        ad_container.addView(ads.getBannerAd())
+        setContentView(R.layout.fragment_container)
+        supportFragmentManager.beginTransaction().add(
+            R.id.fragment_container,
+            MainFragment()
+        ).commit()
 
         log("Logging is working")
     }

@@ -2,6 +2,7 @@ package hackman.trevor.copycat.ui.color_button
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageButton
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.sound.Sound
@@ -20,12 +21,15 @@ class ColorButton @JvmOverloads constructor(
         }
     }
 
-    fun setUp(sound: Sound, color: Int? = null) {
-        this.sound = sound
+    fun setup(sound: Sound? = null, color: Int? = null) {
+        sound?.let { this.sound = sound }
         color?.let { buttonColor = it }
 
-        setOnTouchListener { v, event ->
-            TODO("Not yet implemented")
+        setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> playSound()
+            }
+            view?.onTouchEvent(event) ?: true
         }
     }
 
