@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="classic0">#40FF00</color>
+    <color name="classic1">#FF4000</color>
+    <color name="classic2">#FFFF40</color>
+    <color name="classic3">#2020FF</color>
+
+    <color name="warm0">@color/Yellow500</color>
+    <color name="warm1">@color/Amber500</color>
+    <color name="warm2">@color/Orange500</color>
+    <color name="warm3">@color/DeepOrange900</color>
+
+    <color name="cool0">@color/CyanAccent700</color>
+    <color name="cool1">@color/Blue500</color>
+    <color name="cool2">@color/Indigo500</color>
+    <color name="cool3">@color/Indigo900</color>
+
+    <color name="royal0">#bd2a89</color>
+    <color name="royal1">#bd2aba</color>
+    <color name="royal2">#8f2abd</color>
+    <color name="royal3">#5d2abd</color>
+
+    <color name="inverted0">#BF00FF</color>
+    <color name="inverted1">#00BFFF</color>
+    <color name="inverted2">#0000BF</color>
+    <color name="inverted3">#DFDF00</color>
+
+    <color name="greyed">@color/Grey700</color>
+</resources>

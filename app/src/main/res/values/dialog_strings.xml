@@ -1,0 +1,50 @@
+<resources>
+    <!-- Common -->
+    <string name="dialog_cancel_button">@string/cancel</string>
+    <string name="dialog_ok_button">OK</string>
+    <!---->
+
+    <!-- Leave game dialog -->
+    <string name="dialog_exit_title">Are you sure you want to leave?</string>
+    <string name="dialog_exit_message">Your current game will be lost</string>
+    <string name="dialog_exit_button">Exit App</string>
+    <string name="dialog_exit_main_menu_button">@string/main_menu</string>
+    <!---->
+
+    <!-- More games dialog -->
+    <string name="dialog_more_games_title">More Games</string>
+    <string name="dialog_more_games_message">View other games made by me.</string>
+    <string name="dialog_more_games_view_button">View</string>
+    <!---->
+
+    <!-- Rate the app dialog -->
+    <string name="dialog_rate_app_title">Rate App</string>
+    <string name="dialog_rate_app_message">Simon Says is made by a single person so your reviews mean a lot. Thank you for the effort.</string>
+    <string name="dialog_rate_app_rate_button">Rate</string>
+    <!---->
+
+    <!-- Purchase dialog -->
+    <string name="dialog_no_ads_title">Remove Ads</string>
+    <string name="dialog_no_ads_message">Purchase the game to permanently remove ads!</string>
+    <string name="dialog_no_ads_button">Purchase</string>
+    <!---->
+
+    <!-- Successful purchase dialog -->
+    <string name="dialog_purchase_success_title">Purchase Successful!</string>
+    <string name="dialog_purchase_success_message">You will never receive ads again! Thank you very much for your support.</string>
+    <!---->
+
+    <!-- Already purchased dialog -->
+    <string name="dialog_already_purchased_title">Already Purchased</string>
+    <string name="dialog_already_purchased_message">You have already purchased the game. You will never receive ads.</string>
+    <!---->
+
+    <!-- Failed network dialog -->
+    <string name="dialog_failed_network_title">Network Error</string>
+    <string name="dialog_failed_network_message">Check internet connection or try again later.</string>
+    <!---->
+
+    <!-- Unknown error dialog -->
+    <string name="dialog_unknown_error_title">Unknown Error</string>
+    <!---->
+</resources>
