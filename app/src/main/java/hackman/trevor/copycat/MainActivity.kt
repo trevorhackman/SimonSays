@@ -1,7 +1,6 @@
 package hackman.trevor.copycat
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.log
@@ -9,7 +8,7 @@ import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
-    private val injectorViewModel: Inject by viewModels<InjectorViewModel>()
+    private val injectorViewModel: Injector by injector()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

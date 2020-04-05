@@ -1,10 +1,16 @@
 package hackman.trevor.copycat
 
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.sound.SoundManager
 
-class InjectorViewModel : ViewModel(), Inject, SoundProvider, AdProvider {
+fun MainActivity.injector(): Lazy<Injector> = this.viewModels<InjectorViewModel>()
+fun BaseFragment.soundProvider(): Lazy<SoundProvider> = this.activityViewModels<InjectorViewModel>()
+fun BaseFragment.adProvider(): Lazy<AdProvider> = this.activityViewModels<InjectorViewModel>()
+
+private class InjectorViewModel : ViewModel(), Injector, SoundProvider, AdProvider {
     override lateinit var ads: AdManager
     override lateinit var sounds: SoundManager
 
@@ -14,7 +20,7 @@ class InjectorViewModel : ViewModel(), Inject, SoundProvider, AdProvider {
     }
 }
 
-interface Inject {
+interface Injector {
     fun inject(ads: AdManager, sounds: SoundManager)
 }
 

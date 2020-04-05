@@ -14,5 +14,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <include layout="@layout/color_grid"/>
+    <include layout="@layout/color_grid" />
+
+    <include layout="@layout/title"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
