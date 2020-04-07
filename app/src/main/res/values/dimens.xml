@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="color_button_margin">6dp</dimen>
-    <dimen name="title_side_margin">16dp</dimen>
+    <dimen name="main_color_button_margin">6dp</dimen>
+    <dimen name="main_title_side_margin">16dp</dimen>
+    <dimen name="main_buttons_screen_margin">12dp</dimen>
+    <dimen name="main_game_modes_button_bottom_margin">16dp</dimen>
 </resources>

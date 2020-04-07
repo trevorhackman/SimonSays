@@ -9,7 +9,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:resizeableActivity="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsPictureInPicture="false"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
