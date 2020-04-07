@@ -10,7 +10,7 @@ fun MainActivity.injector(): Lazy<Injector> = this.viewModels<InjectorViewModel>
 fun BaseFragment.soundProvider(): Lazy<SoundProvider> = this.activityViewModels<InjectorViewModel>()
 fun BaseFragment.adProvider(): Lazy<AdProvider> = this.activityViewModels<InjectorViewModel>()
 
-private class InjectorViewModel : ViewModel(), Injector, SoundProvider, AdProvider {
+class InjectorViewModel : ViewModel(), Injector, SoundProvider, AdProvider {
     override lateinit var ads: AdManager
     override lateinit var sounds: SoundManager
 

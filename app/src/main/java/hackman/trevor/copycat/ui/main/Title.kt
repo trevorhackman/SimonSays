@@ -5,6 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.system.displayHeight
+import hackman.trevor.copycat.system.displayWidth
 import kotlin.math.min
 
 class Title @JvmOverloads constructor(
@@ -19,6 +21,14 @@ class Title @JvmOverloads constructor(
         setImageResource(R.drawable.title)
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = MeasureSpec.makeMeasureSpec(determineWidth(), MeasureSpec.EXACTLY)
+        super.onMeasure(width, heightMeasureSpec)
+    }
+
+    private fun determineWidth(): Int =
+        min((displayWidth() + 3 * displayHeight()) / 4, displayWidth())
+
     fun popIn() {
         animate()
             .scaleX(1.0f)
@@ -27,21 +37,6 @@ class Title @JvmOverloads constructor(
             .setDuration(titlePopDuration.toLong())
             .interpolator = interpolator
     }
-
-    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        super.onSizeChanged(width, height, oldWidth, oldHeight)
-        if (width != 0 && height != 0) determineSize(width, height)
-    }
-
-    private fun determineSize(width: Int, height: Int) {
-        val layoutParams = layoutParams
-        layoutParams.width = if (isPortrait(width, height)) width else min((width + 3 * height) / 4, width)
-        this.layoutParams = layoutParams
-        context.resources.displayMetrics.widthPixels
-        context.resources.displayMetrics.heightPixels
-    }
-
-    private fun isPortrait(width: Int, height: Int) = width <= height
 
     companion object {
         private const val titlePopDuration = 1100

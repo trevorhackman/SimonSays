@@ -14,13 +14,18 @@ class MainFragment : BaseFragment() {
 
     private val sounds: SoundProvider by soundProvider()
 
+    private var popInRan: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupColorButtons()
     }
 
     override fun onResume() {
         super.onResume()
-        main_title.popIn()
+        if (!popInRan) {
+            main_title.popIn()
+            popInRan = true
+        }
     }
 
     private fun setupColorButtons() {
