@@ -12,8 +12,4 @@ class SettingsButton @JvmOverloads constructor(
     init {
         background = getDrawable(R.drawable.gear)
     }
-
-    override fun click() {
-
-    }
 }

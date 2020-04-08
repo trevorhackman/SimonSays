@@ -12,8 +12,4 @@ class RemoveAdsButton @JvmOverloads constructor(
     init {
         background = getDrawable(R.drawable.no_ads)
     }
-
-    override fun click() {
-
-    }
 }

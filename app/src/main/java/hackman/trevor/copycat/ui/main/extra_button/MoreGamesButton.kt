@@ -3,20 +3,23 @@ package hackman.trevor.copycat.ui.main.extra_button
 import android.content.Context
 import android.util.AttributeSet
 import hackman.trevor.copycat.R
-import hackman.trevor.copycat.system.Color
-import hackman.trevor.copycat.system.createRippleDrawable
+import hackman.trevor.copycat.system.ShowMoreGames
 import hackman.trevor.copycat.system.getDrawable
+import hackman.trevor.copycat.ui.DialogFactory
 
 class MoreGamesButton @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    init {
-        background = createRippleDrawable(getDrawable(R.drawable.more_games_base), Color.White)
+    private val moreGamesDialog = DialogFactory(context).viewMoreGames {
+        ShowMoreGames.startMoreGamesIntent(context)
     }
 
-    override fun click() {
-
+    init {
+        background = getDrawable(R.drawable.more_games)
+        setOnClickListener {
+            moreGamesDialog.show()
+        }
     }
 }

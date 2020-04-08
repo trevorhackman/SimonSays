@@ -1,8 +1,7 @@
-package hackman.trevor.copycat.system
+package hackman.trevor.copycat.ui
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import hackman.trevor.copycat.R
 
 class DialogFactory(private val context: Context) {
@@ -14,10 +13,8 @@ class DialogFactory(private val context: Context) {
         buildStyle()
             .setTitle(R.string.dialog_exit_title)
             .setMessage(R.string.dialog_exit_message)
-            .setPositiveButton(R.string.dialog_exit_button,
-                DialogInterface.OnClickListener { _, _ -> onExit() })
-            .setNeutralButton(R.string.dialog_exit_main_menu_button,
-                DialogInterface.OnClickListener { _, _ -> onMainMenu() })
+            .setPositiveButton(R.string.dialog_exit_button) { _, _ -> onExit() }
+            .setNeutralButton(R.string.dialog_exit_main_menu_button) { _, _ -> onMainMenu() }
             .setNegativeButton(R.string.dialog_cancel_button, null)
             .create()
 
@@ -25,8 +22,7 @@ class DialogFactory(private val context: Context) {
         buildStyle()
             .setTitle(R.string.dialog_more_games_title)
             .setMessage(R.string.dialog_more_games_message)
-            .setPositiveButton(R.string.dialog_more_games_view_button,
-                DialogInterface.OnClickListener { _, _ -> onViewMoreGames() })
+            .setPositiveButton(R.string.dialog_more_games_view_button) { _, _ -> onViewMoreGames() }
             .setNegativeButton(R.string.dialog_cancel_button, null)
             .create()
 
@@ -34,8 +30,7 @@ class DialogFactory(private val context: Context) {
         buildStyle()
             .setTitle(R.string.dialog_rate_app_title)
             .setMessage(R.string.dialog_rate_app_message)
-            .setPositiveButton(R.string.dialog_rate_app_rate_button,
-                DialogInterface.OnClickListener { _, _ -> onRate() })
+            .setPositiveButton(R.string.dialog_rate_app_rate_button) { _, _ -> onRate() }
             .setNegativeButton(R.string.dialog_cancel_button, null)
             .create()
 
@@ -43,8 +38,7 @@ class DialogFactory(private val context: Context) {
         buildStyle()
             .setTitle(R.string.dialog_no_ads_title)
             .setMessage(R.string.dialog_no_ads_message)
-            .setPositiveButton(R.string.dialog_no_ads_button,
-                DialogInterface.OnClickListener { _, _ -> onPurchase() })
+            .setPositiveButton(R.string.dialog_no_ads_button) { _, _ -> onPurchase() }
             .setNegativeButton(R.string.dialog_cancel_button, null)
             .create()
 
