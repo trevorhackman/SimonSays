@@ -26,6 +26,7 @@ import hackman.trevor.copycat.system.report
  * Banner has retry policy when it fails to load. Interstitial does not.
  */
 class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
+
     init {
         mainActivity.lifecycle.addObserver(this)
     }

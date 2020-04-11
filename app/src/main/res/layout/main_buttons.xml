@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <hackman.trevor.copycat.ui.main.extra_button.MoreGamesButton
+        android:id="@+id/more_games_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_buttons_screen_margin"
+        android:layout_marginLeft="@dimen/main_buttons_screen_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/no_ads_button"/>
+
+    <hackman.trevor.copycat.ui.main.extra_button.RemoveAdsButton
+        android:id="@+id/no_ads_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_buttons_screen_margin"
+        android:layout_marginLeft="@dimen/main_buttons_screen_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <hackman.trevor.copycat.ui.main.extra_button.RateAppButton
+        android:id="@+id/rate_app_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_buttons_screen_margin"
+        android:layout_marginRight="@dimen/main_buttons_screen_margin"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/settings_button"/>
+
+    <hackman.trevor.copycat.ui.main.extra_button.SettingsButton
+        android:id="@+id/settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_buttons_screen_margin"
+        android:layout_marginRight="@dimen/main_buttons_screen_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <hackman.trevor.copycat.ui.main.GameModesButton
+        android:id="@+id/game_modes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_game_modes_button_bottom_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</merge>

@@ -12,8 +12,10 @@ class RateAppButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    private val rateTheAppDialog = DialogFactory(context).rateTheApp {
-        RateTheApp.startRateAppIntent(context)
+    private val rateTheAppDialog by lazy {
+        DialogFactory(context).rateTheApp {
+            RateTheApp.startRateAppIntent(context)
+        }
     }
 
     init {

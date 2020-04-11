@@ -4,12 +4,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
-import hackman.trevor.copycat.system.Color
-import hackman.trevor.copycat.system.displayMinimum
-import hackman.trevor.copycat.system.dpToPixel
-import hackman.trevor.copycat.system.getString
+import hackman.trevor.copycat.system.*
 import kotlin.math.min
 
 class GameModesButton @JvmOverloads constructor(
@@ -19,7 +17,7 @@ class GameModesButton @JvmOverloads constructor(
 
     init {
         text = getString(R.string.game_modes_button)
-        textSize = displayMinimum() * .028f
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .075f)
         setTextColor(Color.White)
     }
 
@@ -33,11 +31,11 @@ class GameModesButton @JvmOverloads constructor(
         val radius = min * .4f
         val strokeWidth = dpToPixel(6)
 
-        return GradientDrawable().apply {
+        return createRippleDrawable(GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             setColor(Color.Grey900)
             cornerRadius = radius
             setStroke(strokeWidth, Color.Black)
-        }
+        }, Color.White)
     }
 }

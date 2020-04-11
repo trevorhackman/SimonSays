@@ -12,20 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/main_buttons_screen_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rate_app_button"
+        app:layout_constraintEnd_toStartOf="@id/no_ads_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <hackman.trevor.copycat.ui.main.extra_button.RateAppButton
-        android:id="@+id/rate_app_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/main_buttons_screen_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/no_ads_button"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/more_games_button" />
 
     <hackman.trevor.copycat.ui.main.extra_button.RemoveAdsButton
         android:id="@+id/no_ads_button"
@@ -33,9 +23,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/main_buttons_screen_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/settings_button"
+        app:layout_constraintEnd_toStartOf="@id/rate_app_button"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/rate_app_button" />
+        app:layout_constraintStart_toEndOf="@id/more_games_button" />
+
+    <hackman.trevor.copycat.ui.main.extra_button.RateAppButton
+        android:id="@+id/rate_app_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/main_buttons_screen_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/settings_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/no_ads_button" />
 
     <hackman.trevor.copycat.ui.main.extra_button.SettingsButton
         android:id="@+id/settings_button"
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/no_ads_button" />
+        app:layout_constraintStart_toEndOf="@id/rate_app_button" />
 
     <hackman.trevor.copycat.ui.main.GameModesButton
         android:id="@+id/game_modes_button"

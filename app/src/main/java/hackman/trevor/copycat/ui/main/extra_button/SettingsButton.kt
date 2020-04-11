@@ -9,6 +9,7 @@ class SettingsButton @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
+
     init {
         background = getDrawable(R.drawable.gear)
     }

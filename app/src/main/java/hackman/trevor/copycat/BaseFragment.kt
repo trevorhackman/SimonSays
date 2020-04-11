@@ -1,6 +1,7 @@
 package hackman.trevor.copycat
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,4 +24,8 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+    }
 }

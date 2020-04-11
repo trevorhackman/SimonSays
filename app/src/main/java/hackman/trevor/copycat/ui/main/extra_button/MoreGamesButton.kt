@@ -12,8 +12,10 @@ class MoreGamesButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    private val moreGamesDialog = DialogFactory(context).viewMoreGames {
-        ShowMoreGames.startMoreGamesIntent(context)
+    private val moreGamesDialog by lazy {
+        DialogFactory(context).viewMoreGames {
+            ShowMoreGames.startMoreGamesIntent(context)
+        }
     }
 
     init {

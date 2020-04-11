@@ -10,9 +10,7 @@ import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
 
-class SoundManager(
-    private val mainActivity: MainActivity
-) : LifecycleObserver {
+class SoundManager(private val mainActivity: MainActivity) : LifecycleObserver {
     private var soundPool: SoundPool? = null
 
     private val allSounds = mutableListOf<SoundImpl>()
