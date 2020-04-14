@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+
+    <string name="settings_setting_speed">Speed</string>
+    <string name="settings_speed_normal">Normal</string>
+    <string name="settings_speed_fast">Fast</string>
+    <string name="settings_speed_extreme">Extreme</string>
+    <string name="settings_speed_insane">Insane</string>
+
+    <string name="settings_setting_color">Colors</string>
+    <string name="settings_color_classic">Classic</string>
+    <string name="settings_color_warm">Warm</string>
+    <string name="settings_color_cool">Cool</string>
+    <string name="settings_color_royal">Royal</string>
+    <string name="settings_color_inverted">Inverted</string>
+    <string name="settings_color_greyed">Greyed</string>
+</resources>

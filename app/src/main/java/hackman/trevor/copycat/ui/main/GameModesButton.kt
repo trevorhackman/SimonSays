@@ -16,7 +16,7 @@ class GameModesButton @JvmOverloads constructor(
 ) : AppCompatButton(context, attributeSet) {
 
     init {
-        text = getString(R.string.game_modes_button)
+        text = getString(R.string.main_game_modes_button)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .075f)
         setTextColor(Color.White)
     }

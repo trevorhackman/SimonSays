@@ -1,13 +1,21 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowFullscreen">true</item> <!-- This makes app full screen -->
+        <item name="android:windowFullscreen">true</item>
         <item name="android:soundEffectsEnabled">false</item>
+    </style>
+
+    <style name="BoldText">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textStyle">bold</item>
+
+        <item name="android:shadowColor">@color/Black</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowDx">4</item>
+        <item name="android:shadowDy">1</item>
     </style>
 
 </resources>

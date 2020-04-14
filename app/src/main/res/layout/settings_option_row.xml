@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/settings_option_row_margin"
+    android:orientation="horizontal"
+    tools:background="@color/colorAccentDarkDark">
+
+    <hackman.trevor.copycat.ui.settings.SettingsOption
+        android:id="@+id/settings_option"
+        style="@style/BoldText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="right"
+        tools:text="Option" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <hackman.trevor.copycat.ui.settings.SettingsArrowButton
+            android:id="@+id/settings_left_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/left_arrow" />
+
+        <hackman.trevor.copycat.ui.settings.SettingsOptionValue
+            android:id="@+id/settings_option_value"
+            style="@style/BoldText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            tools:text="Value" />
+
+        <hackman.trevor.copycat.ui.settings.SettingsArrowButton
+            android:id="@+id/settings_right_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/right_arrow" />
+    </LinearLayout>
+
+</LinearLayout>
