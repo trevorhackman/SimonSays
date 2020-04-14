@@ -1,9 +1,10 @@
-package hackman.trevor.copycat.logic
+package hackman.trevor.copycat.logic.enums
 
 import androidx.annotation.StringRes
 import hackman.trevor.copycat.R
 
-enum class Speed(@StringRes override val nameId: Int) : NameId {
+enum class Speed(@StringRes override val nameId: Int) :
+    NameId {
     Normal(R.string.settings_speed_normal),
     Fast(R.string.settings_speed_fast),
     Extreme(R.string.settings_speed_extreme),

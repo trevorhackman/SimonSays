@@ -2,9 +2,9 @@ package hackman.trevor.copycat.system
 
 import android.content.Context
 import android.content.SharedPreferences
-import hackman.trevor.copycat.logic.ColorSet
 import hackman.trevor.copycat.logic.GameMode
-import hackman.trevor.copycat.logic.Speed
+import hackman.trevor.copycat.logic.enums.ColorSet
+import hackman.trevor.copycat.logic.enums.Speed
 
 class SaveData private constructor(context: Context) {
     companion object {

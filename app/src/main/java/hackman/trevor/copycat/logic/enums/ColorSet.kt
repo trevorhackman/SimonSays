@@ -1,9 +1,10 @@
-package hackman.trevor.copycat.logic
+package hackman.trevor.copycat.logic.enums
 
 import androidx.annotation.StringRes
 import hackman.trevor.copycat.R
 
-enum class ColorSet(@StringRes override val nameId: Int) : NameId {
+enum class ColorSet(@StringRes override val nameId: Int) :
+    NameId {
     Classic(R.string.settings_color_classic),
     Warm(R.string.settings_color_warm),
     Blues(R.string.settings_color_cool),
