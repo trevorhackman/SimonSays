@@ -8,6 +8,7 @@ import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.*
+import hackman.trevor.copycat.system.sound.SoundManager
 import kotlin.math.min
 
 class GameModesButton @JvmOverloads constructor(
@@ -15,10 +16,19 @@ class GameModesButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : AppCompatButton(context, attributeSet) {
 
+    private lateinit var soundManager: SoundManager
+
     init {
         text = getString(R.string.main_game_modes_button)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .075f)
         setTextColor(Color.White)
+        setOnClickListener {
+            soundManager.click.play()
+        }
+    }
+
+    fun setup(soundManager: SoundManager) {
+        this.soundManager = soundManager
     }
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {

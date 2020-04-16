@@ -23,24 +23,38 @@ class MainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupColorButtons()
+        setupMoreGamesButton()
         setupNoAdsButton()
+        setupRateAppButton()
         setupSettingsButton()
         setupSettingsMenu()
+        setupGameModesButton()
         observeColorSettings()
     }
 
     private fun setupColorButtons() {
-        color_button_top_left.setup(sound = sounds.sounds.chip1)
-        color_button_top_right.setup(sound = sounds.sounds.chip2)
-        color_button_bottom_left.setup(sound = sounds.sounds.chip3)
-        color_button_bottom_right.setup(sound = sounds.sounds.chip4)
+        color_button_top_left.setup(sound = sounds.soundManager.chip1)
+        color_button_top_right.setup(sound = sounds.soundManager.chip2)
+        color_button_bottom_left.setup(sound = sounds.soundManager.chip3)
+        color_button_bottom_right.setup(sound = sounds.soundManager.chip4)
     }
 
-    private fun setupNoAdsButton() = no_ads_button.setup(billing.billing)
+    private fun setupMoreGamesButton() = more_games_button.setup(sounds.soundManager)
 
-    private fun setupSettingsButton() = settings_button.setup(settingsViewModel)
+    private fun setupNoAdsButton() =
+        no_ads_button.setup(sounds.soundManager, billing.billingManager)
 
-    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.sounds)
+    private fun setupRateAppButton() =
+        rate_app_button.setup(sounds.soundManager)
+
+    private fun setupSettingsButton() =
+        settings_button.setup(sounds.soundManager, settingsViewModel)
+
+    private fun setupSettingsMenu() =
+        settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.soundManager)
+
+    private fun setupGameModesButton() =
+        game_modes_button.setup(sounds.soundManager)
 
     private fun observeColorSettings() =
         observe(settingsViewModel.colorSet) {

@@ -14,29 +14,33 @@ fun BaseFragment.billingProvider(): Lazy<BillingProvider> =
     this.activityViewModels<InjectorViewModel>()
 
 class InjectorViewModel : ViewModel(), Injector, SoundProvider, AdProvider, BillingProvider {
-    override lateinit var ads: AdManager
-    override lateinit var sounds: SoundManager
-    override lateinit var billing: BillingManager
+    override lateinit var adManager: AdManager
+    override lateinit var soundManager: SoundManager
+    override lateinit var billingManager: BillingManager
 
-    override fun inject(ads: AdManager, sounds: SoundManager, billing: BillingManager) {
-        this.ads = ads
-        this.sounds = sounds
-        this.billing = billing
+    override fun inject(
+        adManager: AdManager,
+        soundManager: SoundManager,
+        billingManager: BillingManager
+    ) {
+        this.adManager = adManager
+        this.soundManager = soundManager
+        this.billingManager = billingManager
     }
 }
 
 interface Injector {
-    fun inject(ads: AdManager, sounds: SoundManager, billing: BillingManager)
+    fun inject(adManager: AdManager, soundManager: SoundManager, billingManager: BillingManager)
 }
 
 interface SoundProvider {
-    val sounds: SoundManager
+    val soundManager: SoundManager
 }
 
 interface AdProvider {
-    val ads: AdManager
+    val adManager: AdManager
 }
 
 interface BillingProvider {
-    val billing: BillingManager
+    val billingManager: BillingManager
 }

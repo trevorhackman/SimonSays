@@ -26,11 +26,15 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
         set(value) {
             field = value
             settings_option_value.text = getString(value.nameId)
-            settings_left_arrow.isEnabled = value != constants.first()
-            settings_right_arrow.isEnabled = value != constants.last()
+            settings_left_arrow.isEnabled = isLeftArrowEnabled()
+            settings_right_arrow.isEnabled = isRightArrowEnabled()
             saveValueSelected()
             onChangeListener(value)
         }
+
+    private fun isLeftArrowEnabled() = optionSelected != constants.first()
+
+    private fun isRightArrowEnabled() = optionSelected != constants.last()
 
     init {
         View.inflate(context, R.layout.settings_option_row, this)
@@ -59,8 +63,8 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        settings_left_arrow.isEnabled = enabled
-        settings_right_arrow.isEnabled = enabled
+        settings_left_arrow.isEnabled = enabled && isLeftArrowEnabled()
+        settings_right_arrow.isEnabled = enabled && isRightArrowEnabled()
     }
 }
 
