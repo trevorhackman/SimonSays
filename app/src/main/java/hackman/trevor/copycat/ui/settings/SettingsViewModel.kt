@@ -13,7 +13,7 @@ class SettingsViewModel : ViewModel() {
         _colorSet.value = colorSet
     }
 
-    private val _inBackground = MutableLiveData<Boolean>(true)
+    private val _inBackground: MutableLiveData<Boolean> = MutableLiveData(true)
     val inBackground: LiveData<Boolean> = _inBackground
 
     fun setInBackground(inBackground: Boolean) {
@@ -21,7 +21,7 @@ class SettingsViewModel : ViewModel() {
             _inBackground.value = inBackground
     }
 
-    private val _hidden = MutableLiveData<Boolean>(true)
+    private val _hidden: MutableLiveData<Boolean> = MutableLiveData(true)
     val hidden: LiveData<Boolean> = _hidden
 
     fun setHidden(hidden: Boolean) {

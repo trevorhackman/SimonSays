@@ -74,6 +74,7 @@ class MainFragment : BaseFragment() {
                 if (!inBackground) settingsViewModel.setInBackground(true)
                 inBackground
             }
+
         }
 
     private fun observeSettingsHidden() =
