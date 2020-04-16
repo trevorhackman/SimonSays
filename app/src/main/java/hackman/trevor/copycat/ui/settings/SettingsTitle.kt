@@ -15,6 +15,6 @@ class SettingsTitle @JvmOverloads constructor(
 
     init {
         text = getString(R.string.settings_title)
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .15f)
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .11f)
     }
 }

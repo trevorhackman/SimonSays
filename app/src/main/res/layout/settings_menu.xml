@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_above="@+id/settings_menu"
-    android:layout_gravity="center"
-    android:background="@drawable/bordered_rectangle_dark">
+    android:background="@drawable/bordered_rectangle_dark"
+    android:padding="@dimen/settings_title_screen_margin"
+    tools:layout_gravity="center">
 
     <hackman.trevor.copycat.ui.settings.SettingsTitle
         android:id="@+id/settings_title"
         style="@style/BoldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/settings_title_screen_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,8 +21,6 @@
         android:id="@+id/settings_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:background="@drawable/block"
         android:focusable="false"
         app:layout_constraintTop_toBottomOf="@id/settings_title"
@@ -33,21 +30,20 @@
         android:id="@+id/settings_option_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_divider"/>
+        app:layout_constraintTop_toBottomOf="@id/settings_divider" />
 
     <hackman.trevor.copycat.ui.settings.SettingsColorRow
         android:id="@+id/settings_option_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_option_speed"/>
+        app:layout_constraintTop_toBottomOf="@id/settings_option_speed" />
 
     <Button
         android:id="@+id/settings_close_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="800dp"
         android:background="@drawable/bordered_rectangle_light"
-        android:padding="0dp"
         android:text="@string/close"
         android:textSize="20dp"
         android:textStyle="bold"

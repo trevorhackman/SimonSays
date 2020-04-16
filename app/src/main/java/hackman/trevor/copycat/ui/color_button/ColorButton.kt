@@ -21,9 +21,12 @@ class ColorButton @JvmOverloads constructor(
         }
     }
 
-    fun setup(sound: Sound? = null, color: Int? = null) {
+    fun setup(sound: Sound? = null, colorInt: Int? = null) {
         sound?.let { this.sound = sound }
-        color?.let { buttonColor = it }
+        colorInt?.let {
+            buttonColor = it
+            createBackground(width, height)
+        }
 
         setOnTouchListener { view, event ->
             when (event.action) {

@@ -12,6 +12,6 @@ class SettingsOption @JvmOverloads constructor(
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .05f)
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .07f)
     }
 }

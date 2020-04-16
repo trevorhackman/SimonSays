@@ -5,17 +5,23 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.RippleDrawable
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import kotlin.math.min
 
-fun View.getString(resId: Int) = this.context.getString(resId)
+fun View.getString(resId: Int) = context.getString(resId)
 
-fun View.getString(resId: Int, vararg args: Any) = this.context.getString(resId, args)
+fun View.getString(resId: Int, vararg args: Any) = context.getString(resId, args)
 
-fun View.getDrawable(id: Int) = this.context.getDrawable(id)
+fun View.getColor(resId: Int) = ContextCompat.getColor(context, resId)
 
-fun View.displayWidth() = this.context.resources.displayMetrics.widthPixels
+fun Fragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
 
-fun View.displayHeight() = this.context.resources.displayMetrics.heightPixels
+fun View.getDrawable(id: Int) = context.getDrawable(id)
+
+fun View.displayWidth() = context.resources.displayMetrics.widthPixels
+
+fun View.displayHeight() = context.resources.displayMetrics.heightPixels
 
 fun View.displayMinimum() = min(displayWidth(), displayHeight())
 

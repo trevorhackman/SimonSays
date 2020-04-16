@@ -10,7 +10,8 @@ import hackman.trevor.copycat.system.sound.SoundManager
 fun MainActivity.injector(): Lazy<Injector> = this.viewModels<InjectorViewModel>()
 fun BaseFragment.soundProvider(): Lazy<SoundProvider> = this.activityViewModels<InjectorViewModel>()
 fun BaseFragment.adProvider(): Lazy<AdProvider> = this.activityViewModels<InjectorViewModel>()
-fun BaseFragment.billingProvider(): Lazy<BillingProvider> = this.activityViewModels<InjectorViewModel>()
+fun BaseFragment.billingProvider(): Lazy<BillingProvider> =
+    this.activityViewModels<InjectorViewModel>()
 
 class InjectorViewModel : ViewModel(), Injector, SoundProvider, AdProvider, BillingProvider {
     override lateinit var ads: AdManager

@@ -12,7 +12,7 @@ class SettingsOptionValue @JvmOverloads constructor(
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .04f)
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .05f)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
