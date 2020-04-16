@@ -13,7 +13,7 @@ fun View.fadeIn(startAction: () -> Unit, endAction: () -> Unit) {
 }
 
 fun View.fadeOut(startAction: () -> Unit, endAction: () -> Unit) {
-    animate().alpha(0.5f)
+    animate().alpha(0f)
         .setDuration(fadeOutDuration)
         .withStartAction(startAction)
         .withEndAction(endAction)

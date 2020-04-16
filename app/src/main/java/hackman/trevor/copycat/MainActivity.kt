@@ -10,7 +10,7 @@ import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
-    private val injectorViewModel: Injector by injector()
+    private val activityInterface: ActivityInterface by injector()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val ads = AdManager(this)
         val sounds = SoundManager(this)
         val billing = BillingManager(this)
-        injectorViewModel.inject(ads, sounds, billing)
+        activityInterface.inject(ads, sounds, billing)
 
         setContentView(R.layout.fragment_container)
         supportFragmentManager.beginTransaction().add(
@@ -35,5 +35,10 @@ class MainActivity : AppCompatActivity() {
             R.id.fragment_container,
             MainFragment()
         ).commit()
+    }
+
+    override fun onBackPressed() {
+        val performSuper = activityInterface.onBackPressed?.invoke()
+        if (performSuper != false) super.onBackPressed()
     }
 }

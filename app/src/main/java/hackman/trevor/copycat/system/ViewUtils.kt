@@ -6,7 +6,7 @@ import android.graphics.drawable.RippleDrawable
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import hackman.trevor.copycat.BaseFragment
 import kotlin.math.min
 
 fun View.getString(resId: Int) = context.getString(resId)
@@ -15,7 +15,7 @@ fun View.getString(resId: Int, vararg args: Any) = context.getString(resId, args
 
 fun View.getColor(resId: Int) = ContextCompat.getColor(context, resId)
 
-fun Fragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
+fun BaseFragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
 
 fun View.getDrawable(id: Int) = context.getDrawable(id)
 

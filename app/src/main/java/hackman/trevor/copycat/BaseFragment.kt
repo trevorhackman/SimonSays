@@ -1,6 +1,5 @@
 package hackman.trevor.copycat
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +11,6 @@ import androidx.fragment.app.Fragment
 abstract class BaseFragment : Fragment() {
     @get:LayoutRes
     abstract val layout: Int
-
-    private val requireContext: Context by lazy {
-        requireContext()
-    }
 
     final override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

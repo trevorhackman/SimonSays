@@ -66,6 +66,7 @@ class SettingsMenu @JvmOverloads constructor(
     private fun fadeIn() = fadeIn({ fadeInStartAction() }, { fadeInEndAction() })
 
     private fun fadeInStartAction() {
+        settingsViewModel.setHidden(false)
         settingsViewModel.setInBackground(false)
     }
 
@@ -80,7 +81,7 @@ class SettingsMenu @JvmOverloads constructor(
     }
 
     private fun fadeOutEndAction() {
-        settingsViewModel.setInBackground(true)
+        settingsViewModel.setHidden(true)
     }
 
     override fun setEnabled(enabled: Boolean) {

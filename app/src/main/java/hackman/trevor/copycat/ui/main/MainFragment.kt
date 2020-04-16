@@ -2,6 +2,7 @@ package hackman.trevor.copycat.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import hackman.trevor.copycat.*
 import hackman.trevor.copycat.system.getColor
@@ -16,6 +17,7 @@ class MainFragment : BaseFragment() {
 
     private val sounds: SoundProvider by soundProvider()
     private val billing: BillingProvider by billingProvider()
+    private val onBackPressed: OnBackPressed by onBackPressed()
 
     private val settingsViewModel: SettingsViewModel by viewModels()
 
@@ -30,6 +32,8 @@ class MainFragment : BaseFragment() {
         setupSettingsMenu()
         setupGameModesButton()
         observeColorSettings()
+        observeSettingsInBackground()
+        observeSettingsHidden()
     }
 
     private fun setupColorButtons() {
@@ -62,6 +66,19 @@ class MainFragment : BaseFragment() {
             color_button_top_right.setup(colorInt = getColor(it.colorResources[1]))
             color_button_bottom_left.setup(colorInt = getColor(it.colorResources[2]))
             color_button_bottom_right.setup(colorInt = getColor(it.colorResources[3]))
+        }
+
+    private fun observeSettingsInBackground() =
+        observe(settingsViewModel.inBackground) { inBackground ->
+            onBackPressed.injectOnBackPressed {
+                if (!inBackground) settingsViewModel.setInBackground(true)
+                inBackground
+            }
+        }
+
+    private fun observeSettingsHidden() =
+        observe(settingsViewModel.hidden) { hidden ->
+            settings_menu.isVisible = !hidden
         }
 
     override fun onResume() {
