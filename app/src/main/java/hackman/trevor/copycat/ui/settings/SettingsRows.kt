@@ -10,17 +10,19 @@ import hackman.trevor.copycat.logic.enums.NameId
 import hackman.trevor.copycat.logic.enums.Speed
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
+import hackman.trevor.copycat.system.sound.SoundManager
 import kotlinx.android.synthetic.main.settings_option_row.view.*
 
 @Suppress("LeakingThis")
 abstract class SettingsRow<T> @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
-    clazz: Class<T>
+    private val constants: Array<T>
 ) : LinearLayout(context, attributeSet) where T : Enum<T>, T : NameId {
-    private val constants: Array<T> = clazz.enumConstants as Array<T>
 
     private lateinit var onChangeListener: (T) -> Unit
+
+    private lateinit var soundManager: SoundManager
 
     protected var optionSelected: T = constants.first()
         set(value) {
@@ -45,15 +47,18 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
     private fun onLeftArrow() {
         if (optionSelected == constants.first()) return
         optionSelected = constants[constants.indexOf(optionSelected) - 1]
+        soundManager.click.play()
     }
 
     private fun onRightArrow() {
         if (optionSelected == constants.last()) return
         optionSelected = constants[constants.indexOf(optionSelected) + 1]
+        soundManager.click.play()
     }
 
-    fun setOnChangeListener(listener: (T) -> Unit) {
-        onChangeListener = listener
+    fun setup(soundManager: SoundManager, onChangeListener: (T) -> Unit) {
+        this.onChangeListener = onChangeListener
+        this.soundManager = soundManager
         initializeValue()
     }
 
@@ -71,7 +76,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 class SettingsSpeedRow @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : SettingsRow<Speed>(context, attributeSet, Speed::class.java) {
+) : SettingsRow<Speed>(context, attributeSet, Speed.values()) {
 
     init {
         settings_option.text = getString(R.string.settings_setting_speed)
@@ -89,7 +94,7 @@ class SettingsSpeedRow @JvmOverloads constructor(
 class SettingsColorRow @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : SettingsRow<ColorSet>(context, attributeSet, ColorSet::class.java) {
+) : SettingsRow<ColorSet>(context, attributeSet, ColorSet.values()) {
 
     init {
         settings_option.text = getString(R.string.settings_setting_color)

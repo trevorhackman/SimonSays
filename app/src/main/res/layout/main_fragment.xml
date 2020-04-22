@@ -37,8 +37,6 @@
 
     <include layout="@layout/title" />
 
-    <include layout="@layout/main_buttons" />
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -47,6 +45,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_button"
         tools:ignore="ContentDescription" />
+
+    <hackman.trevor.copycat.ui.extra_button.ExtraButtonsLayout
+        android:id="@+id/extra_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <hackman.trevor.copycat.ui.settings.SettingsMenu
         android:id="@+id/settings_menu"

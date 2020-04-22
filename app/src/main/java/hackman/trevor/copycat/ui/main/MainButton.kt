@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.Gravity
 import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.Color
@@ -20,6 +21,7 @@ class MainButton @JvmOverloads constructor(
         background = getDrawable(R.drawable.circle)
         setTypeface(null, Typeface.BOLD)
         setTextColor(Color.White)
+        gravity = Gravity.CENTER
         isClickable = false
         setOnTouchListener(CircularTouchListener)
     }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <hackman.trevor.copycat.ui.main.extra_button.MoreGamesButton
+    <hackman.trevor.copycat.ui.extra_button.MoreGamesButton
         android:id="@+id/more_games_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <hackman.trevor.copycat.ui.main.extra_button.RemoveAdsButton
+    <hackman.trevor.copycat.ui.extra_button.RemoveAdsButton
         android:id="@+id/no_ads_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/more_games_button" />
 
-    <hackman.trevor.copycat.ui.main.extra_button.RateAppButton
+    <hackman.trevor.copycat.ui.extra_button.RateAppButton
         android:id="@+id/rate_app_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/no_ads_button" />
 
-    <hackman.trevor.copycat.ui.main.extra_button.SettingsButton
+    <hackman.trevor.copycat.ui.extra_button.SettingsButton
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

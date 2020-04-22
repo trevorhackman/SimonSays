@@ -31,14 +31,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            MainFragment()
-        ).commit()
+        // TODO, What do I need to do here?
     }
 
     override fun onBackPressed() {
-        val performSuper = activityInterface.onBackPressed?.invoke()
-        if (performSuper != false) super.onBackPressed()
+        val shouldPerformSuper = activityInterface.onBackPressed?.invoke()
+        if (shouldPerformSuper != false) super.onBackPressed()
     }
 }

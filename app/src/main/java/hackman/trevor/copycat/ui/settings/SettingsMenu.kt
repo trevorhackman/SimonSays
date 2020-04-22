@@ -19,9 +19,9 @@ class SettingsMenu @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ConstraintLayout(context, attributeSet), LifecycleOwner {
 
-    lateinit var settingsViewModel: SettingsViewModel
-    lateinit var lifecycleOwner: LifecycleOwner
-    lateinit var soundManager: SoundManager
+    private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var lifecycleOwner: LifecycleOwner
+    private lateinit var soundManager: SoundManager
 
     init {
         View.inflate(context, R.layout.settings_menu, this)
@@ -35,24 +35,20 @@ class SettingsMenu @JvmOverloads constructor(
         this.settingsViewModel = settingsViewModel
         this.lifecycleOwner = lifecycleOwner
         this.soundManager = soundManager
-        bindSpeedOption()
-        bindColorOption()
-        bindCloseButton()
+        setupSpeedOption()
+        setupColorOption()
+        setupCloseButton()
         observeInBackground()
     }
 
-    private fun bindSpeedOption() =
-        settings_option_speed.setOnChangeListener {
-            soundManager.click.play()
-        }
+    private fun setupSpeedOption() = settings_option_speed.setup(soundManager) {}
 
-    private fun bindColorOption() =
-        settings_option_color.setOnChangeListener {
+    private fun setupColorOption() =
+        settings_option_color.setup(soundManager) {
             settingsViewModel.setColorSet(it)
-            soundManager.click.play()
         }
 
-    private fun bindCloseButton() =
+    private fun setupCloseButton() =
         settings_close_button.setOnClickListener {
             settingsViewModel.setInBackground(true)
             soundManager.click.play()

@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.ui.main.extra_button
+package hackman.trevor.copycat.ui.extra_button
 
 import android.content.Context
 import android.util.AttributeSet

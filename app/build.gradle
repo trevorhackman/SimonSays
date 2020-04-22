@@ -43,7 +43,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
 
     // Google Ads
-    implementation 'com.google.android.gms:play-services-ads:19.0.1'
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
 
     // Firebase Crashlytics
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'

@@ -8,7 +8,7 @@ import hackman.trevor.copycat.*
 import hackman.trevor.copycat.system.getColor
 import hackman.trevor.copycat.ui.settings.SettingsViewModel
 import kotlinx.android.synthetic.main.color_grid.*
-import kotlinx.android.synthetic.main.main_buttons.*
+import kotlinx.android.synthetic.main.extra_buttons_landscape.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.title.*
 
@@ -25,12 +25,8 @@ class MainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupColorButtons()
-        setupMoreGamesButton()
-        setupNoAdsButton()
-        setupRateAppButton()
-        setupSettingsButton()
+        setupExtraButtons()
         setupSettingsMenu()
-        setupGameModesButton()
         observeColorSettings()
         observeSettingsInBackground()
         observeSettingsHidden()
@@ -43,22 +39,11 @@ class MainFragment : BaseFragment() {
         color_button_bottom_right.setup(sound = sounds.soundManager.chip4)
     }
 
-    private fun setupMoreGamesButton() = more_games_button.setup(sounds.soundManager)
-
-    private fun setupNoAdsButton() =
-        no_ads_button.setup(sounds.soundManager, billing.billingManager)
-
-    private fun setupRateAppButton() =
-        rate_app_button.setup(sounds.soundManager)
-
-    private fun setupSettingsButton() =
-        settings_button.setup(sounds.soundManager, settingsViewModel)
+    private fun setupExtraButtons() =
+        extra_buttons_layout.setup(sounds.soundManager, billing.billingManager, settingsViewModel)
 
     private fun setupSettingsMenu() =
         settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.soundManager)
-
-    private fun setupGameModesButton() =
-        game_modes_button.setup(sounds.soundManager)
 
     private fun observeColorSettings() =
         observe(settingsViewModel.colorSet) {
@@ -74,8 +59,17 @@ class MainFragment : BaseFragment() {
                 if (!inBackground) settingsViewModel.setInBackground(true)
                 inBackground
             }
-
+            setButtonsEnabled(inBackground)
         }
+
+    private fun setButtonsEnabled(isEnabled: Boolean) {
+        main_button.isEnabled = isEnabled
+        more_games_button.isEnabled = isEnabled
+        game_modes_button.isEnabled = isEnabled
+        no_ads_button.isEnabled = isEnabled
+        rate_app_button.isEnabled = isEnabled
+        settings_button.isEnabled = isEnabled
+    }
 
     private fun observeSettingsHidden() =
         observe(settingsViewModel.hidden) { hidden ->
