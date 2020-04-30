@@ -39,6 +39,7 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(owner: LifecycleOwner) {
+        @Suppress("DEPRECATION") // Despite deprecation, this function is recommended
         MobileAds.initialize(mainActivity, admobId)
         initialize()
     }
@@ -59,7 +60,6 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
     }
 
     private fun initialize() {
-        requestNewBannerAd()
         requestNewInterstitialAd()
     }
 
@@ -75,17 +75,26 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
 
     // Get the whole banner ad in order to display it somewhere
     fun getBannerAd(): AdView {
-        bannerAd?.parent?.let { parent ->
-            (parent as ViewGroup).removeView(bannerAd)
-        }
+        removeView()
         return bannerAd ?: buildBannerAd()
     }
 
-    // TODO Load new banner ad when device rotates, call in config change or only if width too large?
+    /**
+     * Banner ad does not resize when the screen resizes
+     * This method must be called to recreate & resize a banner ad when the screen size changes
+     */
     fun buildBannerAd(): AdView =
         BannerAdBuilder(mainActivity, ::requestNewBannerAd).build().also {
+            removeView()
             bannerAd = it
+            requestNewBannerAd()
         }
+
+    private fun removeView() {
+        bannerAd?.parent?.let { parent ->
+            (parent as ViewGroup).removeView(bannerAd)
+        }
+    }
 
     /**
      * Show interstitial ad if possible

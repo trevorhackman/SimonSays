@@ -68,18 +68,32 @@ class ExtraButtonsLayout @JvmOverloads constructor(
         setupGameModesButton()
     }
 
-    private fun setupMoreGamesButton() =
-        findViewById<MoreGamesButton>(R.id.more_games_button).setup(soundManager)
+    private fun setupMoreGamesButton() = findMoreGamesButton().setup(soundManager)
 
-    private fun setupNoAdsButton() =
-        findViewById<RemoveAdsButton>(R.id.no_ads_button).setup(soundManager, billingManager)
+    private fun setupNoAdsButton() = findNoAdsButton().setup(soundManager, billingManager)
 
-    private fun setupRateAppButton() =
-        findViewById<RateAppButton>(R.id.rate_app_button).setup(soundManager)
+    private fun setupRateAppButton() = findRateAppButton().setup(soundManager)
 
-    private fun setupSettingsButton() =
-        findViewById<SettingsButton>(R.id.settings_button).setup(soundManager, settingsViewModel)
+    private fun setupSettingsButton() = findSettingsButton().setup(soundManager, settingsViewModel)
 
-    private fun setupGameModesButton() =
-        findViewById<GameModesButton>(R.id.game_modes_button).setup(soundManager)
+    private fun setupGameModesButton() = findGameModesButton().setup(soundManager)
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        findMoreGamesButton().isEnabled = enabled
+        findNoAdsButton().isEnabled = enabled
+        findRateAppButton().isEnabled = enabled
+        findSettingsButton().isEnabled = enabled
+        findGameModesButton().isEnabled = enabled
+    }
+
+    private fun findMoreGamesButton() = findViewById<MoreGamesButton>(R.id.more_games_button)
+
+    private fun findNoAdsButton() = findViewById<NoAdsButton>(R.id.no_ads_button)
+
+    private fun findRateAppButton() = findViewById<RateAppButton>(R.id.rate_app_button)
+
+    private fun findSettingsButton() = findViewById<SettingsButton>(R.id.settings_button)
+
+    private fun findGameModesButton() = findViewById<GameModesButton>(R.id.game_modes_button)
 }

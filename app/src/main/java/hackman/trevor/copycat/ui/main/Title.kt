@@ -27,7 +27,7 @@ class Title @JvmOverloads constructor(
     }
 
     private fun determineWidth(): Int =
-        min((displayWidth() + 3 * displayHeight()) / 4, displayWidth())
+        min(displayWidth(), (displayWidth() + 3 * displayHeight()) / 4)
 
     fun popIn() {
         animate()

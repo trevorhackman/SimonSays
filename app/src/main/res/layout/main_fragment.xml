@@ -7,13 +7,6 @@
     android:background="@color/Black"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/ad_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <include layout="@layout/color_grid" />
 
     <hackman.trevor.copycat.ui.main.MainButton
@@ -45,6 +38,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_button"
         tools:ignore="ContentDescription" />
+
+    <hackman.trevor.copycat.ui.main.AdContainer
+        android:id="@+id/ad_container"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <hackman.trevor.copycat.ui.extra_button.ExtraButtonsLayout
         android:id="@+id/extra_buttons_layout"

@@ -8,11 +8,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.observe
-import hackman.trevor.copycat.system.displayMinimum
+import hackman.trevor.copycat.system.displayHeight
+import hackman.trevor.copycat.system.displayWidth
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
 import kotlinx.android.synthetic.main.settings_menu.view.*
+import kotlin.math.min
 
 class SettingsMenu @JvmOverloads constructor(
     context: Context,
@@ -59,27 +61,6 @@ class SettingsMenu @JvmOverloads constructor(
         else fadeIn()
     }
 
-    private fun fadeIn() = fadeIn({ fadeInStartAction() }, { fadeInEndAction() })
-
-    private fun fadeInStartAction() {
-        settingsViewModel.setHidden(false)
-        settingsViewModel.setInBackground(false)
-    }
-
-    private fun fadeInEndAction() {
-        isEnabled = true
-    }
-
-    private fun fadeOut() = fadeOut({ fadeOutStartAction() }, { fadeOutEndAction() })
-
-    private fun fadeOutStartAction() {
-        isEnabled = false
-    }
-
-    private fun fadeOutEndAction() {
-        settingsViewModel.setHidden(true)
-    }
-
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
         settings_option_speed.isEnabled = enabled
@@ -88,9 +69,11 @@ class SettingsMenu @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = MeasureSpec.makeMeasureSpec(displayMinimum(), MeasureSpec.EXACTLY)
+        val width = MeasureSpec.makeMeasureSpec(determineWidth(), MeasureSpec.EXACTLY)
         super.onMeasure(width, heightMeasureSpec)
     }
+
+    private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
 
     override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
 }

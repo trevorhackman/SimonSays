@@ -12,8 +12,8 @@ import kotlin.math.max
 import kotlin.math.min
 
 class ColorButtonDrawable(
-    private val width: Int,
-    private val height: Int,
+    width: Int,
+    height: Int,
     @ColorInt private val buttonColor: Int
 ) {
     private val maxDimension = max(height, width)
@@ -46,7 +46,7 @@ class ColorButtonDrawable(
         GradientDrawable().apply {
             applyCornerRadius()
             gradientType = GradientDrawable.RADIAL_GRADIENT
-            gradientRadius = height / 2f
+            gradientRadius = maxDimension / 2f
             colors = intArrayOf(brightenColor(buttonColor, .5), buttonColor)
             simulateShrinkage(minDimension * .155)
         }

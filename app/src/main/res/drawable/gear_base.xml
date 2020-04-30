@@ -28,7 +28,7 @@
         " />
 
     <!--
-    The group allows me to alter the path w/o going through the ardous process of modifying the pathData
+    The group allows me to alter the path w/o going through the arduous process of modifying the pathData
     I'm using it to scale by a factor of 0.9 and translate to maintain the same center
     Formula:
     translation = (1 - scale) * respective_point

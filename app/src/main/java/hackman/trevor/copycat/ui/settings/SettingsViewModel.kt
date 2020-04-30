@@ -20,12 +20,4 @@ class SettingsViewModel : ViewModel() {
         if (this.inBackground.value != inBackground)
             _inBackground.value = inBackground
     }
-
-    private val _hidden: MutableLiveData<Boolean> = MutableLiveData(true)
-    val hidden: LiveData<Boolean> = _hidden
-
-    fun setHidden(hidden: Boolean) {
-        if (this.hidden.value != hidden)
-            _hidden.value = hidden
-    }
 }

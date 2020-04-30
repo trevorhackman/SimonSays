@@ -2,13 +2,13 @@ package hackman.trevor.copycat.ui.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import hackman.trevor.copycat.*
 import hackman.trevor.copycat.system.getColor
+import hackman.trevor.copycat.ui.fadeIn
+import hackman.trevor.copycat.ui.fadeOut
 import hackman.trevor.copycat.ui.settings.SettingsViewModel
 import kotlinx.android.synthetic.main.color_grid.*
-import kotlinx.android.synthetic.main.extra_buttons_landscape.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.title.*
 
@@ -17,6 +17,7 @@ class MainFragment : BaseFragment() {
 
     private val sounds: SoundProvider by soundProvider()
     private val billing: BillingProvider by billingProvider()
+    private val ads: AdProvider by adProvider()
     private val onBackPressed: OnBackPressed by onBackPressed()
 
     private val settingsViewModel: SettingsViewModel by viewModels()
@@ -27,9 +28,9 @@ class MainFragment : BaseFragment() {
         setupColorButtons()
         setupExtraButtons()
         setupSettingsMenu()
+        setupAdContainer()
         observeColorSettings()
         observeSettingsInBackground()
-        observeSettingsHidden()
     }
 
     private fun setupColorButtons() {
@@ -45,6 +46,9 @@ class MainFragment : BaseFragment() {
     private fun setupSettingsMenu() =
         settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.soundManager)
 
+    private fun setupAdContainer() =
+        ad_container.setup(ads.adManager)
+
     private fun observeColorSettings() =
         observe(settingsViewModel.colorSet) {
             color_button_top_left.setup(colorInt = getColor(it.colorResources[0]))
@@ -59,22 +63,20 @@ class MainFragment : BaseFragment() {
                 if (!inBackground) settingsViewModel.setInBackground(true)
                 inBackground
             }
-            setButtonsEnabled(inBackground)
+            fadeItems(inBackground)
         }
 
-    private fun setButtonsEnabled(isEnabled: Boolean) {
-        main_button.isEnabled = isEnabled
-        more_games_button.isEnabled = isEnabled
-        game_modes_button.isEnabled = isEnabled
-        no_ads_button.isEnabled = isEnabled
-        rate_app_button.isEnabled = isEnabled
-        settings_button.isEnabled = isEnabled
+    private fun fadeItems(fadeIn: Boolean) {
+        if (fadeIn) {
+            main_title.fadeIn()
+            extra_buttons_layout.fadeIn()
+            ad_container.fadeOut()
+        } else {
+            main_title.fadeOut()
+            extra_buttons_layout.fadeOut()
+            ad_container.fadeIn()
+        }
     }
-
-    private fun observeSettingsHidden() =
-        observe(settingsViewModel.hidden) { hidden ->
-            settings_menu.isVisible = !hidden
-        }
 
     override fun onResume() {
         super.onResume()

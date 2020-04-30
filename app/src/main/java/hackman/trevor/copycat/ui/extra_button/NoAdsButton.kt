@@ -8,7 +8,7 @@ import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
 
-class RemoveAdsButton @JvmOverloads constructor(
+class NoAdsButton @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
@@ -16,7 +16,7 @@ class RemoveAdsButton @JvmOverloads constructor(
     private lateinit var soundManager: SoundManager
     private lateinit var billingManager: BillingManager
 
-    private val removeAdsDialog by lazy {
+    private val noAdsDialog by lazy {
         DialogFactory(context).purchaseMenu {
             billingManager.startPurchaseFlow()
         }
@@ -26,7 +26,7 @@ class RemoveAdsButton @JvmOverloads constructor(
         background = getDrawable(R.drawable.no_ads)
         setOnClickListener {
             soundManager.click.play()
-            removeAdsDialog.show()
+            noAdsDialog.show()
         }
     }
 
