@@ -3,7 +3,7 @@ package hackman.trevor.copycat.ui.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import hackman.trevor.copycat.logic.enums.ColorSet
+import hackman.trevor.copycat.logic.settings.ColorSet
 
 class SettingsViewModel : ViewModel() {
     private val _colorSet = MutableLiveData<ColorSet>()

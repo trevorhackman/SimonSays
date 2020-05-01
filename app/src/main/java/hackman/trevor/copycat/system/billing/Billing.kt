@@ -162,7 +162,7 @@ class BillingManager(private val mainActivity: MainActivity) {
         }
 
         private fun onNoAdsPurchased() {
-            SaveData.getInstance(mainActivity).isNoAdsOwned = true
+            SaveData.getInstance(mainActivity).isNoAdsOwned = Ownership.Owned
         }
 
         private fun onUnknownPurchase(purchase: Purchase) {
@@ -255,7 +255,10 @@ class BillingManager(private val mainActivity: MainActivity) {
                         " " + purchasesResult.billingResult.debugMessage
             )
 
-        private fun onEmptyPurchases() = flog("No purchases owned")
+        private fun onEmptyPurchases() {
+            SaveData.getInstance(mainActivity).isNoAdsOwned = Ownership.ConfirmedUnowned
+            flog("No purchases owned")
+        }
 
         private fun onSuccessfulPurchaseQuery(purchases: List<Purchase>) {
             for (purchase in purchases) {
@@ -267,7 +270,7 @@ class BillingManager(private val mainActivity: MainActivity) {
         private fun onFoundNoAdsPurchased(purchase: Purchase) {
             if (!purchase.isAcknowledged) acknowledgePurchase(purchase)
 
-            SaveData.getInstance(mainActivity).isNoAdsOwned = true
+            SaveData.getInstance(mainActivity).isNoAdsOwned = Ownership.Owned
             flog("$NO_ADS owned")
         }
 
@@ -347,6 +350,6 @@ class BillingManager(private val mainActivity: MainActivity) {
         }
 
         // Reset Keys
-        SaveData.getInstance(mainActivity).isNoAdsOwned = false
+        SaveData.getInstance(mainActivity).isNoAdsOwned = Ownership.Unknown
     }
 }

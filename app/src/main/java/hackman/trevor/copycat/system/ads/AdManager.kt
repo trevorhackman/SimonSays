@@ -9,6 +9,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import hackman.trevor.copycat.MainActivity
+import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
 
@@ -26,10 +28,7 @@ import hackman.trevor.copycat.system.report
  * Banner has retry policy when it fails to load. Interstitial does not.
  */
 class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
-
-    init {
-        mainActivity.lifecycle.addObserver(this)
-    }
+    private var isInitialized = false
 
     private var bannerAd: AdView? = null
 
@@ -37,11 +36,20 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
         InterstitialAdBuilder(mainActivity, ::requestNewInterstitialAd).build()
     }
 
+    // TODO Use this before showing ads
+    fun isEnabled() =
+        isInitialized && SaveData.getInstance(mainActivity).isNoAdsOwned == Ownership.ConfirmedUnowned
+
+    fun initialize() {
+        mainActivity.lifecycle.addObserver(this)
+        isInitialized = true
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(owner: LifecycleOwner) {
         @Suppress("DEPRECATION") // Despite deprecation, this function is recommended
         MobileAds.initialize(mainActivity, admobId)
-        initialize()
+        requestNewInterstitialAd()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -57,10 +65,6 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(owner: LifecycleOwner) {
         bannerAd?.destroy()
-    }
-
-    private fun initialize() {
-        requestNewInterstitialAd()
     }
 
     private fun requestNewBannerAd() {

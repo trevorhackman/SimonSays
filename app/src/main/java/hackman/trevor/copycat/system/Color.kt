@@ -22,14 +22,14 @@ fun brightenColor(
 // Common Colors - Taken from Google Color Guide
 class Color {
     companion object {
-        const val Transparent = 0x00000000.toInt()
-        const val Shade1 = 0x11000000.toInt()
-        const val Shade2 = 0x22000000.toInt()
-        const val Shade3 = 0x33000000.toInt()
-        const val Shade4 = 0x44000000.toInt()
-        const val Shade5 = 0x55000000.toInt()
-        const val Shade6 = 0x66000000.toInt()
-        const val Shade7 = 0x77000000.toInt()
+        const val Transparent = 0x00000000
+        const val Shade1 = 0x11000000
+        const val Shade2 = 0x22000000
+        const val Shade3 = 0x33000000
+        const val Shade4 = 0x44000000
+        const val Shade5 = 0x55000000
+        const val Shade6 = 0x66000000
+        const val Shade7 = 0x77000000
         const val Shade8 = 0x88000000.toInt()
         const val Shade9 = 0x99000000.toInt()
         const val Shade10 = 0xAA000000.toInt()

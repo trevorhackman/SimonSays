@@ -22,20 +22,23 @@ class AdContainer @JvmOverloads constructor(
 
     fun setup(adManager: AdManager) {
         this.adManager = adManager
-        addView(adManager.getBannerAd())
+        if (adManager.isEnabled()) addView(adManager.getBannerAd())
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        onMeasureWidthMeasureSpec = widthMeasureSpec
-        onMeasureHeightMeasureSpec = heightMeasureSpec
-        if (initial) onInitial()
-        else if (screenSizeChanged()) onScreenSizeChanged()
+        if (adManager.isEnabled()) {
+            onMeasureWidthMeasureSpec = widthMeasureSpec
+            onMeasureHeightMeasureSpec = heightMeasureSpec
+            if (initial) onInitial()
+            else if (screenSizeChanged()) onScreenSizeChanged()
+        }
     }
 
     private fun onInitial() {
         rememberSize()
         initial = false
+        if (childCount == 0) addView(adManager.getBannerAd())
     }
 
     private fun rememberSize() {

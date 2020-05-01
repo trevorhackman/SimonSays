@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.logic.enums
+package hackman.trevor.copycat.logic.settings
 
 import androidx.annotation.StringRes
 import hackman.trevor.copycat.R

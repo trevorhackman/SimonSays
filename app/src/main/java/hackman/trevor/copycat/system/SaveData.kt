@@ -3,8 +3,9 @@ package hackman.trevor.copycat.system
 import android.content.Context
 import android.content.SharedPreferences
 import hackman.trevor.copycat.logic.GameMode
-import hackman.trevor.copycat.logic.enums.ColorSet
-import hackman.trevor.copycat.logic.enums.Speed
+import hackman.trevor.copycat.logic.settings.ColorSet
+import hackman.trevor.copycat.logic.settings.Speed
+import hackman.trevor.copycat.system.billing.Ownership
 
 class SaveData private constructor(context: Context) {
     companion object {
@@ -28,20 +29,10 @@ class SaveData private constructor(context: Context) {
         context.getSharedPreferences("default", Context.MODE_PRIVATE)
     private val editor = preferences.edit()
 
-    // Whether or not noAds has been purchased. Don't display ads if this is true.
-    var isNoAdsOwned: Boolean
-        get() = preferences.getBoolean(isNoAdsOwnedKey, false)
-        set(value) = set(isNoAdsOwnedKey, value)
-
-    // Whether or not rating dialog has been displayed before
-    var isRatingRequestDisplayed: Boolean
-        get() = preferences.getBoolean(isRatingRequestDisplayedKey, false)
-        set(value) = set(isRatingRequestDisplayedKey, value)
-
-    // Track the number of games completed
-    var gamesCompleted: Int
-        get() = preferences.getInt(gamesCompletedKey, 0)
-        set(value) = set(gamesCompletedKey, value)
+    // Whether or not noAds has been purchased. Only show ads if not owned
+    var isNoAdsOwned: Ownership
+        get() = Ownership.values()[preferences.getInt(isNoAdsOwnedKey, Ownership.Unknown.ordinal)]
+        set(value) = set(isNoAdsOwnedKey, value.ordinal)
 
     // Remember the game speed selected in the settings
     var speed: Speed
@@ -53,10 +44,20 @@ class SaveData private constructor(context: Context) {
         get() = ColorSet.values()[preferences.getInt(colorSetKey, ColorSet.Classic.ordinal)]
         set(value) = set(colorSetKey, value.ordinal)
 
+    // Whether or not rating dialog has been displayed before
+    var isRatingRequestDisplayed: Boolean
+        get() = preferences.getBoolean(isRatingRequestDisplayedKey, false)
+        set(value) = set(isRatingRequestDisplayedKey, value)
+
     // Remember the game mode last selected
     var gameMode: GameMode
         get() = GameMode.values()[preferences.getInt(gameModeKey, GameMode.Classic.ordinal)]
         set(value) = set(gameModeKey, value.ordinal)
+
+    // Track the number of games completed
+    var gamesCompleted: Int
+        get() = preferences.getInt(gamesCompletedKey, 0)
+        set(value) = set(gamesCompletedKey, value)
 
     // Get the highscore of the respective gameMode
     fun getHighScore(gameMode: GameMode): Int =
