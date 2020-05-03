@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.*
 import hackman.trevor.copycat.system.sound.SoundManager
+import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
 import kotlin.math.min
 
 class GameModesButton @JvmOverloads constructor(
@@ -17,18 +18,18 @@ class GameModesButton @JvmOverloads constructor(
 ) : AppCompatButton(context, attributeSet) {
 
     private lateinit var soundManager: SoundManager
+    private lateinit var gameModesViewModel: GameModesViewModel
 
     init {
-        text = getString(R.string.main_game_modes_button)
+        text = getString(R.string.game_modes)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .075f)
         setTextColor(Color.White)
-        setOnClickListener {
-            soundManager.click.play()
-        }
     }
 
-    fun setup(soundManager: SoundManager) {
+    fun setup(soundManager: SoundManager, gameModesViewModel: GameModesViewModel) {
         this.soundManager = soundManager
+        this.gameModesViewModel = gameModesViewModel
+        setOnClickListener()
     }
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
@@ -48,4 +49,10 @@ class GameModesButton @JvmOverloads constructor(
             setStroke(strokeWidth, Color.Black)
         }, Color.White)
     }
+
+    private fun setOnClickListener() =
+        setOnClickListener {
+            soundManager.click.play()
+            gameModesViewModel.setInBackground(false)
+        }
 }

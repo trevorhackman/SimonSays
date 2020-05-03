@@ -13,9 +13,9 @@ import hackman.trevor.copycat.ui.main.MainFragment
 class MainActivity : AppCompatActivity() {
     private val activityInterface: ActivityInterface by injector()
 
-    private val ads = AdManager(this)
-    private val sounds = SoundManager(this)
-    private val billing = BillingManager(this)
+    private val ads by lazy { AdManager(this) }
+    private val sounds by lazy { SoundManager(this) }
+    private val billing by lazy { BillingManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

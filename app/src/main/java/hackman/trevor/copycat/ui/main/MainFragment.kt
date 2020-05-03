@@ -7,7 +7,10 @@ import hackman.trevor.copycat.*
 import hackman.trevor.copycat.system.getColor
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
+import hackman.trevor.copycat.ui.game_modes.GameModesViewModelImpl
 import hackman.trevor.copycat.ui.settings.SettingsViewModel
+import hackman.trevor.copycat.ui.settings.SettingsViewModelImpl
 import kotlinx.android.synthetic.main.color_grid.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.title.*
@@ -20,7 +23,8 @@ class MainFragment : BaseFragment() {
     private val ads: AdProvider by adProvider()
     private val onBackPressed: OnBackPressed by onBackPressed()
 
-    private val settingsViewModel: SettingsViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
+    private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
 
     private var popInRan: Boolean = false
 
@@ -41,7 +45,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun setupExtraButtons() =
-        extra_buttons_layout.setup(sounds.soundManager, billing.billingManager, settingsViewModel)
+        extra_buttons_layout.setup(sounds.soundManager, billing.billingManager, settingsViewModel, gameModesViewModel)
 
     private fun setupSettingsMenu() =
         settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.soundManager)

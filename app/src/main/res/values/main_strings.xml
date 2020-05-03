@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_game_modes_button">Game Modes</string>
+    <string name="main_game_modes_button">@string/game_modes</string>
 </resources>

@@ -3,5 +3,6 @@
 
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
+    <string name="game_modes">Game Modes</string>
     <string name="main_menu">Main Menu</string>
 </resources>

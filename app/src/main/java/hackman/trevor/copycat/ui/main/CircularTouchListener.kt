@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.ui
+package hackman.trevor.copycat.ui.main
 
 import android.view.MotionEvent
 import android.view.View

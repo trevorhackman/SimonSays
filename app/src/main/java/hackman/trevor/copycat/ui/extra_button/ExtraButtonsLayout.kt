@@ -8,6 +8,7 @@ import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.isPortrait
 import hackman.trevor.copycat.system.sound.SoundManager
+import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
 import hackman.trevor.copycat.ui.main.GameModesButton
 import hackman.trevor.copycat.ui.settings.SettingsViewModel
 
@@ -19,6 +20,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
     private lateinit var soundManager: SoundManager
     private lateinit var billingManager: BillingManager
     private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var gameModesViewModel: GameModesViewModel
 
     private var isPortrait: Boolean = isPortrait()
 
@@ -52,11 +54,13 @@ class ExtraButtonsLayout @JvmOverloads constructor(
     fun setup(
         soundManager: SoundManager,
         billingManager: BillingManager,
-        settingsViewModel: SettingsViewModel
+        settingsViewModel: SettingsViewModel,
+        gameModesViewModel: GameModesViewModel
     ) {
         this.soundManager = soundManager
         this.billingManager = billingManager
         this.settingsViewModel = settingsViewModel
+        this.gameModesViewModel = gameModesViewModel
         setupAll()
     }
 
@@ -76,7 +80,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
 
     private fun setupSettingsButton() = findSettingsButton().setup(soundManager, settingsViewModel)
 
-    private fun setupGameModesButton() = findGameModesButton().setup(soundManager)
+    private fun setupGameModesButton() = findGameModesButton().setup(soundManager, gameModesViewModel)
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)

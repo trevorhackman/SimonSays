@@ -8,8 +8,8 @@
     android:padding="@dimen/settings_title_screen_margin"
     tools:layout_gravity="center">
 
-    <hackman.trevor.copycat.ui.settings.SettingsTitle
-        android:id="@+id/settings_title"
+    <hackman.trevor.copycat.ui.game_modes.GameModesTitle
+        android:id="@+id/game_modes_title"
         style="@style/BoldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,30 +18,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/settings_divider"
+        android:id="@+id/game_modes_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@drawable/block"
         android:focusable="false"
-        app:layout_constraintTop_toBottomOf="@id/settings_title"
+        app:layout_constraintTop_toBottomOf="@id/game_modes_title"
         tools:ignore="ContentDescription" />
 
-    <hackman.trevor.copycat.ui.settings.SettingsSpeedRow
-        android:id="@+id/settings_option_speed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_divider" />
-
-    <hackman.trevor.copycat.ui.settings.SettingsColorRow
-        android:id="@+id/settings_option_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_option_speed" />
-
     <hackman.trevor.copycat.ui.CloseButton
-        android:id="@+id/settings_close_button"
+        android:id="@+id/game_modes_close_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_option_color" />
+        app:layout_constraintTop_toBottomOf="@id/game_modes_divider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

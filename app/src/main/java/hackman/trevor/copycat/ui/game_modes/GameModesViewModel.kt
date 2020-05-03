@@ -1,15 +1,15 @@
-package hackman.trevor.copycat.ui.settings
+package hackman.trevor.copycat.ui.game_modes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import hackman.trevor.copycat.logic.settings.ColorSet
+import hackman.trevor.copycat.logic.GameMode
 
-class SettingsViewModelImpl : ViewModel(), SettingsViewModel {
-    override val colorSet = MutableLiveData<ColorSet>()
+class GameModesViewModelImpl : ViewModel(), GameModesViewModel {
+    override val gameMode = MutableLiveData<GameMode>()
 
-    override fun setColorSet(colorSet: ColorSet) {
-        this.colorSet.value = colorSet
+    override fun setGameMode(gameMode: GameMode) {
+        this.gameMode.value = gameMode
     }
 
     override val inBackground: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -20,10 +20,10 @@ class SettingsViewModelImpl : ViewModel(), SettingsViewModel {
     }
 }
 
-interface SettingsViewModel {
-    val colorSet: LiveData<ColorSet>
+interface GameModesViewModel {
+    val gameMode: LiveData<GameMode>
 
-    fun setColorSet(colorSet: ColorSet)
+    fun setGameMode(gameMode: GameMode)
 
     val inBackground: LiveData<Boolean>
 

@@ -10,7 +10,6 @@ import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.Color
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getDrawable
-import hackman.trevor.copycat.ui.CircularTouchListener
 
 class MainButton @JvmOverloads constructor(
     context: Context,
@@ -19,7 +18,7 @@ class MainButton @JvmOverloads constructor(
 
     init {
         background = getDrawable(R.drawable.circle)
-        setTypeface(null, Typeface.BOLD)
+        typeface = Typeface.DEFAULT_BOLD
         setTextColor(Color.White)
         gravity = Gravity.CENTER
         isClickable = false
