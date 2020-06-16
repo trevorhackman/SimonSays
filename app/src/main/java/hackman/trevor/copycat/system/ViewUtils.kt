@@ -9,15 +9,27 @@ import androidx.core.content.ContextCompat
 import hackman.trevor.copycat.BaseFragment
 import kotlin.math.min
 
+//region Resource Getters
+
+fun View.getString(stringResource: StringResource) = getString(stringResource.string)
+
 fun View.getString(resId: Int) = context.getString(resId)
 
 fun View.getString(resId: Int, vararg args: Any) = context.getString(resId, args)
+
+fun View.getColor(colorResource: ColorResource) = getColor(colorResource.color)
 
 fun View.getColor(resId: Int) = ContextCompat.getColor(context, resId)
 
 fun View.getDrawable(resId: Int) = context.getDrawable(resId)
 
-fun BaseFragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
+fun BaseFragment.getColor(colorResource: ColorResource) = getColor(colorResource.color)
+
+private fun BaseFragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
+
+//endregion
+
+//region Display Metrics
 
 fun View.displayWidth() = context.resources.displayMetrics.widthPixels
 
@@ -35,6 +47,8 @@ fun View.isPortrait() = this.displayWidth() < this.displayHeight()
  */
 fun View.dpToPixel(dp: Double): Int = (dp * this.context.resources.displayMetrics.density).toInt()
 fun View.dpToPixel(dp: Int): Int = dpToPixel(dp.toDouble())
+
+//endregion
 
 /**
  * Create a ripple drawable for buttons - adds ripple effect onPress and onClick to a normal drawable

@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageButton
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.system.ColorResource
+import hackman.trevor.copycat.system.getColor
 import hackman.trevor.copycat.system.sound.Sound
 
 class ColorButton @JvmOverloads constructor(
@@ -21,10 +23,10 @@ class ColorButton @JvmOverloads constructor(
         }
     }
 
-    fun setup(sound: Sound? = null, colorInt: Int? = null) {
+    fun setup(sound: Sound? = null, colorResource: ColorResource? = null) {
         sound?.let { this.sound = sound }
-        colorInt?.let {
-            buttonColor = it
+        colorResource?.let {
+            buttonColor = getColor(it)
             createBackground(width, height)
         }
 

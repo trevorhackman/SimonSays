@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun injectDependencies() = activityInterface.inject(ads, sounds, billing)
 
     private fun initializeAdsIfNotOwned() {
-        if (SaveData.getInstance(this).isNoAdsOwned != Ownership.Owned) ads.initialize()
+        if (SaveData(this).isNoAdsOwned != Ownership.Owned) ads.initialize()
     }
 
     override fun onBackPressed() {

@@ -85,5 +85,10 @@ class Game(private val gameMode: GameMode) {
 }
 
 enum class GameMode {
-    Classic, Reverse, Chaos, Single, Opposite;
+    Classic,
+    Reverse,
+    Chaos,
+    Single,
+    Opposite,
+    TwoPlayer;
 }

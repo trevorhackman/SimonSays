@@ -38,7 +38,7 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
 
     // TODO Use this before showing ads
     fun isEnabled() =
-        isInitialized && SaveData.getInstance(mainActivity).isNoAdsOwned == Ownership.ConfirmedUnowned
+        isInitialized && SaveData(mainActivity).isNoAdsOwned == Ownership.ConfirmedUnowned
 
     fun initialize() {
         mainActivity.lifecycle.addObserver(this)

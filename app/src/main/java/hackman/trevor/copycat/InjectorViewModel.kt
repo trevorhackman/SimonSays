@@ -31,7 +31,7 @@ class InjectorViewModel : ViewModel(), ActivityInterface, SoundProvider, AdProvi
         this.billingManager = billingManager
     }
 
-    override fun injectOnBackPressed(onBackPressed: (() -> Boolean)?) {
+    override fun setBehavior(onBackPressed: (() -> Boolean)?) {
         this.onBackPressed = onBackPressed
     }
 }
@@ -61,5 +61,5 @@ interface OnBackPressed {
      * @param onBackPressed
      * On a null value or a return of true, the activity's super.onBackPressed() will be called
      */
-    fun injectOnBackPressed(onBackPressed: (() -> Boolean)?)
+    fun setBehavior(onBackPressed: (() -> Boolean)?)
 }

@@ -1,32 +1,14 @@
 package hackman.trevor.copycat.system
 
 import android.content.Context
-import android.content.SharedPreferences
 import hackman.trevor.copycat.logic.GameMode
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.system.billing.Ownership
 
-class SaveData private constructor(context: Context) {
-    companion object {
-        private var instance: SaveData? = null
+class SaveData(context: Context) {
 
-        fun getInstance(context: Context): SaveData {
-            if (instance == null) instance = SaveData(context)
-            return instance!!
-        }
-
-        private const val isNoAdsOwnedKey = "noAdsOwned"
-        private const val isRatingRequestDisplayedKey = "ratingRequestDisplayed"
-        private const val gamesCompletedKey = "gamesCompleted"
-        private const val speedKey = "speed"
-        private const val colorSetKey = "colors"
-        private const val gameModeKey = "gameMode"
-        private const val modeBestKey = "Best"
-    }
-
-    private val preferences: SharedPreferences =
-        context.getSharedPreferences("default", Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences("default", Context.MODE_PRIVATE)
     private val editor = preferences.edit()
 
     // Whether or not noAds has been purchased. Only show ads if not owned
@@ -80,5 +62,15 @@ class SaveData private constructor(context: Context) {
     private fun set(name: String, value: String) {
         editor.putString(name, value)
         editor.apply()
+    }
+
+    companion object {
+        private const val isNoAdsOwnedKey = "noAdsOwned"
+        private const val isRatingRequestDisplayedKey = "ratingRequestDisplayed"
+        private const val gamesCompletedKey = "gamesCompleted"
+        private const val speedKey = "speed"
+        private const val colorSetKey = "colors"
+        private const val gameModeKey = "gameMode"
+        private const val modeBestKey = "Best"
     }
 }

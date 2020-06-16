@@ -5,6 +5,7 @@
     <dimen name="main_buttons_screen_margin">12dp</dimen>
     <dimen name="main_game_modes_button_bottom_margin">16dp</dimen>
 
-    <dimen name="settings_title_screen_margin">5dp</dimen>
-    <dimen name="settings_option_row_margin">8dp</dimen>
+    <dimen name="background_border_width">5dp</dimen>
+
+    <dimen name="game_modes_buttons_margin">10dp</dimen>
 </resources>

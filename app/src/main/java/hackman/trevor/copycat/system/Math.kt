@@ -26,7 +26,7 @@ fun intToExcelName(integer: Int): String {
 }
 
 @OptIn(ExperimentalContracts::class)
-inline fun Any?.isNull(): Boolean {
+fun Any?.isNull(): Boolean {
     contract {
         returns(false) implies (this@isNull != null)
     }

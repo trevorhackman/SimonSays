@@ -12,16 +12,16 @@ class SettingsButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    private lateinit var soundManager: SoundManager
     private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var soundManager: SoundManager
 
     init {
         background = getDrawable(R.drawable.gear)
     }
 
-    fun setup(soundManager: SoundManager, settingsViewModel: SettingsViewModel) {
-        this.soundManager = soundManager
+    fun setup(settingsViewModel: SettingsViewModel, soundManager: SoundManager) {
         this.settingsViewModel = settingsViewModel
+        this.soundManager = soundManager
         setOnClickListener()
     }
 

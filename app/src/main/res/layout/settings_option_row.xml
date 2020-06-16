@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/settings_option_row_margin"
+    android:layout_margin="8dp"
     android:orientation="horizontal"
     tools:background="@color/colorAccentDarkDark">
 
     <hackman.trevor.copycat.ui.settings.SettingsOption
         android:id="@+id/settings_option"
-        style="@style/BoldText"
+        style="@style/Text.Bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -35,7 +35,7 @@
 
         <hackman.trevor.copycat.ui.settings.SettingsOptionValue
             android:id="@+id/settings_option_value"
-            style="@style/BoldText"
+            style="@style/Text.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

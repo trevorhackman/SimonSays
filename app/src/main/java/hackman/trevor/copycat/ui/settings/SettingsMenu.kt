@@ -43,12 +43,9 @@ class SettingsMenu @JvmOverloads constructor(
         observeInBackground()
     }
 
-    private fun setupSpeedOption() = settings_option_speed.setup(soundManager) {}
+    private fun setupSpeedOption() = settings_option_speed.setup(soundManager, settingsViewModel)
 
-    private fun setupColorOption() =
-        settings_option_color.setup(soundManager) {
-            settingsViewModel.setColorSet(it)
-        }
+    private fun setupColorOption() = settings_option_color.setup(soundManager, settingsViewModel)
 
     private fun setupCloseButton() =
         settings_close_button.setOnClickListener {

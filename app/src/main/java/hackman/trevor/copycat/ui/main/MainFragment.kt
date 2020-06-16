@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import hackman.trevor.copycat.*
-import hackman.trevor.copycat.system.getColor
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
 import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
@@ -32,9 +31,11 @@ class MainFragment : BaseFragment() {
         setupColorButtons()
         setupExtraButtons()
         setupSettingsMenu()
+        setupGameModesMenu()
         setupAdContainer()
         observeColorSettings()
         observeSettingsInBackground()
+        observeGameModesInBackground()
     }
 
     private fun setupColorButtons() {
@@ -50,21 +51,33 @@ class MainFragment : BaseFragment() {
     private fun setupSettingsMenu() =
         settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.soundManager)
 
+    private fun setupGameModesMenu() =
+        game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner, sounds.soundManager)
+
     private fun setupAdContainer() =
         ad_container.setup(ads.adManager)
 
     private fun observeColorSettings() =
         observe(settingsViewModel.colorSet) {
-            color_button_top_left.setup(colorInt = getColor(it.colorResources[0]))
-            color_button_top_right.setup(colorInt = getColor(it.colorResources[1]))
-            color_button_bottom_left.setup(colorInt = getColor(it.colorResources[2]))
-            color_button_bottom_right.setup(colorInt = getColor(it.colorResources[3]))
+            color_button_top_left.setup(colorResource = it.colors.topLeft)
+            color_button_top_right.setup(colorResource = it.colors.topRight)
+            color_button_bottom_left.setup(colorResource = it.colors.bottomLeft)
+            color_button_bottom_right.setup(colorResource = it.colors.bottomRight)
         }
 
     private fun observeSettingsInBackground() =
         observe(settingsViewModel.inBackground) { inBackground ->
-            onBackPressed.injectOnBackPressed {
+            onBackPressed.setBehavior {
                 if (!inBackground) settingsViewModel.setInBackground(true)
+                inBackground
+            }
+            fadeItems(inBackground)
+        }
+
+    private fun observeGameModesInBackground() =
+        observe(gameModesViewModel.inBackground) { inBackground ->
+            onBackPressed.setBehavior {
+                if (!inBackground) gameModesViewModel.setInBackground(true)
                 inBackground
             }
             fadeItems(inBackground)

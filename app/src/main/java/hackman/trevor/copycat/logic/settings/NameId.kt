@@ -1,8 +1,7 @@
 package hackman.trevor.copycat.logic.settings
 
-import androidx.annotation.StringRes
+import hackman.trevor.copycat.system.StringResource
 
 interface NameId {
-    @get:StringRes
-    val nameId: Int
+    val nameId: StringResource
 }

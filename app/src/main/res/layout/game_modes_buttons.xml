@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:layout_gravity="center">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/game_modes_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <hackman.trevor.copycat.ui.game_modes.GameModesButton
+        android:id="@+id/game_modes_mode_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/game_modes_buttons_margin"
+        app:layout_constraintRight_toLeftOf="@id/game_modes_vertical_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="mode1" />
+
+    <hackman.trevor.copycat.ui.game_modes.GameModesButton
+        android:id="@+id/game_modes_mode_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/game_modes_buttons_margin"
+        app:layout_constraintLeft_toRightOf="@id/game_modes_vertical_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="mode2" />
+
+    <hackman.trevor.copycat.ui.game_modes.GameModesButton
+        android:id="@+id/game_modes_mode_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/game_modes_buttons_margin"
+        app:layout_constraintRight_toLeftOf="@id/game_modes_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/game_modes_mode_1"
+        tools:text="mode3" />
+
+    <hackman.trevor.copycat.ui.game_modes.GameModesButton
+        android:id="@+id/game_modes_mode_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/game_modes_buttons_margin"
+        app:layout_constraintLeft_toRightOf="@id/game_modes_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/game_modes_mode_1"
+        tools:text="mode4" />
+
+    <hackman.trevor.copycat.ui.game_modes.GameModesButton
+        android:id="@+id/game_modes_mode_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/game_modes_buttons_margin"
+        app:layout_constraintRight_toLeftOf="@id/game_modes_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/game_modes_mode_3"
+        tools:text="mode5" />
+
+    <hackman.trevor.copycat.ui.game_modes.GameModesButton
+        android:id="@+id/game_modes_mode_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/game_modes_buttons_margin"
+        app:layout_constraintLeft_toRightOf="@id/game_modes_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/game_modes_mode_3"
+        tools:text="mode6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

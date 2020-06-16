@@ -5,26 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bordered_rectangle_dark"
-    android:padding="@dimen/settings_title_screen_margin"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/background_border_width"
     tools:layout_gravity="center">
 
     <hackman.trevor.copycat.ui.settings.SettingsTitle
         android:id="@+id/settings_title"
-        style="@style/BoldText"
+        style="@style/Text.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <hackman.trevor.copycat.ui.Divider
         android:id="@+id/settings_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@drawable/block"
         android:focusable="false"
-        app:layout_constraintTop_toBottomOf="@id/settings_title"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toBottomOf="@id/settings_title" />
 
     <hackman.trevor.copycat.ui.settings.SettingsSpeedRow
         android:id="@+id/settings_option_speed"

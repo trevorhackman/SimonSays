@@ -20,8 +20,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
     private val constants: Array<T>
 ) : LinearLayout(context, attributeSet) where T : Enum<T>, T : NameId {
 
-    private lateinit var onChangeListener: (T) -> Unit
-
+    protected lateinit var settingsViewModel: SettingsViewModel
     private lateinit var soundManager: SoundManager
 
     protected var optionSelected: T = constants.first()
@@ -31,7 +30,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
             settings_left_arrow.isEnabled = isLeftArrowEnabled()
             settings_right_arrow.isEnabled = isRightArrowEnabled()
             saveValueSelected()
-            onChangeListener(value)
+            if (::settingsViewModel.isInitialized) onChange(value)
         }
 
     private fun isLeftArrowEnabled() = optionSelected != constants.first()
@@ -42,6 +41,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
         View.inflate(context, R.layout.settings_option_row, this)
         settings_left_arrow.setOnClickListener { onLeftArrow() }
         settings_right_arrow.setOnClickListener { onRightArrow() }
+        initializeValue()
     }
 
     private fun onLeftArrow() {
@@ -56,15 +56,17 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
         soundManager.click.play()
     }
 
-    fun setup(soundManager: SoundManager, onChangeListener: (T) -> Unit) {
-        this.onChangeListener = onChangeListener
+    fun setup(soundManager: SoundManager, settingsViewModel: SettingsViewModel) {
         this.soundManager = soundManager
-        initializeValue()
+        this.settingsViewModel = settingsViewModel
+        onChange(optionSelected)
     }
 
     protected abstract fun initializeValue()
 
     protected abstract fun saveValueSelected()
+
+    protected open fun onChange(value: T) {}
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
@@ -83,11 +85,11 @@ class SettingsSpeedRow @JvmOverloads constructor(
     }
 
     override fun initializeValue() {
-        optionSelected = SaveData.getInstance(context).speed
+        optionSelected = SaveData(context).speed
     }
 
     override fun saveValueSelected() {
-        SaveData.getInstance(context).speed = optionSelected
+        SaveData(context).speed = optionSelected
     }
 }
 
@@ -101,10 +103,14 @@ class SettingsColorRow @JvmOverloads constructor(
     }
 
     override fun initializeValue() {
-        optionSelected = SaveData.getInstance(context).colorSet
+        optionSelected = SaveData(context).colorSet
     }
 
     override fun saveValueSelected() {
-        SaveData.getInstance(context).colorSet = optionSelected
+        SaveData(context).colorSet = optionSelected
+    }
+
+    override fun onChange(value: ColorSet) {
+        settingsViewModel.setColorSet(value)
     }
 }

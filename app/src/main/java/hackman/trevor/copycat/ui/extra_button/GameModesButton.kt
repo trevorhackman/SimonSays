@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.ui.main
+package hackman.trevor.copycat.ui.extra_button
 
 import android.content.Context
 import android.graphics.drawable.Drawable

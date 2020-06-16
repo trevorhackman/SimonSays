@@ -9,7 +9,6 @@ import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.isPortrait
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
-import hackman.trevor.copycat.ui.main.GameModesButton
 import hackman.trevor.copycat.ui.settings.SettingsViewModel
 
 class ExtraButtonsLayout @JvmOverloads constructor(
@@ -78,7 +77,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
 
     private fun setupRateAppButton() = findRateAppButton().setup(soundManager)
 
-    private fun setupSettingsButton() = findSettingsButton().setup(soundManager, settingsViewModel)
+    private fun setupSettingsButton() = findSettingsButton().setup(settingsViewModel, soundManager)
 
     private fun setupGameModesButton() = findGameModesButton().setup(soundManager, gameModesViewModel)
 

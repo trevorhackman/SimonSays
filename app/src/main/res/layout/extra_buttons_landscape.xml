@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
-    <hackman.trevor.copycat.ui.main.GameModesButton
+    <hackman.trevor.copycat.ui.extra_button.GameModesButton
         android:id="@+id/game_modes_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
