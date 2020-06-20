@@ -15,7 +15,8 @@ fun View.getString(stringResource: StringResource) = getString(stringResource.st
 
 fun View.getString(resId: Int) = context.getString(resId)
 
-fun View.getString(resId: Int, vararg args: Any) = context.getString(resId, args)
+/** That's right, a goddamn star! Never seen this spread operator before? https://proandroiddev.com/kotlins-vararg-and-spread-operator-4200c07d65e1 */
+fun View.getString(resId: Int, vararg args: Any) = context.getString(resId, *args)
 
 fun View.getColor(colorResource: ColorResource) = getColor(colorResource.color)
 

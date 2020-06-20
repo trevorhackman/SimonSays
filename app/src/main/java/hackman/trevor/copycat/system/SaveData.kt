@@ -6,6 +6,7 @@ import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.system.billing.Ownership
 
+// TODO Make this singleton and use application context
 class SaveData(context: Context) {
 
     private val preferences = context.getSharedPreferences("default", Context.MODE_PRIVATE)

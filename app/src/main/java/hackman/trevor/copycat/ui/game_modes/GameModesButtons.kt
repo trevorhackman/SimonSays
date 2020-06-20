@@ -6,6 +6,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.GameMode
+import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager
 import kotlinx.android.synthetic.main.game_modes_buttons.view.*
@@ -32,6 +33,7 @@ class GameModesButtons @JvmOverloads constructor(
     init {
         View.inflate(context, R.layout.game_modes_buttons, this)
         setText()
+        setSelectedMode(SaveData(context).gameMode)
     }
 
     private fun setText() = buttons.forEachIndexed { index, button ->
@@ -65,10 +67,10 @@ class GameModesButtons @JvmOverloads constructor(
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-    private fun findMaxButtonWidth() = buttons.map {
+    private fun findMaxButtonWidth(): Int = buttons.map {
         val widthSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         val heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         it.measure(widthSpec, heightSpec)
         it.measuredWidth
-    }.max() ?: error("Impossible")
+    }.max()!!
 }

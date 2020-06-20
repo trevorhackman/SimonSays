@@ -11,7 +11,6 @@ import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayHeight
 import hackman.trevor.copycat.system.displayWidth
-import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
@@ -57,8 +56,9 @@ class GameModesMenu @JvmOverloads constructor(
         }
 
     private fun observeGameMode() = observe(gameModesViewModel.gameMode) {
-        game_modes_description.text = getString(it.description())
         game_modes_buttons.setSelectedMode(it)
+        game_modes_description.updateText(it)
+        game_modes_best_text.updateText(it)
     }
 
     private fun observeInBackground() = observe(gameModesViewModel.inBackground) {

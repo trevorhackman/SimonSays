@@ -18,8 +18,12 @@ class GameModesDescription @JvmOverloads constructor(
     private val placeholder = TextView(context)
 
     init {
-        text = getString(SaveData(context).gameMode.description())
+        updateText(SaveData(context).gameMode)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .05f)
+    }
+
+    fun updateText(gameMode: GameMode) {
+        text = getString(gameMode.description())
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -32,8 +36,7 @@ class GameModesDescription @JvmOverloads constructor(
      * any game mode description
      */
     private fun findMaxHeight(): Int =
-        GameMode.values().map { measureHeightWith(getString(it.description())) }.max()
-            ?: error("Impossible")
+        GameMode.values().map { measureHeightWith(getString(it.description())) }.max()!!
 
     private fun measureHeightWith(text: String): Int {
         placeholder.layoutParams = layoutParams
