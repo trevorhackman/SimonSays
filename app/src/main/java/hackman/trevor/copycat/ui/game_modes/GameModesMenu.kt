@@ -45,7 +45,7 @@ class GameModesMenu @JvmOverloads constructor(
         observeInBackground()
     }
 
-    private fun initGameMode() = gameModesViewModel.setGameMode(SaveData(context).gameMode)
+    private fun initGameMode() = gameModesViewModel.setGameMode(SaveData.gameMode)
 
     private fun setupButtons() = game_modes_buttons.setup(gameModesViewModel, soundManager)
 

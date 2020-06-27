@@ -44,6 +44,11 @@
     <string name="dialog_failed_network_message">Check internet connection or try again later.</string>
     <!---->
 
+    <!-- Billing unavailable dialog -->
+    <string name="dialog_billing_unavailable_title">Billing Unavailable</string>
+    <string name="dialog_billing_unavailable_message">Check that you are signed in on Google Play or try again later.</string>
+    <!---->
+
     <!-- Unknown error dialog -->
     <string name="dialog_unknown_error_title">Unknown Error</string>
     <!---->

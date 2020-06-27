@@ -33,7 +33,7 @@ class GameModesButtons @JvmOverloads constructor(
     init {
         View.inflate(context, R.layout.game_modes_buttons, this)
         setText()
-        setSelectedMode(SaveData(context).gameMode)
+        setSelectedMode(SaveData.gameMode)
     }
 
     private fun setText() = buttons.forEachIndexed { index, button ->

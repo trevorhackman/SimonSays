@@ -1,5 +1,6 @@
 package hackman.trevor.copycat
 
+import android.app.Application
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import hackman.trevor.copycat.system.SaveData
@@ -19,8 +20,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initSaveData()
+        initAdsIfNotOwned()
         injectDependencies()
-        initializeAdsIfNotOwned()
 
         setContentView(R.layout.fragment_container)
 
@@ -35,8 +37,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun injectDependencies() = activityInterface.inject(ads, sounds, billing)
 
-    private fun initializeAdsIfNotOwned() {
-        if (SaveData(this).isNoAdsOwned != Ownership.Owned) ads.initialize()
+    private fun initSaveData() = SaveData.setup(applicationContext as Application)
+
+    private fun initAdsIfNotOwned() {
+        if (SaveData.isNoAdsOwned != Ownership.Owned) ads.initialize()
     }
 
     override fun onBackPressed() {

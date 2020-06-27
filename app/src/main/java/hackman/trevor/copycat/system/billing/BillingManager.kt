@@ -14,192 +14,166 @@ import org.jetbrains.annotations.TestOnly
 /**
  * Handles all things related to billing for in-app purchases.
  * There's two major reasons why billing may not work. No network connection or Google Play Store (required) not installed/force stopped/disabled/updating.
- * Only returning a network error dialog for now. Could improve in the future to detect if Google Play Store is installed and return a different error dialog for that. But I expect 99% of app-users have Google Play.
  * Google documentation (garbage documentation) : https://developer.android.com/google/play/billing/billing_library_overview
  */
 class BillingManager(private val mainActivity: MainActivity) {
 
-    private val billingClient = BillingClient.newBuilder(mainActivity).enablePendingPurchases()
-        .setListener(PurchaseListener())
-        .build().apply { startConnection(BillingStateListener()) }
-
+    /** Attempt to periodically reconnect if [BillingClient.startConnection] fails */
     private var reconnectJob: Job? = null
 
     /**
      * Call to present Google's purchase dialog
      * User may make the purchase, cancel, or fail to make purchase
+     *
+     * [BillingClient.isReady] will be false if [BillingClient.startConnection] fails
      */
     fun startPurchaseFlow() {
-        val skuList = listOf(NO_ADS)
+        if (!billingClient.isReady) {
+            DialogFactory(mainActivity).billingUnavailable().show()
+            return
+        }
+
+        val skuList: List<String> = listOf(NO_ADS) // List of product IDs. Determined in Google Developer Console
         val skuDetailsParams = SkuDetailsParams.newBuilder()
             .setSkusList(skuList)
             .setType(BillingClient.SkuType.INAPP)
             .build()
 
-        billingClient.querySkuDetailsAsync(skuDetailsParams, SkuRetrievalListener())
+        billingClient.querySkuDetailsAsync(skuDetailsParams, skuRetrievalListener)
     }
 
-    private fun acknowledgePurchase(purchase: Purchase) {
-        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-            .setPurchaseToken(purchase.purchaseToken)
+    //region Sku Listener
+
+    private val skuRetrievalListener = SkuDetailsResponseListener { billingResult, skuDetails ->
+        when {
+            skuDetails.isNullOrEmpty() -> onSkuError()
+            successfulSkuRetrieval(billingResult) -> onSuccessfulSkuRetrieval(skuDetails)
+            else -> onFailedSkuRetrieval(billingResult)
+        }
+    }
+
+    // TODO This can happen if billing failed to connect
+    private fun onSkuError() {
+        report("This shouldn't happen. Null details on OK response : " + billingClient.isReady)
+        DialogFactory(mainActivity).failedNetwork().show()
+    }
+
+    private fun successfulSkuRetrieval(billingResult: BillingResult) =
+        billingResult.responseCode == BillingClient.BillingResponseCode.OK
+
+    private fun onSuccessfulSkuRetrieval(skuDetails: List<SkuDetails>) {
+        for (skuDetail in skuDetails) {
+            when (skuDetail.sku) {
+                NO_ADS -> onRetrievedNoAds(skuDetail)
+                else -> onUnknownSku(skuDetail)
+            }
+        }
+    }
+
+    private fun onRetrievedNoAds(skuDetail: SkuDetails) {
+        val billingFlowParams = BillingFlowParams.newBuilder()
+            .setSkuDetails(skuDetail)
             .build()
-        billingClient.acknowledgePurchase(acknowledgePurchaseParams, AcknowledgePurchaseListener())
+        billingClient.launchBillingFlow(mainActivity, billingFlowParams)
     }
 
-    private inner class SkuRetrievalListener : SkuDetailsResponseListener {
-        override fun onSkuDetailsResponse(
-            billingResult: BillingResult?,
-            skuDetails: List<SkuDetails>?
-        ) {
-            when {
-                billingResult.isNull() -> report("Sku: Null billing result")
-                skuDetails.isNullOrEmpty() -> onSkuError()
-                successfulSkuRetrieval(billingResult) -> onSuccessfulSkuRetrieval(skuDetails)
-                else -> onFailedSkuRetrieval(billingResult)
-            }
-        }
-
-        private fun onSkuError() {
-            report("This shouldn't happen. Null details on OK response : " + billingClient.isReady)
-            DialogFactory(mainActivity).failedNetwork().show()
-        }
-
-        private fun successfulSkuRetrieval(billingResult: BillingResult) =
-            billingResult.responseCode == BillingClient.BillingResponseCode.OK
-
-        private fun onSuccessfulSkuRetrieval(skuDetails: List<SkuDetails>) {
-            for (skuDetail in skuDetails) {
-                when (skuDetail.sku) {
-                    NO_ADS -> onRetrievedNoAds(skuDetail)
-                    else -> onUnknownSku(skuDetail)
-                }
-            }
-        }
-
-        private fun onRetrievedNoAds(skuDetail: SkuDetails) {
-            val billingFlowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetail)
-                .build()
-            billingClient.launchBillingFlow(mainActivity, billingFlowParams)
-        }
-
-        private fun onUnknownSku(skuDetail: SkuDetails) =
-            report(
-                "This shouldn't happen. Unknown querySkuDetailsAsync result?: " +
-                        skuDetail.sku + " : " + skuDetail
-            )
+    private fun onUnknownSku(skuDetail: SkuDetails) =
+        report("This shouldn't happen. Unknown querySkuDetailsAsync result?: ${skuDetail.sku} $skuDetail")
 
 
-        private fun onFailedSkuRetrieval(billingResult: BillingResult) {
-            flog(
-                "querySkuDetailsAsync failed : " +
-                        billingResponseToName(billingResult) +
-                        " : " + billingResult.debugMessage + " : " + billingClient.isReady
-            )
-            DialogFactory(mainActivity).failedNetwork().show()
+    private fun onFailedSkuRetrieval(billingResult: BillingResult) {
+        flog("querySkuDetailsAsync failed : ${billingResponseToName(billingResult)} ${billingResult.debugMessage} ${billingClient.isReady}")
+        DialogFactory(mainActivity).failedNetwork().show()
+    }
+
+    //endregion
+
+    //region Purchase Listener
+
+    private val purchaseListener = PurchasesUpdatedListener { billingResult, purchases ->
+        when {
+            userCancelledPurchase(billingResult) -> onUserCancelledPurchase()
+            noInternetConnection(billingResult) -> onNoInternetConnection()
+            purchases.isNullOrEmpty() -> onPurchaseError(billingResult)
+            billingResult.isSuccessful() -> onSuccessfulPurchase(purchases)
+            else -> onFailedToMakePurchase(billingResult)
         }
     }
 
-    private inner class AcknowledgePurchaseListener : AcknowledgePurchaseResponseListener {
-        override fun onAcknowledgePurchaseResponse(billingResult: BillingResult?) =
-            when {
-                billingResult.isNull() -> report("Acknowledge: Null billing result")
-                successfullyAcknowledged(billingResult) -> onSuccessfulAcknowledgement()
-                else -> onFailedToAcknowledge(billingResult)
-            }
+    private fun userCancelledPurchase(billingResult: BillingResult) =
+        billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED
 
-        private fun successfullyAcknowledged(billingResult: BillingResult) =
-            billingResult.responseCode == BillingClient.BillingResponseCode.OK
+    private fun onUserCancelledPurchase() = flog("User cancelled purchase")
 
-        private fun onSuccessfulAcknowledgement() {
-            flog("Successfully acknowledged")
-            DialogFactory(mainActivity).successfulNoAdsPurchase().show()
-        }
+    private fun noInternetConnection(billingResult: BillingResult) =
+        billingResult.responseCode == BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE
 
-        // I hope this doesn't happen. Not sure what to do since I believe user already paid, but acknowledgement is required
-        // Failure to acknowledge within 3 days results in purchases being refunded
-        private fun onFailedToAcknowledge(billingResult: BillingResult) =
-            report(
-                "Failed to acknowledge : " + billingResponseToName(
-                    billingResult
-                ) + " : " + billingResult.responseCode
-            )
+    private fun onNoInternetConnection() = flog("No internet connection")
+
+    private fun onPurchaseError(billingResult: BillingResult) {
+        report("Unexpected failure to make purchase ${billingClient.isReady} ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
+        DialogFactory(mainActivity).unknownError("Sorry, there was an error with your purchase").show()
     }
 
-    private inner class PurchaseListener : PurchasesUpdatedListener {
-        override fun onPurchasesUpdated(
-            billingResult: BillingResult?,
-            purchases: List<Purchase>?
-        ) {
-            when {
-                billingResult.isNull() -> report("Purchase: Null billing result")
-                userCancelledPurchase(billingResult) -> onUserCancelledPurchase()
-                purchases.isNullOrEmpty() -> onPurchasesError()
-                successfullyPurchased(billingResult) -> onSuccessfulPurchase(purchases)
-                else -> onFailedToMakePurchase(billingResult)
+    private fun onSuccessfulPurchase(purchases: List<Purchase>) {
+        flog("Purchase made : $purchases")
+
+        // Not sure why there would be more than one purchase updated at a time, but to be thorough we'll loop through the whole list
+        for (purchase in purchases) {
+            when (purchase.sku) {
+                NO_ADS -> onNoAdsPurchased()
+                else -> onUnknownPurchase(purchase)
             }
-        }
-
-        private fun onPurchasesError() {
-            report("This shouldn't happen. Null purchases on OK response : " + billingClient.isReady)
-            DialogFactory(mainActivity).unknownError("Sorry, there was an error finding your purchase")
-                .show()
-        }
-
-        private fun successfullyPurchased(billingResult: BillingResult) =
-            billingResult.responseCode == BillingClient.BillingResponseCode.OK
-
-        private fun onSuccessfulPurchase(purchases: List<Purchase>) {
-            flog("Purchase made : $purchases")
-
-            // Not sure why there would be more than one purchase updated at a time, but to be thorough we'll loop through the whole list
-            for (purchase in purchases) {
-                when (purchase.sku) {
-                    NO_ADS -> onNoAdsPurchased()
-                    else -> onUnknownPurchase(purchase)
-                }
-            }
-        }
-
-        private fun onNoAdsPurchased() {
-            SaveData(mainActivity).isNoAdsOwned = Ownership.Owned
-        }
-
-        private fun onUnknownPurchase(purchase: Purchase) {
-            report("This shouldn't happen. Unknown purchase? : " + purchase.sku + " : " + purchase.purchaseToken)
-            DialogFactory(mainActivity).unknownError("Sorry, unknown item purchased")
-        }
-
-        private fun userCancelledPurchase(billingResult: BillingResult) =
-            billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED
-
-        private fun onUserCancelledPurchase() = flog("User cancelled purchase")
-
-        private fun onFailedToMakePurchase(billingResult: BillingResult) {
-            report(
-                "Unsuccessful purchase : " +
-                        billingResponseToName(billingResult) +
-                        " : " + billingResult.debugMessage
-            )
-            DialogFactory(mainActivity).failedNetwork()
+            if (!purchase.isAcknowledged) acknowledgePurchase(purchase)
         }
     }
+
+    private fun onNoAdsPurchased() {
+        SaveData.isNoAdsOwned = Ownership.Owned
+    }
+
+    private fun onUnknownPurchase(purchase: Purchase) {
+        report("This shouldn't happen. Unknown purchase : ${purchase.sku} ${purchase.purchaseToken}")
+        DialogFactory(mainActivity).unknownError("Sorry, unknown item purchased")
+    }
+
+    private fun onFailedToMakePurchase(billingResult: BillingResult) {
+        report("Unsuccessful purchase : ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
+        DialogFactory(mainActivity).failedNetwork()
+    }
+
+    //endregion
+
+    //region Acknowledge Listener
+
+    private val acknowledgePurchaseListener = AcknowledgePurchaseResponseListener { billingResult ->
+        if (billingResult.isSuccessful()) onSuccessfulAcknowledgement()
+        else onFailedToAcknowledge(billingResult)
+    }
+
+    private fun onSuccessfulAcknowledgement() {
+        flog("Successfully acknowledged")
+        DialogFactory(mainActivity).successfulNoAdsPurchase().show()
+    }
+
+    // I hope this doesn't happen. Not sure what to do since I believe user already paid, but acknowledgement is required
+    // Failure to acknowledge within 3 days results in purchases being refunded
+    private fun onFailedToAcknowledge(billingResult: BillingResult) =
+        report("Failed to acknowledge : ${billingResponseToName(billingResult)} ${billingResult.responseCode}")
+
+    //endregion
+
+    //region Billing State Listener
 
     /**
      * This is NOT a network connection listener. Can return OK when no connection.
      * Connects with Google Play Store installed on device.
      */
-    private inner class BillingStateListener : BillingClientStateListener {
+    private val billingStateListener: BillingClientStateListener = object : BillingClientStateListener {
 
-        override fun onBillingSetupFinished(billingResult: BillingResult?) =
-            when {
-                billingResult.isNull() -> report("State: Null billing result")
-                successfullyConnected(billingResult) -> onSuccessfulConnection()
-                else -> onFailedConnection(billingResult)
-            }
-
-        private fun successfullyConnected(billingResult: BillingResult) =
-            billingResult.responseCode == BillingClient.BillingResponseCode.OK
+        override fun onBillingSetupFinished(billingResult: BillingResult) =
+            if (billingResult.isSuccessful()) onSuccessfulConnection()
+            else onFailedConnection(billingResult)
 
         private fun onSuccessfulConnection() {
             flog("startConnection succeeded")
@@ -207,39 +181,11 @@ class BillingManager(private val mainActivity: MainActivity) {
             queryPurchases()
         }
 
-        private fun onFailedConnection(billingResult: BillingResult) {
-            flog(
-                "startConnection failed : " +
-                        billingResponseToName(billingResult) +
-                        " : " + billingResult.debugMessage
-            )
-            attemptReconnect()
-        }
-
-        // Called if Google Play Store is force stopped or otherwise no longer running
-        override fun onBillingServiceDisconnected() {
-            flog("Billing Service Disconnected")
-            attemptReconnect()
-        }
-
-        /**
-         * Periodically attempt to reconnect on a 30 second delay
-         * Must cancel reconnection attempt on reconnect
-         */
-        private fun attemptReconnect() {
-            reconnectJob = mainActivity.lifecycleScope.launch {
-                delay(30000)
-                flog("Attempting to reconnect")
-                billingClient.startConnection(this@BillingStateListener)
-            }
-        }
-
         // Make a non-network check to Google Play Store's cache for what purchases have been made
         private fun queryPurchases() {
-            val purchasesResult: PurchasesResult =
-                billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+            val purchasesResult: PurchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
 
-            val purchases: List<Purchase>? = purchasesResult.purchasesList.filterNotNull()
+            val purchases: List<Purchase>? = purchasesResult.purchasesList?.filterNotNull()
 
             when {
                 purchases.isNull() -> onNullPurchases(purchasesResult)
@@ -249,14 +195,10 @@ class BillingManager(private val mainActivity: MainActivity) {
         }
 
         private fun onNullPurchases(purchasesResult: PurchasesResult) =
-            report(
-                "Why are purchases null? : " +
-                        billingResponseToName(purchasesResult) +
-                        " " + purchasesResult.billingResult.debugMessage
-            )
+            report("Why are purchases null? : ${billingResponseToName(purchasesResult)} ${purchasesResult.billingResult.debugMessage}")
 
         private fun onEmptyPurchases() {
-            SaveData(mainActivity).isNoAdsOwned = Ownership.ConfirmedUnowned
+            SaveData.isNoAdsOwned = Ownership.ConfirmedUnowned
             flog("No purchases owned")
         }
 
@@ -270,16 +212,51 @@ class BillingManager(private val mainActivity: MainActivity) {
         private fun onFoundNoAdsPurchased(purchase: Purchase) {
             if (!purchase.isAcknowledged) acknowledgePurchase(purchase)
 
-            SaveData(mainActivity).isNoAdsOwned = Ownership.Owned
+            SaveData.isNoAdsOwned = Ownership.Owned
             flog("$NO_ADS owned")
         }
 
         private fun onFoundUnknownPurchase(purchase: Purchase) =
-            report(
-                "This shouldn't happen. Unknown queryPurchase result?: "
-                        + purchase.sku + " : " + purchase.purchaseToken
-            )
+            report("This shouldn't happen. Unknown queryPurchase result?: ${purchase.sku} ${purchase.purchaseToken}")
+
+        private fun onFailedConnection(billingResult: BillingResult) {
+            flog("startConnection failed ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
+            attemptReconnect()
+        }
+
+        // Called if Google Play Store is force stopped or otherwise no longer running
+        override fun onBillingServiceDisconnected() {
+            flog("Billing Service Disconnected")
+            attemptReconnect()
+        }
     }
+
+    /**
+     * Periodically attempt to reconnect on a 30 second delay
+     * Must cancel reconnection attempt on reconnect
+     */
+    private fun attemptReconnect() {
+        reconnectJob = mainActivity.lifecycleScope.launch {
+            delay(30000)
+            flog("Attempting to reconnect")
+            billingClient.startConnection(billingStateListener)
+        }
+    }
+
+    //endregion
+
+    private val billingClient = BillingClient.newBuilder(mainActivity).enablePendingPurchases()
+        .setListener(purchaseListener)
+        .build().apply { startConnection(billingStateListener) }
+
+    private fun acknowledgePurchase(purchase: Purchase) {
+        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+            .setPurchaseToken(purchase.purchaseToken)
+            .build()
+        billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseListener)
+    }
+
+    private fun BillingResult.isSuccessful() = responseCode == BillingClient.BillingResponseCode.OK
 
     /**
      * Gets the name of the error code
@@ -304,52 +281,35 @@ class BillingManager(private val mainActivity: MainActivity) {
     }
 
     // Overload
-    private fun billingResponseToName(billingResult: BillingResult): String {
-        return billingResponseToName(
-            billingResult.responseCode
-        )
-    }
+    private fun billingResponseToName(billingResult: BillingResult): String =
+        billingResponseToName(billingResult.responseCode)
 
     // Overload
-    private fun billingResponseToName(purchasesResult: PurchasesResult): String {
-        return billingResponseToName(
-            purchasesResult.billingResult
-        )
-    }
+    private fun billingResponseToName(purchasesResult: PurchasesResult): String =
+        billingResponseToName(purchasesResult.billingResult)
 
-    // For testing, reset purchases.
-    @TestOnly
-    fun forTestingConsumeAllPurchases(main: MainActivity) {
+    @TestOnly // Reset all purchases for testing
+    fun forTestingConsumeAllPurchases() {
+        val listener = ConsumeResponseListener { billingResult, purchaseToken ->
+            if (billingResult.isSuccessful()) log("Consumed purchase successfully : $purchaseToken")
+            else log("Consume failed : ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
+        }
+
         // Get purchases if any
-        val purchases: List<Purchase> =
-            billingClient.queryPurchases(BillingClient.SkuType.INAPP).purchasesList
-        if (purchases.isEmpty()) log("No purchases to consume")
-        else {
-            for (purchase in purchases) {
-                val consumeParams = ConsumeParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
-                    .build()
-                val listener =
-                    ConsumeResponseListener { billingResult, purchaseToken ->
-                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                            log("Consumed purchase successfully : $purchaseToken")
-                        } else {
-                            log(
-                                "Consume failed : " +
-                                        billingResponseToName(billingResult) +
-                                        " : " + billingResult.debugMessage
-                            )
-                        }
-                    }
-                billingClient.consumeAsync(
-                    consumeParams,
-                    listener
-                )
-                log("Consuming " + purchase.sku)
-            }
+        val purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP).purchasesList
+        if (purchases.isNullOrEmpty()) log("No purchases to consume")
+        else for (purchase in purchases) {
+            val consumeParams = ConsumeParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+            billingClient.consumeAsync(
+                consumeParams,
+                listener
+            )
+            log("Consuming ${purchase.sku}")
         }
 
         // Reset Keys
-        SaveData(mainActivity).isNoAdsOwned = Ownership.Unknown
+        SaveData.isNoAdsOwned = Ownership.Unknown
     }
 }

@@ -1,16 +1,27 @@
 package hackman.trevor.copycat.system
 
+import android.app.Application
 import android.content.Context
 import hackman.trevor.copycat.logic.GameMode
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.system.billing.Ownership
 
-// TODO Make this singleton and use application context
-class SaveData(context: Context) {
+object SaveData {
 
-    private val preferences = context.getSharedPreferences("default", Context.MODE_PRIVATE)
-    private val editor = preferences.edit()
+    private lateinit var application: Application
+
+    fun setup(application: Application) {
+        this.application = application
+    }
+
+    private val preferences by lazy {
+        application.getSharedPreferences("default", Context.MODE_PRIVATE)
+    }
+
+    private val editor by lazy {
+        preferences.edit()
+    }
 
     // Whether or not noAds has been purchased. Only show ads if not owned
     var isNoAdsOwned: Ownership
@@ -65,13 +76,11 @@ class SaveData(context: Context) {
         editor.apply()
     }
 
-    companion object {
-        private const val isNoAdsOwnedKey = "noAdsOwned"
-        private const val isRatingRequestDisplayedKey = "ratingRequestDisplayed"
-        private const val gamesCompletedKey = "gamesCompleted"
-        private const val speedKey = "speed"
-        private const val colorSetKey = "colors"
-        private const val gameModeKey = "gameMode"
-        private const val modeBestKey = "Best"
-    }
+    private const val isNoAdsOwnedKey = "noAdsOwned"
+    private const val isRatingRequestDisplayedKey = "ratingRequestDisplayed"
+    private const val gamesCompletedKey = "gamesCompleted"
+    private const val speedKey = "speed"
+    private const val colorSetKey = "colors"
+    private const val gameModeKey = "gameMode"
+    private const val modeBestKey = "Best"
 }

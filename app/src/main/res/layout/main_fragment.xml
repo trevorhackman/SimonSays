@@ -9,7 +9,7 @@
 
     <include layout="@layout/color_grid" />
 
-    <hackman.trevor.copycat.ui.main.MainButton
+    <hackman.trevor.copycat.ui.main.main_button.MainButton
         android:id="@+id/main_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

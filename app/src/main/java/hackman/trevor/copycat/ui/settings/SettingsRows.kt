@@ -85,11 +85,11 @@ class SettingsSpeedRow @JvmOverloads constructor(
     }
 
     override fun initializeValue() {
-        optionSelected = SaveData(context).speed
+        optionSelected = SaveData.speed
     }
 
     override fun saveValueSelected() {
-        SaveData(context).speed = optionSelected
+        SaveData.speed = optionSelected
     }
 }
 
@@ -103,11 +103,11 @@ class SettingsColorRow @JvmOverloads constructor(
     }
 
     override fun initializeValue() {
-        optionSelected = SaveData(context).colorSet
+        optionSelected = SaveData.colorSet
     }
 
     override fun saveValueSelected() {
-        SaveData(context).colorSet = optionSelected
+        SaveData.colorSet = optionSelected
     }
 
     override fun onChange(value: ColorSet) {

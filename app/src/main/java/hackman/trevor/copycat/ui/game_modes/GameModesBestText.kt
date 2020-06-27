@@ -16,13 +16,13 @@ class GameModesBestText @JvmOverloads constructor(
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
-        updateText(SaveData(context).gameMode)
+        updateText(SaveData.gameMode)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .04f)
     }
 
     fun updateText(gameMode: GameMode) {
         val gameModeName = getString(gameMode.name())
-        val gameModeHighScore = SaveData(context).getHighScore(gameMode)
+        val gameModeHighScore = SaveData.getHighScore(gameMode)
         text = getString(R.string.game_modes_best_text_format, gameModeName, gameModeHighScore)
     }
 }

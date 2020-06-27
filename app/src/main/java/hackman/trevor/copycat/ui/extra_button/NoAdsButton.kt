@@ -40,7 +40,7 @@ class NoAdsButton @JvmOverloads constructor(
     private fun setOnClickListener() =
         setOnClickListener {
             soundManager.click.play()
-            if (SaveData(context).isNoAdsOwned == Ownership.Owned) noAdsAlreadyPurchased.show()
+            if (SaveData.isNoAdsOwned == Ownership.Owned) noAdsAlreadyPurchased.show()
             else noAdsDialog.show()
         }
 

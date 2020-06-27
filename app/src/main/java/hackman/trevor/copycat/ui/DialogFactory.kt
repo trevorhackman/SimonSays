@@ -63,6 +63,13 @@ class DialogFactory(private val context: Context) {
             .setNeutralButton(R.string.dialog_ok_button, null)
             .create()
 
+    fun billingUnavailable(): AlertDialog =
+        buildStyle()
+            .setTitle(R.string.dialog_billing_unavailable_title)
+            .setMessage(R.string.dialog_billing_unavailable_message)
+            .setNeutralButton(R.string.dialog_ok_button, null)
+            .create()
+
     fun unknownError(errorMessage: String): AlertDialog =
         buildStyle()
             .setTitle(R.string.dialog_unknown_error_title)

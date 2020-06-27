@@ -2,7 +2,6 @@ package hackman.trevor.copycat.ui.main
 
 import android.view.MotionEvent
 import android.view.View
-import hackman.trevor.copycat.system.log
 
 /**
  * Gives circular touch listener
@@ -26,8 +25,6 @@ object CircularTouchListener : View.OnTouchListener {
             if (event.action == MotionEvent.ACTION_UP) {
                 view.performClick()
             }
-            log("" + view.isFocusable)
-            view.requestFocus()
             return true
         }
         return false

@@ -15,6 +15,5 @@ class SettingsArrowButton @JvmOverloads constructor(
         setMeasuredDimension(size, size)
     }
 
-    private fun determineSize(): Int = (displayMinimum() * .12).toInt()
-
+    private fun determineSize() = (displayMinimum() * .12).toInt()
 }
