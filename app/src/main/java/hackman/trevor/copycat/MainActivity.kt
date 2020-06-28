@@ -9,6 +9,7 @@ import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.sound.SoundManager
+import hackman.trevor.copycat.ui.DialogFactory
 import hackman.trevor.copycat.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSaveData()
+        initDialogFactory()
         initAdsIfNotOwned()
         injectDependencies()
 
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     private fun injectDependencies() = activityInterface.inject(ads, sounds, billing)
 
     private fun initSaveData() = SaveData.setup(applicationContext as Application)
+
+    private fun initDialogFactory() = DialogFactory.setup(this)
 
     private fun initAdsIfNotOwned() {
         if (SaveData.isNoAdsOwned != Ownership.Owned) ads.initialize()

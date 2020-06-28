@@ -1,13 +1,18 @@
 package hackman.trevor.copycat.ui
 
+import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import hackman.trevor.copycat.R
 
-class DialogFactory(private val context: Context) {
+object DialogFactory {
 
-    private fun buildStyle() =
-        AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
+    private lateinit var activity: Activity
+
+    fun setup(activity: Activity) {
+        this.activity = activity
+    }
+
+    private fun buildStyle() = AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
 
     fun leaveCurrentGame(onExit: () -> Unit, onMainMenu: () -> Unit): AlertDialog =
         buildStyle()

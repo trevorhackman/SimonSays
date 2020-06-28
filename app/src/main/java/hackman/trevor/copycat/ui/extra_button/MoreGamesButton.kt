@@ -16,7 +16,7 @@ class MoreGamesButton @JvmOverloads constructor(
     private lateinit var soundManager: SoundManager
 
     private val moreGamesDialog by lazy {
-        DialogFactory(context).viewMoreGames {
+        DialogFactory.viewMoreGames {
             ShowMoreGames.startMoreGamesIntent(context)
         }
     }

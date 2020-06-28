@@ -54,10 +54,7 @@ class SoundManager(private val mainActivity: MainActivity) : LifecycleObserver {
         }
     }
 
-    private fun updateSounds() =
-        allSounds.forEach {
-            it.soundId = loadSoundAndGetId(it.resource)
-        }
+    private fun updateSounds() = allSounds.forEach { it.soundId = loadSoundAndGetId(it.resource) }
 
     private fun createSound(resource: Int, volume: Float): Sound =
         SoundImpl(resource, volume, this).also {

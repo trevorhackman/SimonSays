@@ -29,7 +29,7 @@ class BillingManager(private val mainActivity: MainActivity) {
      */
     fun startPurchaseFlow() {
         if (!billingClient.isReady) {
-            DialogFactory(mainActivity).billingUnavailable().show()
+            DialogFactory.billingUnavailable().show()
             return
         }
 
@@ -55,7 +55,7 @@ class BillingManager(private val mainActivity: MainActivity) {
     // TODO This can happen if billing failed to connect
     private fun onSkuError() {
         report("This shouldn't happen. Null details on OK response : " + billingClient.isReady)
-        DialogFactory(mainActivity).failedNetwork().show()
+        DialogFactory.failedNetwork().show()
     }
 
     private fun successfulSkuRetrieval(billingResult: BillingResult) =
@@ -83,7 +83,7 @@ class BillingManager(private val mainActivity: MainActivity) {
 
     private fun onFailedSkuRetrieval(billingResult: BillingResult) {
         flog("querySkuDetailsAsync failed : ${billingResponseToName(billingResult)} ${billingResult.debugMessage} ${billingClient.isReady}")
-        DialogFactory(mainActivity).failedNetwork().show()
+        DialogFactory.failedNetwork().show()
     }
 
     //endregion
@@ -112,7 +112,7 @@ class BillingManager(private val mainActivity: MainActivity) {
 
     private fun onPurchaseError(billingResult: BillingResult) {
         report("Unexpected failure to make purchase ${billingClient.isReady} ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
-        DialogFactory(mainActivity).unknownError("Sorry, there was an error with your purchase").show()
+        DialogFactory.unknownError("Sorry, there was an error with your purchase").show()
     }
 
     private fun onSuccessfulPurchase(purchases: List<Purchase>) {
@@ -134,12 +134,12 @@ class BillingManager(private val mainActivity: MainActivity) {
 
     private fun onUnknownPurchase(purchase: Purchase) {
         report("This shouldn't happen. Unknown purchase : ${purchase.sku} ${purchase.purchaseToken}")
-        DialogFactory(mainActivity).unknownError("Sorry, unknown item purchased")
+        DialogFactory.unknownError("Sorry, unknown item purchased")
     }
 
     private fun onFailedToMakePurchase(billingResult: BillingResult) {
         report("Unsuccessful purchase : ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
-        DialogFactory(mainActivity).failedNetwork()
+        DialogFactory.failedNetwork()
     }
 
     //endregion
@@ -153,7 +153,7 @@ class BillingManager(private val mainActivity: MainActivity) {
 
     private fun onSuccessfulAcknowledgement() {
         flog("Successfully acknowledged")
-        DialogFactory(mainActivity).successfulNoAdsPurchase().show()
+        DialogFactory.successfulNoAdsPurchase().show()
     }
 
     // I hope this doesn't happen. Not sure what to do since I believe user already paid, but acknowledgement is required

@@ -19,13 +19,13 @@ class NoAdsButton @JvmOverloads constructor(
     private lateinit var billingManager: BillingManager
 
     private val noAdsDialog by lazy {
-        DialogFactory(context).purchaseMenu {
+        DialogFactory.purchaseMenu {
             billingManager.startPurchaseFlow()
         }
     }
 
     private val noAdsAlreadyPurchased by lazy {
-        DialogFactory(context).noAdsAlreadyPurchased()
+        DialogFactory.noAdsAlreadyPurchased()
     }
 
     init {

@@ -16,7 +16,7 @@ class RateAppButton @JvmOverloads constructor(
     private lateinit var soundManager: SoundManager
 
     private val rateTheAppDialog by lazy {
-        DialogFactory(context).rateTheApp {
+        DialogFactory.rateTheApp {
             RateTheApp.startRateAppIntent(context)
         }
     }
