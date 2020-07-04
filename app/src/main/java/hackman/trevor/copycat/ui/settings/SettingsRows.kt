@@ -21,7 +21,6 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 ) : LinearLayout(context, attributeSet) where T : Enum<T>, T : NameId {
 
     protected lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var soundManager: SoundManager
 
     protected var optionSelected: T = constants.first()
         set(value) {
@@ -47,17 +46,16 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
     private fun onLeftArrow() {
         if (optionSelected == constants.first()) return
         optionSelected = constants[constants.indexOf(optionSelected) - 1]
-        soundManager.click.play()
+        SoundManager.click.play()
     }
 
     private fun onRightArrow() {
         if (optionSelected == constants.last()) return
         optionSelected = constants[constants.indexOf(optionSelected) + 1]
-        soundManager.click.play()
+        SoundManager.click.play()
     }
 
-    fun setup(soundManager: SoundManager, settingsViewModel: SettingsViewModel) {
-        this.soundManager = soundManager
+    fun setup(settingsViewModel: SettingsViewModel) {
         this.settingsViewModel = settingsViewModel
         onChange(optionSelected)
     }

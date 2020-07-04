@@ -13,8 +13,6 @@ class MoreGamesButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    private lateinit var soundManager: SoundManager
-
     private val moreGamesDialog by lazy {
         DialogFactory.viewMoreGames {
             ShowMoreGames.startMoreGamesIntent(context)
@@ -24,12 +22,8 @@ class MoreGamesButton @JvmOverloads constructor(
     init {
         background = getDrawable(R.drawable.more_games)
         setOnClickListener {
-            soundManager.click.play()
+            SoundManager.click.play()
             moreGamesDialog.show()
         }
-    }
-
-    fun setup(soundManager: SoundManager) {
-        this.soundManager = soundManager
     }
 }

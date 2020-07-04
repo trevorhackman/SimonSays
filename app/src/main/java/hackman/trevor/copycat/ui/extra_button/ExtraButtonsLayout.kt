@@ -5,9 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import hackman.trevor.copycat.R
-import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.isPortrait
-import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
 import hackman.trevor.copycat.ui.settings.SettingsViewModel
 
@@ -16,8 +14,6 @@ class ExtraButtonsLayout @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ConstraintLayout(context, attributeSet) {
 
-    private lateinit var soundManager: SoundManager
-    private lateinit var billingManager: BillingManager
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var gameModesViewModel: GameModesViewModel
 
@@ -50,36 +46,20 @@ class ExtraButtonsLayout @JvmOverloads constructor(
         isPortrait = isPortrait()
     }
 
-    fun setup(
-        soundManager: SoundManager,
-        billingManager: BillingManager,
-        settingsViewModel: SettingsViewModel,
-        gameModesViewModel: GameModesViewModel
-    ) {
-        this.soundManager = soundManager
-        this.billingManager = billingManager
+    fun setup(settingsViewModel: SettingsViewModel, gameModesViewModel: GameModesViewModel) {
         this.settingsViewModel = settingsViewModel
         this.gameModesViewModel = gameModesViewModel
         setupAll()
     }
 
     private fun setupAll() {
-        setupMoreGamesButton()
-        setupNoAdsButton()
-        setupRateAppButton()
         setupSettingsButton()
         setupGameModesButton()
     }
 
-    private fun setupMoreGamesButton() = findMoreGamesButton().setup(soundManager)
+    private fun setupSettingsButton() = findSettingsButton().setup(settingsViewModel)
 
-    private fun setupNoAdsButton() = findNoAdsButton().setup(soundManager, billingManager)
-
-    private fun setupRateAppButton() = findRateAppButton().setup(soundManager)
-
-    private fun setupSettingsButton() = findSettingsButton().setup(settingsViewModel, soundManager)
-
-    private fun setupGameModesButton() = findGameModesButton().setup(soundManager, gameModesViewModel)
+    private fun setupGameModesButton() = findGameModesButton().setup(gameModesViewModel)
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)

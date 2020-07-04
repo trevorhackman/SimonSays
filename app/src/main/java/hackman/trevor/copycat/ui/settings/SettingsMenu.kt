@@ -23,7 +23,6 @@ class SettingsMenu @JvmOverloads constructor(
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var lifecycleOwner: LifecycleOwner
-    private lateinit var soundManager: SoundManager
 
     init {
         View.inflate(context, R.layout.settings_menu, this)
@@ -31,26 +30,25 @@ class SettingsMenu @JvmOverloads constructor(
 
     fun setup(
         settingsViewModel: SettingsViewModel,
-        lifecycleOwner: LifecycleOwner,
-        soundManager: SoundManager
+        lifecycleOwner: LifecycleOwner
     ) {
         this.settingsViewModel = settingsViewModel
         this.lifecycleOwner = lifecycleOwner
-        this.soundManager = soundManager
         setupSpeedOption()
         setupColorOption()
         setupCloseButton()
         observeInBackground()
     }
 
-    private fun setupSpeedOption() = settings_option_speed.setup(soundManager, settingsViewModel)
+    private fun setupSpeedOption() = settings_option_speed.setup(settingsViewModel)
 
-    private fun setupColorOption() = settings_option_color.setup(soundManager, settingsViewModel)
+    private fun setupColorOption() = settings_option_color.setup(settingsViewModel)
 
+    // TODO This does not follow setup manual dependency injection pattern
     private fun setupCloseButton() =
         settings_close_button.setOnClickListener {
             settingsViewModel.setInBackground(true)
-            soundManager.click.play()
+            SoundManager.click.play()
         }
 
     private fun observeInBackground() = observe(settingsViewModel.inBackground) {

@@ -1,22 +1,25 @@
 package hackman.trevor.copycat.system.billing
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.*
 import com.android.billingclient.api.Purchase.PurchasesResult
-import hackman.trevor.copycat.MainActivity
 import hackman.trevor.copycat.system.*
 import hackman.trevor.copycat.ui.DialogFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.TestOnly
+import java.lang.ref.WeakReference
 
 /**
  * Handles all things related to billing for in-app purchases.
  * There's two major reasons why billing may not work. No network connection or Google Play Store (required) not installed/force stopped/disabled/updating.
  * Google documentation (garbage documentation) : https://developer.android.com/google/play/billing/billing_library_overview
  */
-class BillingManager(private val mainActivity: MainActivity) {
+object BillingManager {
+
+    private lateinit var activity: WeakReference<AppCompatActivity>
 
     /** Attempt to periodically reconnect if [BillingClient.startConnection] fails */
     private var reconnectJob: Job? = null
@@ -71,7 +74,7 @@ class BillingManager(private val mainActivity: MainActivity) {
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(skuDetail)
             .build()
-        billingClient.launchBillingFlow(mainActivity, billingFlowParams)
+        billingClient.launchBillingFlow(activity.get()!!, billingFlowParams)
     }
 
     private fun onUnknownSku(skuDetail: SkuDetails) =
@@ -233,7 +236,7 @@ class BillingManager(private val mainActivity: MainActivity) {
      * Must cancel reconnection attempt on reconnect
      */
     private fun attemptReconnect() {
-        reconnectJob = mainActivity.lifecycleScope.launch {
+        reconnectJob = activity.get()!!.lifecycleScope.launch {
             delay(30000)
             flog("Attempting to reconnect")
             billingClient.startConnection(billingStateListener)
@@ -242,7 +245,7 @@ class BillingManager(private val mainActivity: MainActivity) {
 
     //endregion
 
-    private val billingClient = BillingClient.newBuilder(mainActivity).enablePendingPurchases()
+    private val billingClient = BillingClient.newBuilder(activity.get()!!).enablePendingPurchases()
         .setListener(purchaseListener)
         .build().apply { startConnection(billingStateListener) }
 

@@ -25,7 +25,6 @@ class GameModesButton @JvmOverloads constructor(
         }
 
     private lateinit var gameModesViewModel: GameModesViewModel
-    private lateinit var soundManager: SoundManager
     private lateinit var gameMode: GameMode
 
     init {
@@ -44,13 +43,8 @@ class GameModesButton @JvmOverloads constructor(
         }
     }
 
-    fun setup(
-        gameModesViewModel: GameModesViewModel,
-        soundManager: SoundManager,
-        gameMode: GameMode
-    ) {
+    fun setup(gameModesViewModel: GameModesViewModel, gameMode: GameMode) {
         this.gameModesViewModel = gameModesViewModel
-        this.soundManager = soundManager
         this.gameMode = gameMode
         setOnClickListener()
     }
@@ -58,6 +52,6 @@ class GameModesButton @JvmOverloads constructor(
     private fun setOnClickListener() = setOnClickListener {
         SaveData.gameMode = gameMode
         gameModesViewModel.setGameMode(gameMode)
-        soundManager.click.play()
+        SoundManager.click.play()
     }
 }

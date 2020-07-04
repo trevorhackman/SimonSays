@@ -15,12 +15,9 @@ class NoAdsButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    private lateinit var soundManager: SoundManager
-    private lateinit var billingManager: BillingManager
-
     private val noAdsDialog by lazy {
         DialogFactory.purchaseMenu {
-            billingManager.startPurchaseFlow()
+            BillingManager.startPurchaseFlow()
         }
     }
 
@@ -37,15 +34,9 @@ class NoAdsButton @JvmOverloads constructor(
         background = getDrawable(R.drawable.no_ads)
     }
 
-    private fun setOnClickListener() =
-        setOnClickListener {
-            soundManager.click.play()
-            if (SaveData.isNoAdsOwned == Ownership.Owned) noAdsAlreadyPurchased.show()
-            else noAdsDialog.show()
-        }
-
-    fun setup(soundManager: SoundManager, billingManager: BillingManager) {
-        this.soundManager = soundManager
-        this.billingManager = billingManager
+    private fun setOnClickListener() = setOnClickListener {
+        SoundManager.click.play()
+        if (SaveData.isNoAdsOwned == Ownership.Owned) noAdsAlreadyPurchased.show()
+        else noAdsDialog.show()
     }
 }

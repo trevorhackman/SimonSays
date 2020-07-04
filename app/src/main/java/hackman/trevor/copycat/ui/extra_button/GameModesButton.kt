@@ -17,7 +17,6 @@ class GameModesButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : AppCompatButton(context, attributeSet) {
 
-    private lateinit var soundManager: SoundManager
     private lateinit var gameModesViewModel: GameModesViewModel
 
     init {
@@ -26,8 +25,7 @@ class GameModesButton @JvmOverloads constructor(
         setTextColor(Color.White)
     }
 
-    fun setup(soundManager: SoundManager, gameModesViewModel: GameModesViewModel) {
-        this.soundManager = soundManager
+    fun setup(gameModesViewModel: GameModesViewModel) {
         this.gameModesViewModel = gameModesViewModel
         setOnClickListener()
     }
@@ -50,9 +48,8 @@ class GameModesButton @JvmOverloads constructor(
         }, Color.White)
     }
 
-    private fun setOnClickListener() =
-        setOnClickListener {
-            soundManager.click.play()
-            gameModesViewModel.setInBackground(false)
-        }
+    private fun setOnClickListener() = setOnClickListener {
+        SoundManager.click.play()
+        gameModesViewModel.setInBackground(false)
+    }
 }

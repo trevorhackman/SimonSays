@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import hackman.trevor.copycat.*
+import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
 import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
@@ -17,8 +18,6 @@ import kotlinx.android.synthetic.main.title.*
 class MainFragment : BaseFragment() {
     override val layout = R.layout.main_fragment
 
-    private val sounds: SoundProvider by soundProvider()
-    private val billing: BillingProvider by billingProvider()
     private val onBackPressed: OnBackPressed by onBackPressed()
 
     private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
@@ -37,20 +36,17 @@ class MainFragment : BaseFragment() {
     }
 
     private fun setupColorButtons() {
-        color_button_top_left.setup(sound = sounds.soundManager.chip1)
-        color_button_top_right.setup(sound = sounds.soundManager.chip2)
-        color_button_bottom_left.setup(sound = sounds.soundManager.chip3)
-        color_button_bottom_right.setup(sound = sounds.soundManager.chip4)
+        color_button_top_left.setup(sound = SoundManager.chip1)
+        color_button_top_right.setup(sound = SoundManager.chip2)
+        color_button_bottom_left.setup(sound = SoundManager.chip3)
+        color_button_bottom_right.setup(sound = SoundManager.chip4)
     }
 
-    private fun setupExtraButtons() =
-        extra_buttons_layout.setup(sounds.soundManager, billing.billingManager, settingsViewModel, gameModesViewModel)
+    private fun setupExtraButtons() = extra_buttons_layout.setup(settingsViewModel, gameModesViewModel)
 
-    private fun setupSettingsMenu() =
-        settings_menu.setup(settingsViewModel, viewLifecycleOwner, sounds.soundManager)
+    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycleOwner)
 
-    private fun setupGameModesMenu() =
-        game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner, sounds.soundManager)
+    private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner)
 
     private fun observeColorSettings() =
         observe(settingsViewModel.colorSet) {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.ads.AdManager
-import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.sound.SoundManager
@@ -13,17 +12,14 @@ import hackman.trevor.copycat.ui.DialogFactory
 import hackman.trevor.copycat.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
-    private val activityInterface: ActivityInterface by injector()
-
-    private val sounds by lazy { SoundManager(this) }
-    private val billing by lazy { BillingManager(this) }
+    private val activityInterface: ActivityInterface by activityInterface()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSaveData()
         initDialogFactory()
         initAdsIfNotOwned()
-        injectDependencies()
+        initSounds()
 
         setContentView(R.layout.fragment_container)
 
@@ -36,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         log("Logging is working")
     }
 
-    private fun injectDependencies() = activityInterface.inject(sounds, billing)
-
     private fun initSaveData() = SaveData.setup(applicationContext as Application)
 
     private fun initDialogFactory() = DialogFactory.setup(this)
@@ -46,8 +40,10 @@ class MainActivity : AppCompatActivity() {
         if (SaveData.isNoAdsOwned != Ownership.Owned) AdManager.setup(this)
     }
 
+    private fun initSounds() = SoundManager.setup(this)
+
     override fun onBackPressed() {
-        val shouldPerformSuper = activityInterface.onBackPressed?.invoke()
-        if (shouldPerformSuper != false) super.onBackPressed()
+        if (activityInterface.onBackPressed?.invoke() == true) return
+        super.onBackPressed()
     }
 }

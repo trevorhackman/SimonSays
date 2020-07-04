@@ -1,17 +1,32 @@
 package hackman.trevor.copycat.system.sound
 
 import android.media.SoundPool
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import hackman.trevor.copycat.MainActivity
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
+import java.lang.ref.WeakReference
 
-class SoundManager(private val mainActivity: MainActivity) : LifecycleObserver {
+object SoundManager : LifecycleObserver {
+
+    private lateinit var activity: WeakReference<AppCompatActivity>
+
     private var soundPool: SoundPool? = null
+
+    /**
+     * Volume levels
+     * Balancing the volume out some b/c the higher pitched notes 'sound' louder than lower pitched notes
+     */
+    private const val VOLUME_CHIP1 = 0.3f
+    private const val VOLUME_CHIP2 = 0.45f
+    private const val VOLUME_CHIP3 = 0.6f
+    private const val VOLUME_CHIP4 = 0.75f
+    private const val VOLUME_FAILURE = 1.0f
+    private const val VOLUME_CLICK = 0.3f
 
     private val allSounds = mutableListOf<SoundImpl>()
     val chip1 = createSound(R.raw.chip1_amp, VOLUME_CHIP1) // Sound 1 (Highest)
@@ -21,8 +36,9 @@ class SoundManager(private val mainActivity: MainActivity) : LifecycleObserver {
     val failure = createSound(R.raw.failure, VOLUME_FAILURE) // Fail sound
     val click = createSound(R.raw.click, VOLUME_CLICK) // Button click sound
 
-    init {
-        mainActivity.lifecycle.addObserver(this)
+    fun setup(activity: AppCompatActivity) {
+        this.activity = WeakReference(activity)
+        activity.lifecycle.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -56,13 +72,12 @@ class SoundManager(private val mainActivity: MainActivity) : LifecycleObserver {
 
     private fun updateSounds() = allSounds.forEach { it.soundId = loadSoundAndGetId(it.resource) }
 
-    private fun createSound(resource: Int, volume: Float): Sound =
-        SoundImpl(resource, volume, this).also {
-            allSounds.add(it)
-        }
+    private fun createSound(resource: Int, volume: Float): Sound = SoundImpl(resource, volume).also {
+        allSounds.add(it)
+    }
 
     private fun loadSoundAndGetId(resource: Int): Int =
-        soundPool?.load(mainActivity, resource, 1) ?: {
+        soundPool?.load(activity.get(), resource, 1) ?: {
             report("Attempted to load sound on null SoundPool")
             0
         }.invoke()
@@ -95,29 +110,15 @@ class SoundManager(private val mainActivity: MainActivity) : LifecycleObserver {
 
     private fun disableAllSounds() = allSounds.forEach { it.isEnabled = false }
 
-    companion object {
-        /**
-         * Volume levels
-         * Balancing the volume out some b/c the higher pitched notes 'sound' louder than lower pitched notes
-         */
-        private const val VOLUME_CHIP1 = 0.3f
-        private const val VOLUME_CHIP2 = 0.45f
-        private const val VOLUME_CHIP3 = 0.6f
-        private const val VOLUME_CHIP4 = 0.75f
-        private const val VOLUME_FAILURE = 1.0f
-        private const val VOLUME_CLICK = 0.3f
-    }
-
     private class SoundImpl(
         val resource: Int,
-        val volume: Float,
-        val soundManager: SoundManager
+        val volume: Float
     ) : Sound {
         var soundId = 0
         var isEnabled = true
 
         override fun play() {
-            if (isEnabled) soundManager.playSound(this)
+            if (isEnabled) playSound(this)
         }
     }
 }

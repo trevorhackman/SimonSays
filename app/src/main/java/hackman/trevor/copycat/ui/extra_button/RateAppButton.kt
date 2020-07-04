@@ -13,8 +13,6 @@ class RateAppButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : ExtraButton(context, attributeSet) {
 
-    private lateinit var soundManager: SoundManager
-
     private val rateTheAppDialog by lazy {
         DialogFactory.rateTheApp {
             RateTheApp.startRateAppIntent(context)
@@ -24,12 +22,8 @@ class RateAppButton @JvmOverloads constructor(
     init {
         background = getDrawable(R.drawable.star)
         setOnClickListener {
-            soundManager.click.play()
+            SoundManager.click.play()
             rateTheAppDialog.show()
         }
-    }
-
-    fun setup(soundManager: SoundManager) {
-        this.soundManager = soundManager
     }
 }

@@ -8,7 +8,6 @@ import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.system.sound.SoundManager
 import kotlinx.android.synthetic.main.game_modes_buttons.view.*
 
 class GameModesButtons @JvmOverloads constructor(
@@ -17,7 +16,6 @@ class GameModesButtons @JvmOverloads constructor(
 ) : ConstraintLayout(context, attributeSet) {
 
     private lateinit var gameModesViewModel: GameModesViewModel
-    private lateinit var soundManager: SoundManager
 
     private val buttons: List<GameModesButton> by lazy {
         listOf(
@@ -40,9 +38,8 @@ class GameModesButtons @JvmOverloads constructor(
         button.text = getString(GameMode.values()[index].name())
     }
 
-    fun setup(gameModesViewModel: GameModesViewModel, soundManager: SoundManager) {
+    fun setup(gameModesViewModel: GameModesViewModel) {
         this.gameModesViewModel = gameModesViewModel
-        this.soundManager = soundManager
         setupButtons()
     }
 
@@ -50,8 +47,7 @@ class GameModesButtons @JvmOverloads constructor(
         button.setup(GameMode.values()[index])
     }
 
-    private fun GameModesButton.setup(gameMode: GameMode) =
-        setup(gameModesViewModel, soundManager, gameMode)
+    private fun GameModesButton.setup(gameMode: GameMode) = setup(gameModesViewModel, gameMode)
 
     fun setSelectedMode(gameMode: GameMode) {
         val highlightedIndex = GameMode.values().indexOf(gameMode)

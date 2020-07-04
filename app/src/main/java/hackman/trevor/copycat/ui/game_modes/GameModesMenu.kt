@@ -24,7 +24,6 @@ class GameModesMenu @JvmOverloads constructor(
 
     private lateinit var gameModesViewModel: GameModesViewModel
     private lateinit var lifecycleOwner: LifecycleOwner
-    private lateinit var soundManager: SoundManager
 
     init {
         View.inflate(context, R.layout.game_modes_menu, this)
@@ -32,12 +31,10 @@ class GameModesMenu @JvmOverloads constructor(
 
     fun setup(
         gameModesViewModel: GameModesViewModel,
-        lifecycleOwner: LifecycleOwner,
-        soundManager: SoundManager
+        lifecycleOwner: LifecycleOwner
     ) {
         this.gameModesViewModel = gameModesViewModel
         this.lifecycleOwner = lifecycleOwner
-        this.soundManager = soundManager
         initGameMode()
         setupButtons()
         setupCloseButton()
@@ -47,13 +44,12 @@ class GameModesMenu @JvmOverloads constructor(
 
     private fun initGameMode() = gameModesViewModel.setGameMode(SaveData.gameMode)
 
-    private fun setupButtons() = game_modes_buttons.setup(gameModesViewModel, soundManager)
+    private fun setupButtons() = game_modes_buttons.setup(gameModesViewModel)
 
-    private fun setupCloseButton() =
-        game_modes_close_button.setOnClickListener {
-            gameModesViewModel.setInBackground(true)
-            soundManager.click.play()
-        }
+    private fun setupCloseButton() = game_modes_close_button.setOnClickListener {
+        gameModesViewModel.setInBackground(true)
+        SoundManager.click.play()
+    }
 
     private fun observeGameMode() = observe(gameModesViewModel.gameMode) {
         game_modes_buttons.setSelectedMode(it)
