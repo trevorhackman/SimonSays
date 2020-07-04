@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
-import hackman.trevor.copycat.logic.GameMode
+import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getString

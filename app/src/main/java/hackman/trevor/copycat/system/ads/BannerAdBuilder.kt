@@ -1,18 +1,18 @@
 package hackman.trevor.copycat.system.ads
 
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import hackman.trevor.copycat.MainActivity
 import hackman.trevor.copycat.system.TESTING
 import hackman.trevor.copycat.system.log
 
 class BannerAdBuilder(
-    private val mainActivity: MainActivity,
+    private val activity: AppCompatActivity,
     private val requestNewBannerAd: () -> Unit
 ) {
     fun build(): AdView =
-        AdView(mainActivity).apply {
+        AdView(activity).apply {
             adSize = AdSize.SMART_BANNER
             adUnitId = if (TESTING) testBannerAdId else bannerAdId
             adListener = bannerAdListener

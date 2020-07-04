@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.logic
+package hackman.trevor.copycat.logic.game
 
 import java.util.*
 

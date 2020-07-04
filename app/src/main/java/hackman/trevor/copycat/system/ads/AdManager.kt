@@ -1,6 +1,7 @@
 package hackman.trevor.copycat.system.ads
 
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -8,11 +9,11 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import hackman.trevor.copycat.MainActivity
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
+import java.lang.ref.WeakReference
 
 /**
  * Admob Ads with Firebase
@@ -27,27 +28,31 @@ import hackman.trevor.copycat.system.report
  * Interstitial resizes on rotation. Banner does not. Should build new banner after rotation.
  * Banner has retry policy when it fails to load. Interstitial does not.
  */
-class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
+object AdManager : LifecycleObserver {
+
+    private lateinit var activity: WeakReference<AppCompatActivity>
+
     private var isInitialized = false
 
     private var bannerAd: AdView? = null
 
     private val interstitialAd by lazy {
-        InterstitialAdBuilder(mainActivity, ::requestNewInterstitialAd).build()
+        InterstitialAdBuilder(activity.get()!!, ::requestNewInterstitialAd).build()
     }
 
     // TODO Use this before showing ads
     fun isEnabled() = isInitialized && SaveData.isNoAdsOwned == Ownership.ConfirmedUnowned
 
-    fun initialize() {
-        mainActivity.lifecycle.addObserver(this)
+    fun setup(activity: AppCompatActivity) {
+        this.activity = WeakReference(activity)
+        activity.lifecycle.addObserver(this)
         isInitialized = true
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(owner: LifecycleOwner) {
         @Suppress("DEPRECATION") // Despite deprecation, this function is recommended
-        MobileAds.initialize(mainActivity, admobId)
+        MobileAds.initialize(activity.get(), admobId)
         requestNewInterstitialAd()
     }
 
@@ -87,7 +92,7 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
      * This method must be called to recreate & resize a banner ad when the screen size changes
      */
     fun buildBannerAd(): AdView =
-        BannerAdBuilder(mainActivity, ::requestNewBannerAd).build().also {
+        BannerAdBuilder(activity.get()!!, ::requestNewBannerAd).build().also {
             removeView()
             bannerAd = it
             requestNewBannerAd()
@@ -113,20 +118,18 @@ class AdManager(private val mainActivity: MainActivity) : LifecycleObserver {
             false
         }
 
-    companion object {
-        /**
-         * The meaning of the error codes that AdMob may return
-         * https://developers.google.com/android/reference/com/google/android/gms/ads/AdRequest#ERROR_CODE_INTERNAL_ERROR
-         */
-        fun errorCodeToString(errorCode: Int): String {
-            when (errorCode) {
-                0 -> return "ERROR_CODE_INTERNAL_ERROR" // Something happened internally; for instance, an invalid response was received from the ad server.
-                1 -> return "ERROR_CODE_INVALID_REQUEST" // The ad request was invalid; for instance, the ad unit ID was incorrect.
-                2 -> return "ERROR_CODE_NETWORK_ERROR" // The ad request was unsuccessful due to network connectivity.
-                3 -> return "ERROR_CODE_NO_FILL" // The ad request was successful, but no ad was returned due to lack of ad inventory.
-            }
-            report("ERROR : Invalid response code")
-            return "ERROR : Invalid response code"
+    /**
+     * The meaning of the error codes that AdMob may return
+     * https://developers.google.com/android/reference/com/google/android/gms/ads/AdRequest#ERROR_CODE_INTERNAL_ERROR
+     */
+    fun errorCodeToString(errorCode: Int): String {
+        when (errorCode) {
+            0 -> return "ERROR_CODE_INTERNAL_ERROR" // Something happened internally; for instance, an invalid response was received from the ad server.
+            1 -> return "ERROR_CODE_INVALID_REQUEST" // The ad request was invalid; for instance, the ad unit ID was incorrect.
+            2 -> return "ERROR_CODE_NETWORK_ERROR" // The ad request was unsuccessful due to network connectivity.
+            3 -> return "ERROR_CODE_NO_FILL" // The ad request was successful, but no ad was returned due to lack of ad inventory.
         }
+        report("ERROR : Invalid response code")
+        return "ERROR : Invalid response code"
     }
 }

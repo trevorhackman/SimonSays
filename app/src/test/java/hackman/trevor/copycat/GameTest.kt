@@ -1,7 +1,7 @@
 package hackman.trevor.copycat
 
-import hackman.trevor.copycat.logic.Game
-import hackman.trevor.copycat.logic.GameMode
+import hackman.trevor.copycat.logic.game.Game
+import hackman.trevor.copycat.logic.game.GameMode
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -14,7 +14,8 @@ class GameTest {
 
     @Test
     fun testClassic() {
-        game = Game(GameMode.Classic)
+        game =
+            Game(GameMode.Classic)
         assertEquals(false, game.canInput)
         sequence = mutableListOf()
         while (!game.canInput) {
@@ -40,7 +41,8 @@ class GameTest {
 
     @Test
     fun testReverse() {
-        game = Game(GameMode.Reverse)
+        game =
+            Game(GameMode.Reverse)
         assertEquals(false, game.canInput)
         sequence = mutableListOf()
         while (!game.canInput) {
@@ -66,7 +68,8 @@ class GameTest {
 
     @Test
     fun testChaos() {
-        game = Game(GameMode.Chaos)
+        game =
+            Game(GameMode.Chaos)
         assertEquals(false, game.canInput)
         sequence = mutableListOf()
         while (!game.canInput) {
@@ -91,7 +94,8 @@ class GameTest {
 
     @Test
     fun testSingle() {
-        game = Game(GameMode.Single)
+        game =
+            Game(GameMode.Single)
         assertEquals(false, game.canInput)
         sequence = mutableListOf()
         while (!game.canInput) {
@@ -113,7 +117,8 @@ class GameTest {
 
     @Test
     fun testOpposite() {
-        game = Game(GameMode.Opposite)
+        game =
+            Game(GameMode.Opposite)
         assertEquals(false, game.canInput)
         sequence = mutableListOf()
         while (!game.canInput) {

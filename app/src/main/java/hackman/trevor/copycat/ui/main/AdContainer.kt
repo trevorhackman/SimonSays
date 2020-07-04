@@ -10,8 +10,6 @@ class AdContainer @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : FrameLayout(context, attributeSet) {
 
-    private lateinit var adManager: AdManager
-
     private var initial = true
 
     private var previousWidthMeasureSpec = 0
@@ -20,14 +18,13 @@ class AdContainer @JvmOverloads constructor(
     private var onMeasureWidthMeasureSpec = 0
     private var onMeasureHeightMeasureSpec = 0
 
-    fun setup(adManager: AdManager) {
-        this.adManager = adManager
-        if (adManager.isEnabled()) addView(adManager.getBannerAd())
+    init {
+        if (AdManager.isEnabled()) addView(AdManager.getBannerAd())
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (adManager.isEnabled()) {
+        if (AdManager.isEnabled()) {
             onMeasureWidthMeasureSpec = widthMeasureSpec
             onMeasureHeightMeasureSpec = heightMeasureSpec
             if (initial) onInitial()
@@ -38,7 +35,7 @@ class AdContainer @JvmOverloads constructor(
     private fun onInitial() {
         rememberSize()
         initial = false
-        if (childCount == 0) addView(adManager.getBannerAd())
+        if (childCount == 0) addView(AdManager.getBannerAd())
     }
 
     private fun rememberSize() {
@@ -51,7 +48,7 @@ class AdContainer @JvmOverloads constructor(
 
     private fun onScreenSizeChanged() {
         rememberSize()
-        adManager.buildBannerAd()
-        addView(adManager.getBannerAd())
+        AdManager.buildBannerAd()
+        addView(AdManager.getBannerAd())
     }
 }

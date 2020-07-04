@@ -3,7 +3,7 @@ package hackman.trevor.copycat.ui.game_modes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import hackman.trevor.copycat.logic.GameMode
+import hackman.trevor.copycat.logic.game.GameMode
 
 class GameModesViewModelImpl : ViewModel(), GameModesViewModel {
     override val gameMode = MutableLiveData<GameMode>()

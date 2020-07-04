@@ -1,8 +1,5 @@
 package hackman.trevor.copycat.system
 
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
-
 /**
  * Turns an int into its corresponding 'excel column' form.
  * That is 1, 2, 3... into A, B, C, ... Z, AA, AB, AC, ... AZ, BA, BB, ... ZZ, AAA, ...
@@ -23,13 +20,4 @@ fun intToExcelName(integer: Int): String {
         recursion = (recursion - 1) / 26
     }
     return result.toString()
-}
-
-@OptIn(ExperimentalContracts::class)
-fun Any?.isNull(): Boolean {
-    contract {
-        returns(false) implies (this@isNull != null)
-    }
-
-    return this == null
 }

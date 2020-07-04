@@ -3,16 +3,17 @@ package hackman.trevor.copycat.ui
 import android.app.Activity
 import android.app.AlertDialog
 import hackman.trevor.copycat.R
+import java.lang.ref.WeakReference
 
 object DialogFactory {
 
-    private lateinit var activity: Activity
+    private lateinit var activity: WeakReference<Activity>
 
     fun setup(activity: Activity) {
-        this.activity = activity
+        this.activity = WeakReference(activity)
     }
 
-    private fun buildStyle() = AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
+    private fun buildStyle() = AlertDialog.Builder(activity.get(), android.R.style.Theme_Material_Dialog_Alert)
 
     fun leaveCurrentGame(onExit: () -> Unit, onMainMenu: () -> Unit): AlertDialog =
         buildStyle()

@@ -47,7 +47,7 @@ class BillingManager(private val mainActivity: MainActivity) {
     private val skuRetrievalListener = SkuDetailsResponseListener { billingResult, skuDetails ->
         when {
             skuDetails.isNullOrEmpty() -> onSkuError()
-            successfulSkuRetrieval(billingResult) -> onSuccessfulSkuRetrieval(skuDetails)
+            billingResult.isSuccessful() -> onSuccessfulSkuRetrieval(skuDetails)
             else -> onFailedSkuRetrieval(billingResult)
         }
     }
@@ -57,9 +57,6 @@ class BillingManager(private val mainActivity: MainActivity) {
         report("This shouldn't happen. Null details on OK response : " + billingClient.isReady)
         DialogFactory.failedNetwork().show()
     }
-
-    private fun successfulSkuRetrieval(billingResult: BillingResult) =
-        billingResult.responseCode == BillingClient.BillingResponseCode.OK
 
     private fun onSuccessfulSkuRetrieval(skuDetails: List<SkuDetails>) {
         for (skuDetail in skuDetails) {

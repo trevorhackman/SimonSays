@@ -15,7 +15,6 @@ import hackman.trevor.copycat.ui.main.MainFragment
 class MainActivity : AppCompatActivity() {
     private val activityInterface: ActivityInterface by injector()
 
-    private val ads by lazy { AdManager(this) }
     private val sounds by lazy { SoundManager(this) }
     private val billing by lazy { BillingManager(this) }
 
@@ -37,14 +36,14 @@ class MainActivity : AppCompatActivity() {
         log("Logging is working")
     }
 
-    private fun injectDependencies() = activityInterface.inject(ads, sounds, billing)
+    private fun injectDependencies() = activityInterface.inject(sounds, billing)
 
     private fun initSaveData() = SaveData.setup(applicationContext as Application)
 
     private fun initDialogFactory() = DialogFactory.setup(this)
 
     private fun initAdsIfNotOwned() {
-        if (SaveData.isNoAdsOwned != Ownership.Owned) ads.initialize()
+        if (SaveData.isNoAdsOwned != Ownership.Owned) AdManager.setup(this)
     }
 
     override fun onBackPressed() {

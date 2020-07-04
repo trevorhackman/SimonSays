@@ -19,7 +19,6 @@ class MainFragment : BaseFragment() {
 
     private val sounds: SoundProvider by soundProvider()
     private val billing: BillingProvider by billingProvider()
-    private val ads: AdProvider by adProvider()
     private val onBackPressed: OnBackPressed by onBackPressed()
 
     private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
@@ -32,7 +31,6 @@ class MainFragment : BaseFragment() {
         setupExtraButtons()
         setupSettingsMenu()
         setupGameModesMenu()
-        setupAdContainer()
         observeColorSettings()
         observeSettingsInBackground()
         observeGameModesInBackground()
@@ -53,9 +51,6 @@ class MainFragment : BaseFragment() {
 
     private fun setupGameModesMenu() =
         game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner, sounds.soundManager)
-
-    private fun setupAdContainer() =
-        ad_container.setup(ads.adManager)
 
     private fun observeColorSettings() =
         observe(settingsViewModel.colorSet) {

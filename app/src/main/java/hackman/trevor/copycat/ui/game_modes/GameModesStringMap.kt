@@ -1,7 +1,7 @@
 package hackman.trevor.copycat.ui.game_modes
 
 import hackman.trevor.copycat.R
-import hackman.trevor.copycat.logic.GameMode
+import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.system.StringResource
 
 fun GameMode.name() = StringResource(
