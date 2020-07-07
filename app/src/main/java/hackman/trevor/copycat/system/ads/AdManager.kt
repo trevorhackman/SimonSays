@@ -40,7 +40,7 @@ object AdManager : LifecycleObserver {
         InterstitialAdBuilder(activity.get()!!, ::requestNewInterstitialAd).build()
     }
 
-    // TODO Use this before showing ads
+    // Check this before showing ads
     fun isEnabled() = isInitialized && SaveData.isNoAdsOwned == Ownership.ConfirmedUnowned
 
     fun setup(activity: AppCompatActivity) {

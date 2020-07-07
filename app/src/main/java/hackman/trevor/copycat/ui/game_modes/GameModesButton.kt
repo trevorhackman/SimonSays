@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.game.GameMode
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getColor

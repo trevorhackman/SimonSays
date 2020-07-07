@@ -9,6 +9,8 @@
     <color name="colorAccentDark">@color/Grey600</color>
     <color name="colorAccentDarkDark">@color/Grey900</color>
 
+    <color name="instructions_background">#EA757575</color>
+
     <color name="classic0">#40FF00</color>
     <color name="classic1">#FF4000</color>
     <color name="classic2">#FFFF40</color>

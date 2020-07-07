@@ -6,6 +6,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.game.GameMode
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
 import kotlinx.android.synthetic.main.game_modes_buttons.view.*

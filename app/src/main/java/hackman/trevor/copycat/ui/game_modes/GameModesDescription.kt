@@ -2,13 +2,13 @@ package hackman.trevor.copycat.ui.game_modes
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getString
+import hackman.trevor.copycat.system.pixelTextSize
 
 class GameModesDescription @JvmOverloads constructor(
     context: Context,
@@ -19,7 +19,7 @@ class GameModesDescription @JvmOverloads constructor(
 
     init {
         updateText(SaveData.gameMode)
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .05f)
+        pixelTextSize = displayMinimum() * .05f
     }
 
     fun updateText(gameMode: GameMode) {
@@ -40,7 +40,7 @@ class GameModesDescription @JvmOverloads constructor(
 
     private fun measureHeightWith(text: String): Int {
         placeholder.layoutParams = layoutParams
-        placeholder.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        placeholder.pixelTextSize = textSize
         placeholder.text = text
 
         val widthSpec = MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY)

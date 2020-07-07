@@ -8,6 +8,7 @@ import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.NameId
 import hackman.trevor.copycat.logic.settings.Speed
+import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager

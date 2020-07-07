@@ -27,8 +27,7 @@ inline fun <T : Any> Fragment.observe(
     crossinline function: (T) -> Unit
 ) =
     liveData.observe(viewLifecycleOwner, Observer {
-        it ?: return@Observer
-        function(it)
+        function(it ?: return@Observer)
     })
 
 inline fun <T : Any?> LifecycleOwner.observe(
@@ -45,6 +44,5 @@ inline fun <T : Any> LifecycleOwner.observe(
     crossinline function: (T) -> Unit
 ) =
     liveData.observe(this, Observer {
-        it ?: return@Observer
-        function(it)
+        function(it ?: return@Observer)
     })

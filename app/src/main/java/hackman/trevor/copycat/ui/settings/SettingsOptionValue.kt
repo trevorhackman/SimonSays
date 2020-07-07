@@ -2,9 +2,9 @@ package hackman.trevor.copycat.ui.settings
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatTextView
 import hackman.trevor.copycat.system.displayMinimum
+import hackman.trevor.copycat.system.pixelTextSize
 
 class SettingsOptionValue @JvmOverloads constructor(
     context: Context,
@@ -12,7 +12,7 @@ class SettingsOptionValue @JvmOverloads constructor(
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .05f)
+        pixelTextSize = displayMinimum() * .05f
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

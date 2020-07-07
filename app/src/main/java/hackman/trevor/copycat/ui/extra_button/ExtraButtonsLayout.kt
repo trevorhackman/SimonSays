@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
+import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.system.isPortrait
-import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
-import hackman.trevor.copycat.ui.settings.SettingsViewModel
 
 class ExtraButtonsLayout @JvmOverloads constructor(
     context: Context,

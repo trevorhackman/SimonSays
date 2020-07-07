@@ -2,6 +2,7 @@ package hackman.trevor.copycat.ui.main.main_button
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.view.isVisible
 import hackman.trevor.copycat.R
 
 class MainButtonPlayIcon @JvmOverloads constructor(
@@ -13,11 +14,12 @@ class MainButtonPlayIcon @JvmOverloads constructor(
 
     init {
         setImageResource(R.drawable.play_symbol)
-        gyrate()
     }
 
-    private fun gyrate() {
+    fun gyrate() {
         val scale = if (animationCount++ % 2 == 0) 0.92f else 1f
-        animate().scaleX(scale).scaleY(scale).setDuration(725).withEndAction(::gyrate)
+        animate().scaleX(scale).scaleY(scale).setDuration(725).withEndAction {
+            if (isVisible) gyrate()
+        }
     }
 }

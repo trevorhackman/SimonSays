@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.displayHeight
 import hackman.trevor.copycat.system.displayWidth
@@ -36,7 +37,7 @@ class SettingsMenu @JvmOverloads constructor(
         this.lifecycleOwner = lifecycleOwner
         setupSpeedOption()
         setupColorOption()
-        setupCloseButton()
+        setOnCloseClickListener()
         observeInBackground()
     }
 
@@ -44,12 +45,10 @@ class SettingsMenu @JvmOverloads constructor(
 
     private fun setupColorOption() = settings_option_color.setup(settingsViewModel)
 
-    // TODO This does not follow setup manual dependency injection pattern
-    private fun setupCloseButton() =
-        settings_close_button.setOnClickListener {
-            settingsViewModel.setInBackground(true)
-            SoundManager.click.play()
-        }
+    private fun setOnCloseClickListener() = settings_close_button.setOnClickListener {
+        settingsViewModel.setInBackground(true)
+        SoundManager.click.play()
+    }
 
     private fun observeInBackground() = observe(settingsViewModel.inBackground) {
         if (it) fadeOut()

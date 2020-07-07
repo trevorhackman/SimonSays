@@ -2,11 +2,11 @@ package hackman.trevor.copycat.ui.game_modes
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatTextView
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getString
+import hackman.trevor.copycat.system.pixelTextSize
 
 class GameModesTitle @JvmOverloads constructor(
     context: Context,
@@ -15,6 +15,6 @@ class GameModesTitle @JvmOverloads constructor(
 
     init {
         text = getString(R.string.game_modes_title)
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .11f)
+        pixelTextSize = displayMinimum() * .11f
     }
 }

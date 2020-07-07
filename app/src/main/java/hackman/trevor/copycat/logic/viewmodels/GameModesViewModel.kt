@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.ui.game_modes
+package hackman.trevor.copycat.logic.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

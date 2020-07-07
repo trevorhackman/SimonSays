@@ -3,9 +3,9 @@ package hackman.trevor.copycat.ui.extra_button
 import android.content.Context
 import android.util.AttributeSet
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.sound.SoundManager
-import hackman.trevor.copycat.ui.settings.SettingsViewModel
 
 class SettingsButton @JvmOverloads constructor(
     context: Context,

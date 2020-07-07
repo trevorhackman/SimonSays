@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayHeight
@@ -29,10 +30,7 @@ class GameModesMenu @JvmOverloads constructor(
         View.inflate(context, R.layout.game_modes_menu, this)
     }
 
-    fun setup(
-        gameModesViewModel: GameModesViewModel,
-        lifecycleOwner: LifecycleOwner
-    ) {
+    fun setup(gameModesViewModel: GameModesViewModel, lifecycleOwner: LifecycleOwner) {
         this.gameModesViewModel = gameModesViewModel
         this.lifecycleOwner = lifecycleOwner
         initGameMode()

@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
 import hackman.trevor.copycat.system.*
 import hackman.trevor.copycat.system.sound.SoundManager
-import hackman.trevor.copycat.ui.game_modes.GameModesViewModel
 import kotlin.math.min
 
 class GameModesButton @JvmOverloads constructor(
@@ -21,7 +20,7 @@ class GameModesButton @JvmOverloads constructor(
 
     init {
         text = getString(R.string.game_modes)
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, displayMinimum() * .075f)
+        pixelTextSize = displayMinimum() * .075f
         setTextColor(Color.White)
     }
 
