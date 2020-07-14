@@ -16,7 +16,6 @@ import hackman.trevor.copycat.ui.game_modes.popupText
 import kotlinx.android.synthetic.main.color_grid.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.title.*
-import kotlinx.coroutines.*
 
 class MainFragment : BaseFragment() {
     override val layout = R.layout.main_fragment
@@ -29,14 +28,13 @@ class MainFragment : BaseFragment() {
 
     private var popInRan: Boolean = false
 
-    private var instructionsFadeJob: Job? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupColorButtons()
         setupExtraButtons()
         setupSettingsMenu()
         setupGameModesMenu()
         setupMainButton()
+        setupInstructions()
         observeColorSettings()
         observeSettingsInBackground()
         observeGameModesInBackground()
@@ -58,6 +56,8 @@ class MainFragment : BaseFragment() {
     private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner)
 
     private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycleOwner)
+
+    private fun setupInstructions() = instructions.setup(lifecycleScope)
 
     private fun observeColorSettings() = observe(settingsViewModel.colorSet) {
         color_button_top_left.setup(colorResource = it.colors.topLeft)
@@ -98,23 +98,13 @@ class MainFragment : BaseFragment() {
 
     private fun onMainMenu() {
         fadeTitleAndExtraButtons(true)
+        instructions.cancelAnimation()
         instructions.fadeOut()
     }
 
     private fun onGame() {
         fadeTitleAndExtraButtons(false, FadeSpeed.Slow)
-        fadeInstructions()
-    }
-
-    // TODO Move to instructions class
-    private fun fadeInstructions() {
-        instructionsFadeJob?.cancel()
-        instructionsFadeJob = lifecycleScope.launch {
-            withContext(Dispatchers.Default) { delay(600) }
-            instructions.fadeIn(FadeSpeed.Default)
-            withContext(Dispatchers.Default) { delay(3000) }
-            instructions.fadeOut(FadeSpeed.Slow)
-        }
+        instructions.animateInstructions()
     }
 
     private fun fadeTitleAndExtraButtons(fadeIn: Boolean, speed: FadeSpeed = FadeSpeed.Default) {

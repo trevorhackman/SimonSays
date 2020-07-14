@@ -10,11 +10,19 @@ import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.dpToPixel
 import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.pixelTextSize
+import hackman.trevor.copycat.ui.FadeSpeed
+import hackman.trevor.copycat.ui.fadeIn
+import hackman.trevor.copycat.ui.fadeOut
+import kotlinx.coroutines.*
 
 class Instructions @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : AppCompatTextView(context, attributeSet) {
+
+    private lateinit var lifecycleScope: CoroutineScope
+
+    private var instructionsFadeJob: Job? = null
 
     init {
         background = getDrawable(R.drawable.instructions_rectangle)
@@ -22,5 +30,30 @@ class Instructions @JvmOverloads constructor(
         setPadding(dpToPixel(8))
         isVisible = false
         alpha = 0f
+    }
+
+    fun setup(lifecycleScope: CoroutineScope) {
+        this.lifecycleScope = lifecycleScope
+    }
+
+    fun cancelAnimation() {
+        instructionsFadeJob?.cancel()
+        resetOnEnd()
+    }
+
+    fun animateInstructions() {
+        instructionsFadeJob = lifecycleScope.launch {
+            withContext(Dispatchers.Default) { delay(600) }
+            fadeIn(FadeSpeed.Default)
+            withContext(Dispatchers.Default) { delay(3000) }
+            fadeOut(FadeSpeed.Slow) {
+                resetOnEnd()
+            }.scaleY(0.25f).translationY(dpToPixel(75).toFloat())
+        }
+    }
+
+    private fun resetOnEnd() {
+        scaleY = 1f
+        translationY = 0f
     }
 }

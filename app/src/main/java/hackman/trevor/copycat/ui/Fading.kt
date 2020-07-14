@@ -13,12 +13,12 @@ fun View.plainFadeIn(): ViewPropertyAnimator = animate().alpha(1f).setDuration(F
 
 fun View.plainFadeOut(): ViewPropertyAnimator = animate().alpha(0f).setDuration(FadeSpeed.Default.fadeOutDuration)
 
-fun View.fadeIn(
+inline fun View.fadeIn(
     speed: FadeSpeed = FadeSpeed.Default,
-    startAction: () -> Unit = {},
-    endAction: () -> Unit = {}
-): ViewPropertyAnimator =
-    animate().alpha(1f)
+    crossinline startAction: () -> Unit = {},
+    crossinline endAction: () -> Unit = {}
+): ViewPropertyAnimator {
+    return animate().alpha(1f)
         .setDuration(speed.fadeInDuration)
         .withStartAction {
             isVisible = true
@@ -28,11 +28,12 @@ fun View.fadeIn(
             isEnabled = true
             endAction()
         }
+}
 
-fun View.fadeOut(
+inline fun View.fadeOut(
     speed: FadeSpeed = FadeSpeed.Default,
-    startAction: () -> Unit = {},
-    endAction: () -> Unit = {}
+    crossinline startAction: () -> Unit = {},
+    crossinline endAction: () -> Unit = {}
 ): ViewPropertyAnimator =
     animate().alpha(0f)
         .setDuration(speed.fadeOutDuration)
