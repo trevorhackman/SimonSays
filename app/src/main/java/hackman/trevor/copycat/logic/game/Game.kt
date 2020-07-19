@@ -9,33 +9,43 @@ import java.util.*
  * [InputResponse] Get success or failed at each step
  * [Game.playBack] Get a series of int outputs - playback next round of colors
  *
- * [canInput] represents game state (playing vs watching)
+ * [processInput] represents game state (playing vs watching)
  */
 class Game(private val gameMode: GameMode) {
     private val buttonNumber = 4
     private val random = Random()
-    private val sequence: MutableList<Int> = mutableListOf(generateInt())
     private var index = 0
+
+    private val sequence = mutableListOf(generateGameButton())
+    private val twoPlayerData = TwoPlayerData(generateGameButton())
+
+    private val selectSequence
+        get() = when (gameMode) {
+            GameMode.TwoPlayer ->
+                if (twoPlayerData.isSecondPlayerTurn) twoPlayerData.secondSequence
+                else sequence
+            else -> sequence
+        }
 
     var canInput = false
         private set
 
-    fun input(pressed: Int): InputResponse =
-        if (canInput) canInput(pressed)
+    fun input(pressed: GameButton): InputResponse =
+        if (canInput) processInput(pressed)
         else InputResponse(false)
 
-    fun playBack(): Int? =
-        if (!canInput) canPlayBack()
+    fun playBack(): GameButton? =
+        if (!canInput) processPlayBack()
         else null
 
-    private fun generateInt() = random.nextInt(buttonNumber)
+    private fun generateGameButton() = GameButton(random.nextInt(buttonNumber))
 
-    private fun canInput(pressed: Int): InputResponse =
+    private fun processInput(pressed: GameButton): InputResponse =
         if (pressed == correctButton()) onSuccess()
         else onFailure()
 
     private fun onSuccess(): InputResponse {
-        if (index == sequence.size - 1) nextLevel()
+        if (index == selectSequence.size - 1) nextLevel()
         else index++
         return InputResponse(true)
     }
@@ -44,39 +54,39 @@ class Game(private val gameMode: GameMode) {
 
     private fun correctButton() = when (gameMode) {
         GameMode.Reverse -> sequence[sequence.size - 1 - index]
-        GameMode.Opposite -> buttonNumber - sequence[index]
-        else -> sequence[index]
+        GameMode.Opposite -> GameButton(buttonNumber - sequence[index].buttonNumber)
+        else -> selectSequence[index]
     }
 
-    private fun nextLevel() = when (gameMode) {
-        GameMode.Chaos -> {
+    private fun nextLevel() {
+        if (gameMode == GameMode.Chaos) {
             for (i in sequence.indices) {
-                sequence[i] = generateInt()
+                sequence[i] = generateGameButton()
             }
-            sequence.add(generateInt())
-            canInput = false
-            index = 0
         }
-        else -> {
-            sequence.add(generateInt())
-            canInput = false
-            index = 0
+
+        selectSequence.add(generateGameButton())
+        canInput = false
+        index = 0
+
+        if (gameMode == GameMode.TwoPlayer) {
+            twoPlayerData.isSecondPlayerTurn = !twoPlayerData.isSecondPlayerTurn
         }
     }
 
-    private fun canPlayBack(): Int = when (gameMode) {
+    private fun processPlayBack() = when (gameMode) {
         GameMode.Single -> {
             onFinishedPlayBack()
             sequence[sequence.size - 1]
         }
         else -> {
-            val toReturn = sequence[index++]
+            val toReturn = selectSequence[index++]
             if (finishedPlayBack()) onFinishedPlayBack()
             toReturn
         }
     }
 
-    private fun finishedPlayBack() = index >= sequence.size
+    private fun finishedPlayBack() = index >= selectSequence.size
 
     private fun onFinishedPlayBack() {
         index = 0
@@ -91,4 +101,9 @@ enum class GameMode {
     Single,
     Opposite,
     TwoPlayer;
+}
+
+private class TwoPlayerData(randomButton: GameButton) {
+    val secondSequence = mutableListOf(randomButton)
+    var isSecondPlayerTurn = false
 }

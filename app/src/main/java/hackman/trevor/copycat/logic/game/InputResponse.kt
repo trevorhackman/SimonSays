@@ -7,5 +7,5 @@ package hackman.trevor.copycat.logic.game
  */
 data class InputResponse(
     val isSuccess: Boolean,
-    val correct: Int? = null
+    val correct: GameButton? = null
 )
