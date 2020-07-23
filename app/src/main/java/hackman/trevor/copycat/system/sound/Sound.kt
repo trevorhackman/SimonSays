@@ -4,3 +4,7 @@ package hackman.trevor.copycat.system.sound
 interface Sound {
     fun play()
 }
+
+object NullSound: Sound {
+    override fun play() {}
+}

@@ -20,7 +20,7 @@ class ColorButtonDrawable(
     private val minDimension = min(height, width)
     private val cornerRadius = maxDimension / 15f
 
-    fun make(): StateListDrawable =
+    fun build(): StateListDrawable =
         StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_pressed), pressedGraphic())
             addState(StateSet.WILD_CARD, normalGraphic())

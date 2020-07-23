@@ -26,7 +26,7 @@
         android:focusable="false"
         app:layout_constraintTop_toBottomOf="@id/game_modes_title" />
 
-    <hackman.trevor.copycat.ui.game_modes.GameModesButtons
+    <hackman.trevor.copycat.ui.game_modes.GameModesButtonLayout
         android:id="@+id/game_modes_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

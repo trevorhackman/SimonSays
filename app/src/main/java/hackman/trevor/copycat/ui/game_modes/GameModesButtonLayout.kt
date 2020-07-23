@@ -11,7 +11,7 @@ import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
 import kotlinx.android.synthetic.main.game_modes_buttons.view.*
 
-class GameModesButtons @JvmOverloads constructor(
+class GameModesButtonLayout @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : ConstraintLayout(context, attributeSet) {

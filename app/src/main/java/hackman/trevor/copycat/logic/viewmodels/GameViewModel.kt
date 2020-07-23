@@ -3,22 +3,35 @@ package hackman.trevor.copycat.logic.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import hackman.trevor.copycat.logic.game.GameButton
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.game.GameState
+import hackman.trevor.copycat.logic.game.RoundNumber
 
 class GameViewModelImpl : ViewModel(), GameViewModel {
+
     override val gameMode = MutableLiveData<GameMode>()
 
     override val gameState = MutableLiveData(GameState.MainMenu)
 
-    override val roundNumber = MutableLiveData(1)
+    override val roundNumber = MutableLiveData(RoundNumber(1))
+
+    override val buttonPlayBack = MutableLiveData<GameButton>()
 
     override fun setGameMode(gameMode: GameMode) {
         this.gameMode.value = gameMode
     }
 
-    override fun playButtonClicked() {
-        gameState.value = if (gameState.value == GameState.MainMenu) GameState.Watch else GameState.MainMenu
+    override fun setGameState(gameState: GameState) {
+        this.gameState.value = gameState
+    }
+
+    override fun setRoundNumber(roundNumber: RoundNumber) {
+        this.roundNumber.value = roundNumber
+    }
+
+    override fun setButtonPlayBack(gameButton: GameButton?) {
+        this.buttonPlayBack.value = gameButton
     }
 }
 
@@ -27,9 +40,16 @@ interface GameViewModel {
 
     val gameState: LiveData<GameState>
 
-    val roundNumber: LiveData<Int>
+    val roundNumber: LiveData<RoundNumber>
+
+    /** Indicates which button the game presses. Null indicates release. */
+    val buttonPlayBack: LiveData<GameButton?>
 
     fun setGameMode(gameMode: GameMode)
 
-    fun playButtonClicked()
+    fun setGameState(gameState: GameState)
+
+    fun setRoundNumber(roundNumber: RoundNumber)
+
+    fun setButtonPlayBack(gameButton: GameButton?)
 }

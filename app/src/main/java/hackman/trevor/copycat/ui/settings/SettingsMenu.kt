@@ -23,7 +23,7 @@ class SettingsMenu @JvmOverloads constructor(
 ) : ConstraintLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var lifecycleOwner: LifecycleOwner
+    private lateinit var lifecycle: Lifecycle
 
     init {
         View.inflate(context, R.layout.settings_menu, this)
@@ -31,10 +31,10 @@ class SettingsMenu @JvmOverloads constructor(
 
     fun setup(
         settingsViewModel: SettingsViewModel,
-        lifecycleOwner: LifecycleOwner
+        lifecycle: Lifecycle
     ) {
         this.settingsViewModel = settingsViewModel
-        this.lifecycleOwner = lifecycleOwner
+        this.lifecycle = lifecycle
         setupSpeedOption()
         setupColorOption()
         setOnCloseClickListener()
@@ -69,5 +69,5 @@ class SettingsMenu @JvmOverloads constructor(
 
     private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
 
-    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+    override fun getLifecycle(): Lifecycle = lifecycle
 }

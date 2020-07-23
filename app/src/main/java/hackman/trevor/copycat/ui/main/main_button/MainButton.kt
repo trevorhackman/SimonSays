@@ -27,15 +27,15 @@ class MainButton @JvmOverloads constructor(
 ) : FrameLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var gameViewModel: GameViewModel
-    private lateinit var lifecycleOwner: LifecycleOwner
+    private lateinit var lifecycle: Lifecycle
 
     init {
         View.inflate(context, R.layout.main_button_frame_layout, this)
     }
 
-    fun setup(gameViewModel: GameViewModel, lifecycleOwner: LifecycleOwner) {
+    fun setup(gameViewModel: GameViewModel, lifecycle: Lifecycle) {
         this.gameViewModel = gameViewModel
-        this.lifecycleOwner = lifecycleOwner
+        this.lifecycle = lifecycle
         setOnTouchListener(CircularTouchListener)
         observeGameMode()
         observeGameState()
@@ -78,10 +78,13 @@ class MainButton @JvmOverloads constructor(
     }
 
     override fun performClick(): Boolean {
-        super.performClick()
-        gameViewModel.playButtonClicked()
+        if (isMainMenu()) startGame()
         return true
     }
 
-    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+    private fun isMainMenu() = gameViewModel.gameState.value == GameState.MainMenu
+
+    private fun startGame() = gameViewModel.setGameState(GameState.Watch)
+
+    override fun getLifecycle(): Lifecycle = lifecycle
 }

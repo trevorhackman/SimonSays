@@ -9,8 +9,8 @@
         android:id="@+id/main_button_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="vertical">
 
         <hackman.trevor.copycat.ui.main.main_button.MainButtonPlayIcon
@@ -34,6 +34,7 @@
         style="@style/Text.Bold"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:gravity="center"
+        android:visibility="gone" />
 
 </hackman.trevor.copycat.ui.main.main_button.MainButtonFrameLayout>

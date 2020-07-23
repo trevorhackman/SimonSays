@@ -46,3 +46,5 @@ inline fun <T : Any> LifecycleOwner.observe(
     liveData.observe(this, Observer {
         function(it ?: return@Observer)
     })
+
+fun <T> LiveData<T>.requireValue() = value!!

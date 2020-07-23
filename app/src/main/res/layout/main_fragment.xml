@@ -7,7 +7,10 @@
     android:background="@color/Black"
     tools:context=".MainActivity">
 
-    <include layout="@layout/color_grid" />
+    <hackman.trevor.copycat.ui.color_button.ColorButtonsLayout
+        android:id="@+id/color_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <hackman.trevor.copycat.ui.main.main_button.MainButton
         android:id="@+id/main_button"

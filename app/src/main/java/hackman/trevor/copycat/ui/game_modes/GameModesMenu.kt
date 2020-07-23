@@ -24,15 +24,15 @@ class GameModesMenu @JvmOverloads constructor(
 ) : ConstraintLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var gameModesViewModel: GameModesViewModel
-    private lateinit var lifecycleOwner: LifecycleOwner
+    private lateinit var lifecycle: Lifecycle
 
     init {
         View.inflate(context, R.layout.game_modes_menu, this)
     }
 
-    fun setup(gameModesViewModel: GameModesViewModel, lifecycleOwner: LifecycleOwner) {
+    fun setup(gameModesViewModel: GameModesViewModel, lifecycle: Lifecycle) {
         this.gameModesViewModel = gameModesViewModel
-        this.lifecycleOwner = lifecycleOwner
+        this.lifecycle = lifecycle
         initGameMode()
         setupButtons()
         setupCloseButton()
@@ -67,5 +67,5 @@ class GameModesMenu @JvmOverloads constructor(
 
     private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
 
-    override fun getLifecycle(): Lifecycle = lifecycleOwner.lifecycle
+    override fun getLifecycle(): Lifecycle = lifecycle
 }

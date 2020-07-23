@@ -5,15 +5,14 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import hackman.trevor.copycat.*
+import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.*
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.FadeSpeed
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
 import hackman.trevor.copycat.ui.game_modes.popupText
-import kotlinx.android.synthetic.main.color_grid.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.title.*
 
@@ -26,6 +25,8 @@ class MainFragment : BaseFragment() {
     private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
     private val gameViewModel: GameViewModel by viewModels<GameViewModelImpl>()
 
+    private lateinit var gamePlayer: GamePlayer
+
     private var popInRan: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,36 +36,24 @@ class MainFragment : BaseFragment() {
         setupGameModesMenu()
         setupMainButton()
         setupInstructions()
-        observeColorSettings()
         observeSettingsInBackground()
         observeGameModesInBackground()
         observeGameMode()
         observeGameState()
     }
 
-    private fun setupColorButtons() {
-        color_button_top_left.setup(sound = SoundManager.chip1)
-        color_button_top_right.setup(sound = SoundManager.chip2)
-        color_button_bottom_left.setup(sound = SoundManager.chip3)
-        color_button_bottom_right.setup(sound = SoundManager.chip4)
-    }
+    private fun setupColorButtons() =
+        color_buttons.setup(settingsViewModel, gameViewModel, viewLifecycleOwner.lifecycle)
 
     private fun setupExtraButtons() = extra_buttons_layout.setup(settingsViewModel, gameModesViewModel)
 
-    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycleOwner)
+    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycleOwner.lifecycle)
 
-    private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner)
+    private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner.lifecycle)
 
-    private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycleOwner)
+    private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycleOwner.lifecycle)
 
     private fun setupInstructions() = instructions.setup(lifecycleScope)
-
-    private fun observeColorSettings() = observe(settingsViewModel.colorSet) {
-        color_button_top_left.setup(colorResource = it.colors.topLeft)
-        color_button_top_right.setup(colorResource = it.colors.topRight)
-        color_button_bottom_left.setup(colorResource = it.colors.bottomLeft)
-        color_button_bottom_right.setup(colorResource = it.colors.bottomRight)
-    }
 
     private fun observeSettingsInBackground() = observe(settingsViewModel.inBackground) { inBackground ->
         onBackPressed.setBehavior {
@@ -105,6 +94,7 @@ class MainFragment : BaseFragment() {
     private fun onGame() {
         fadeTitleAndExtraButtons(false, FadeSpeed.Slow)
         instructions.animateInstructions()
+        gamePlayer = GamePlayer(gameViewModel, viewLifecycleOwner.lifecycle)
     }
 
     private fun fadeTitleAndExtraButtons(fadeIn: Boolean, speed: FadeSpeed = FadeSpeed.Default) {
