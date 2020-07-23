@@ -25,9 +25,12 @@ class MainFragment : BaseFragment() {
     private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
     private val gameViewModel: GameViewModel by viewModels<GameViewModelImpl>()
 
-    private lateinit var gamePlayer: GamePlayer
+    private val gamePlayer by lazy {
+        GamePlayer(gameViewModel, viewLifecycleOwner.lifecycle)
+    }
 
-    private var popInRan: Boolean = false
+    private var popInRan = false
+    private var onMainMenu = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupColorButtons()
@@ -86,24 +89,31 @@ class MainFragment : BaseFragment() {
     }
 
     private fun onMainMenu() {
+        onMainMenu = true
         fadeTitleAndExtraButtons(true)
         instructions.cancelAnimation()
         instructions.fadeOut()
     }
 
     private fun onGame() {
-        fadeTitleAndExtraButtons(false, FadeSpeed.Slow)
-        instructions.animateInstructions()
-        gamePlayer = GamePlayer(gameViewModel, viewLifecycleOwner.lifecycle)
+        if (onMainMenu) {
+            onMainMenu = false
+            fadeTitleAndExtraButtons(false, FadeSpeed.Slow)
+            instructions.animateInstructions()
+            gamePlayer.startGame()
+        }
     }
 
     private fun fadeTitleAndExtraButtons(fadeIn: Boolean, speed: FadeSpeed = FadeSpeed.Default) {
+        fade_top.pivotY = fade_top.y
         if (fadeIn) {
             main_title.fadeIn(speed)
             extra_buttons_layout.fadeIn(speed)
+            fade_top.animate().setDuration(speed.fadeInDuration).scaleY(1f)
         } else {
             main_title.fadeOut(speed)
             extra_buttons_layout.fadeOut(speed)
+            fade_top.animate().setDuration(speed.fadeOutDuration).scaleY(0.5f)
         }
     }
 

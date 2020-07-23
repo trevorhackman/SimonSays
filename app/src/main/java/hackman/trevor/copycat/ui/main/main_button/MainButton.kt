@@ -13,12 +13,9 @@ import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.ui.fadeIn
-import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.copycat.ui.*
 import hackman.trevor.copycat.ui.game_modes.name
 import hackman.trevor.copycat.ui.main.CircularTouchListener
-import hackman.trevor.copycat.ui.plainFadeIn
-import hackman.trevor.copycat.ui.plainFadeOut
 import kotlinx.android.synthetic.main.main_button_frame_layout.view.*
 
 class MainButton @JvmOverloads constructor(
@@ -55,7 +52,7 @@ class MainButton @JvmOverloads constructor(
     }
 
     private fun onMainMenu() {
-        main_button_play_icon.fadeIn()
+        main_button_play_icon.fadeIn(speed = FadeSpeed.Slow).scaleX(1f).scaleY(1f)
         main_button_play_icon.gyrate()
         main_button_game_mode_text.plainFadeIn()
         main_button_round_text.fadeOut()
@@ -63,7 +60,7 @@ class MainButton @JvmOverloads constructor(
     }
 
     private fun onGame() {
-        main_button_play_icon.fadeOut()
+        main_button_play_icon.fadeOut(speed = FadeSpeed.Slow).scaleX(0.45f).scaleY(0.45f)
         main_button_game_mode_text.plainFadeOut()
         main_button_round_text.fadeIn()
         shrink()
@@ -74,7 +71,7 @@ class MainButton @JvmOverloads constructor(
     private fun shrink() = animate().setDuration(1000).scaleX(0.90f).scaleY(0.90f)
 
     private fun observeRoundNumber() = observe(gameViewModel.roundNumber) {
-        main_button_round_text.text = it.toString()
+        main_button_round_text.text = it.roundNumber.toString()
     }
 
     override fun performClick(): Boolean {

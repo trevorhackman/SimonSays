@@ -2,7 +2,6 @@ package hackman.trevor.copycat.ui.color_button
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatImageButton
 import hackman.trevor.copycat.R
@@ -18,6 +17,17 @@ class ColorButton @JvmOverloads constructor(
 
     var sound: Sound = NullSound
 
+    var pushed = false
+        set(value) {
+            field = value
+            if (value) {
+                background.state = intArrayOf(android.R.attr.state_pressed)
+                playSound()
+            } else {
+                background.state = intArrayOf()
+            }
+        }
+
     @ColorInt
     private var buttonColor: Int = 0
 
@@ -25,30 +35,14 @@ class ColorButton @JvmOverloads constructor(
         context.theme.obtainStyledAttributes(attributeSet, R.styleable.ColorButton, 0, 0).apply {
             buttonColor = getColor(R.styleable.ColorButton_button_color, 0)
         }
-        setOnTouchListener()
     }
 
-    fun press() {
-        background.state = intArrayOf(android.R.attr.state_pressed)
-    }
-
-    fun release() {
-        background.state = intArrayOf()
-    }
+    fun playSound() = sound.play()
 
     fun setColorResource(colorResource: ColorResource) {
         buttonColor = getColor(colorResource)
         createBackground(width, height)
     }
-
-    private fun setOnTouchListener() = setOnTouchListener { view, event ->
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> playSound()
-        }
-        view?.onTouchEvent(event) ?: true
-    }
-
-    private fun playSound() = sound.play()
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
         super.onSizeChanged(width, height, oldWidth, oldHeight)

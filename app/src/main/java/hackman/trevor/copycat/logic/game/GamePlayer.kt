@@ -14,17 +14,27 @@ class GamePlayer(
     private val lifecycle: Lifecycle
 ) : LifecycleOwner {
 
-    private val gameMode = gameViewModel.gameMode.requireValue()
-    private val game = Game(gameMode)
-
+    private lateinit var game: Game
     private lateinit var sequence: List<GameButton>
+
+    /** For better user experience, don't fail until all buttons are released */
+    private var waitingToFail = false
 
     init {
         observeGameState()
+        observePlayerPushed()
+    }
+
+    fun startGame() {
+        waitingToFail = false
+        game = Game(gameViewModel.gameMode.requireValue())
+        gameViewModel.setRoundNumber(RoundNumber(1))
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
-        if (it == GameState.Watch) playSequence()
+        if (it == GameState.Watch) {
+            playSequence()
+        }
     }
 
     private fun playSequence() {
@@ -51,6 +61,31 @@ class GamePlayer(
         gameViewModel.setButtonPlayBack(button)
         delay(1000)
         gameViewModel.setButtonPlayBack(null)
+        delay(500)
+    }
+
+    private fun observePlayerPushed() = observe(gameViewModel.playerPushed) {
+        if (gameViewModel.gameState.value != GameState.Input) return@observe
+        when (it) {
+            null -> onAllReleased()
+            else -> onPress(game.input(it))
+        }
+    }
+
+    private fun onAllReleased() {
+        if (waitingToFail) gameViewModel.setGameState(GameState.MainMenu)
+        else if (!game.canInput) {
+            gameViewModel.setGameState(GameState.Watch)
+            gameViewModel.setRoundNumber(RoundNumber(game.sequenceSize))
+        }
+    }
+
+    private fun onPress(response: InputResponse) {
+        if (!response.isSuccess) waitToFail()
+    }
+
+    private fun waitToFail() {
+        waitingToFail = true
     }
 
     override fun getLifecycle(): Lifecycle = lifecycle

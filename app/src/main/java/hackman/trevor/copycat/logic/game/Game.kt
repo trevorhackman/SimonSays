@@ -27,6 +27,9 @@ class Game(private val gameMode: GameMode) {
             else -> sequence
         }
 
+    val sequenceSize
+        get() = sequence.size
+
     var canInput = false
         private set
 

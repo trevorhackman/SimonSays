@@ -35,6 +35,7 @@
         tools:text="@string/game_modes_mode_classic_popup" />
 
     <ImageView
+        android:id="@+id/fade_top"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/top_fade"
@@ -42,15 +43,24 @@
         app:layout_constraintBottom_toTopOf="@id/main_button"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include layout="@layout/title" />
+    <View
+        android:id="@+id/makeshift_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_button"
+        app:layout_constraintVertical_bias="0.5"/>
 
     <ImageView
+        android:id="@+id/fade_bottom"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/bottom_fade"
         android:focusable="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_button" />
+        app:layout_constraintTop_toBottomOf="@id/makeshift_guideline" />
+
+    <include layout="@layout/title" />
 
     <hackman.trevor.copycat.ui.main.AdContainer
         android:id="@+id/ad_container"

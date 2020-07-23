@@ -9,8 +9,13 @@ import hackman.trevor.copycat.BuildConfig as MyBuildConfig
 val TESTING = MyBuildConfig.DEBUG
 
 // Logs to logcat, uses Log.ERROR
+fun log(tag: String, message: String) {
+    val spacedTag = if (tag.isNotBlank()) "${getTag()} $tag" else getTag()
+    if (TESTING) Log.e(spacedTag, message)
+}
+
 fun log(message: String) {
-    if (TESTING) Log.e(getTag(), message)
+    log("", message)
 }
 
 fun log(any: Any?) {
