@@ -24,6 +24,16 @@ object BillingManager {
     /** Attempt to periodically reconnect if [BillingClient.startConnection] fails */
     private var reconnectJob: Job? = null
 
+    private val billingClient by lazy {
+        BillingClient.newBuilder(activity.get()!!).enablePendingPurchases()
+            .setListener(purchaseListener)
+            .build().apply { startConnection(billingStateListener) }
+    }
+
+    fun setup(activity: AppCompatActivity) {
+        this.activity = WeakReference(activity)
+    }
+
     /**
      * Call to present Google's purchase dialog
      * User may make the purchase, cancel, or fail to make purchase
@@ -43,6 +53,13 @@ object BillingManager {
             .build()
 
         billingClient.querySkuDetailsAsync(skuDetailsParams, skuRetrievalListener)
+    }
+
+    private fun acknowledgePurchase(purchase: Purchase) {
+        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+            .setPurchaseToken(purchase.purchaseToken)
+            .build()
+        billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseListener)
     }
 
     //region Sku Listener
@@ -244,17 +261,6 @@ object BillingManager {
     }
 
     //endregion
-
-    private val billingClient = BillingClient.newBuilder(activity.get()!!).enablePendingPurchases()
-        .setListener(purchaseListener)
-        .build().apply { startConnection(billingStateListener) }
-
-    private fun acknowledgePurchase(purchase: Purchase) {
-        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-            .setPurchaseToken(purchase.purchaseToken)
-            .build()
-        billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseListener)
-    }
 
     private fun BillingResult.isSuccessful() = responseCode == BillingClient.BillingResponseCode.OK
 

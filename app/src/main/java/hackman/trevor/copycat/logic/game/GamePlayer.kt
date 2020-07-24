@@ -3,9 +3,11 @@ package hackman.trevor.copycat.logic.game
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.requireValue
+import hackman.trevor.copycat.system.SaveData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -16,6 +18,7 @@ class GamePlayer(
 
     private lateinit var game: Game
     private lateinit var sequence: List<GameButton>
+    private lateinit var speed: Speed
 
     /** For better user experience, don't fail until all buttons are released */
     private var waitingToFail = false
@@ -27,8 +30,9 @@ class GamePlayer(
 
     fun startGame() {
         waitingToFail = false
-        game = Game(gameViewModel.gameMode.requireValue())
         gameViewModel.setRoundNumber(RoundNumber(1))
+        game = Game(gameViewModel.gameMode.requireValue())
+        speed = SaveData.speed
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
@@ -52,16 +56,19 @@ class GamePlayer(
 
     private fun playOneAtATime() {
         lifecycleScope.launch {
-            sequence.forEach { playButton(it) }
+            delay(speed.startDelay)
+            sequence.forEachIndexed { i, gameButton ->
+                playButton(gameButton, i == sequence.lastIndex)
+            }
             gameViewModel.setGameState(GameState.Input)
         }
     }
 
-    private suspend fun playButton(button: GameButton) {
+    private suspend fun playButton(button: GameButton, isLast: Boolean) {
         gameViewModel.setButtonPlayBack(button)
-        delay(1000)
+        delay(speed.lightDuration)
         gameViewModel.setButtonPlayBack(null)
-        delay(500)
+        if (!isLast) delay(speed.delayDuration)
     }
 
     private fun observePlayerPushed() = observe(gameViewModel.playerPushed) {
@@ -76,7 +83,7 @@ class GamePlayer(
         if (waitingToFail) gameViewModel.setGameState(GameState.MainMenu)
         else if (!game.canInput) {
             gameViewModel.setGameState(GameState.Watch)
-            gameViewModel.setRoundNumber(RoundNumber(game.sequenceSize))
+            gameViewModel.setRoundNumber(RoundNumber(game.roundNumber))
         }
     }
 

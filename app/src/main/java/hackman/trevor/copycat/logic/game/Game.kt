@@ -27,8 +27,11 @@ class Game(private val gameMode: GameMode) {
             else -> sequence
         }
 
-    val sequenceSize
-        get() = sequence.size
+    val roundNumber
+        get() = when (gameMode) {
+            GameMode.TwoPlayer -> twoPlayerData.secondSequence.size
+            else -> sequence.size
+        }
 
     var canInput = false
         private set
@@ -57,7 +60,7 @@ class Game(private val gameMode: GameMode) {
 
     private fun correctButton() = when (gameMode) {
         GameMode.Reverse -> sequence[sequence.size - 1 - index]
-        GameMode.Opposite -> GameButton(buttonNumber - sequence[index].buttonNumber)
+        GameMode.Opposite -> GameButton(buttonNumber - sequence[index].buttonNumber - 1)
         else -> selectSequence[index]
     }
 
@@ -95,15 +98,6 @@ class Game(private val gameMode: GameMode) {
         index = 0
         canInput = true
     }
-}
-
-enum class GameMode {
-    Classic,
-    Reverse,
-    Chaos,
-    Single,
-    Opposite,
-    TwoPlayer;
 }
 
 private class TwoPlayerData(randomButton: GameButton) {

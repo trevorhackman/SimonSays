@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.ads.AdManager
+import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.sound.SoundManager
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         initDialogFactory()
         initAdsIfNotOwned()
         initSounds()
+        initBilling()
 
         setContentView(R.layout.fragment_container)
 
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initSounds() = SoundManager.setup(this)
+
+    private fun initBilling() = BillingManager.setup(this)
 
     override fun onBackPressed() {
         if (activityInterface.onBackPressed?.invoke() == true) return

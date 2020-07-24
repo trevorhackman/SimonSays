@@ -82,7 +82,7 @@ class GameTest {
         repeat(100) {
             val sequence = readSequence()
             val inverted = sequence.map {
-                GameButton(4 - it.buttonNumber)
+                GameButton(3 - it.buttonNumber)
             }
             playSequence(inverted)
         }
