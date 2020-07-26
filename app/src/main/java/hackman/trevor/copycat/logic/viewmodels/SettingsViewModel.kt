@@ -20,12 +20,8 @@ class SettingsViewModelImpl : ViewModel(), SettingsViewModel {
     }
 }
 
-interface SettingsViewModel {
+interface SettingsViewModel : Menu {
     val colorSet: LiveData<ColorSet>
 
     fun setColorSet(colorSet: ColorSet)
-
-    val inBackground: LiveData<Boolean>
-
-    fun setInBackground(inBackground: Boolean)
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="failure_title">Game Over</string>
+
+    <string name="failure_row_mode">Mode</string>
+    <string name="failure_row_score">Score</string>
+    <string name="failure_row_best">Best</string>
+    <string name="failure_row_pressed">Pressed</string>
+    <string name="failure_row_correct">Correct</string>
+
+    <string name="failure_main_menu">@string/main_menu</string>
+    <string name="failure_play_again">Play Again</string>
+</resources>

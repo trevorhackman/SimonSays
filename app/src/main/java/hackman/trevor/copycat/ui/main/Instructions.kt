@@ -13,7 +13,10 @@ import hackman.trevor.copycat.system.pixelTextSize
 import hackman.trevor.copycat.ui.FadeSpeed
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class Instructions @JvmOverloads constructor(
     context: Context,
@@ -43,9 +46,9 @@ class Instructions @JvmOverloads constructor(
 
     fun animateInstructions() {
         instructionsFadeJob = lifecycleScope.launch {
-            withContext(Dispatchers.Default) { delay(600) }
+            delay(600)
             fadeIn(FadeSpeed.Default)
-            withContext(Dispatchers.Default) { delay(3000) }
+            delay(3000)
             fadeOut(FadeSpeed.Slow) {
                 resetOnEnd()
             }.scaleY(0.25f).translationY(dpToPixel(75).toFloat())

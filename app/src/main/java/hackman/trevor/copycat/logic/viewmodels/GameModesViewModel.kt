@@ -20,12 +20,8 @@ class GameModesViewModelImpl : ViewModel(), GameModesViewModel {
     }
 }
 
-interface GameModesViewModel {
+interface GameModesViewModel : Menu {
     val gameMode: LiveData<GameMode>
 
     fun setGameMode(gameMode: GameMode)
-
-    val inBackground: LiveData<Boolean>
-
-    fun setInBackground(inBackground: Boolean)
 }

@@ -57,7 +57,7 @@ class GameModesButtonLayout @JvmOverloads constructor(
         }
     }
 
-    /** Find max width of buttons and set to all buttons for a consistent width */
+    // Find max width of buttons and set to all buttons for a consistent width
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val buttonWidth = findMaxButtonWidth()
         for (button in buttons) button.width = buttonWidth

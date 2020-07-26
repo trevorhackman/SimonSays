@@ -9,6 +9,8 @@ import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.*
 import hackman.trevor.copycat.system.getString
+import hackman.trevor.copycat.system.sound.SoundManager
+import hackman.trevor.copycat.ui.DialogFactory
 import hackman.trevor.copycat.ui.FadeSpeed
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
@@ -19,10 +21,15 @@ import kotlinx.android.synthetic.main.title.*
 class MainFragment : BaseFragment() {
     override val layout = R.layout.main_fragment
 
+    private val viewLifecycle by lazy {
+        viewLifecycleOwner.lifecycle
+    }
+
     private val onBackPressed: OnBackPressed by onBackPressed()
 
     private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
     private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
+    private val failureViewModel: FailureViewModel by viewModels<FailureViewModelImpl>()
     private val gameViewModel: GameViewModel by viewModels<GameViewModelImpl>()
 
     private val gamePlayer by lazy {
@@ -30,47 +37,44 @@ class MainFragment : BaseFragment() {
     }
 
     private var popInRan = false
-    private var onMainMenu = true
+    private var inGame = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupColorButtons()
         setupExtraButtons()
         setupSettingsMenu()
         setupGameModesMenu()
+        setupFailureMenu()
         setupMainButton()
         setupInstructions()
-        observeSettingsInBackground()
-        observeGameModesInBackground()
+        observeMenusInBackground()
         observeGameMode()
         observeGameState()
     }
 
-    private fun setupColorButtons() =
-        color_buttons.setup(settingsViewModel, gameViewModel, viewLifecycleOwner.lifecycle)
+    private fun setupColorButtons() = color_buttons.setup(settingsViewModel, gameViewModel, viewLifecycle)
 
     private fun setupExtraButtons() = extra_buttons_layout.setup(settingsViewModel, gameModesViewModel)
 
-    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycleOwner.lifecycle)
+    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycle)
 
-    private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycleOwner.lifecycle)
+    private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycle)
 
-    private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycleOwner.lifecycle)
+    private fun setupFailureMenu() = failure_menu.setup(failureViewModel, gameViewModel, viewLifecycle)
+
+    private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycle)
 
     private fun setupInstructions() = instructions.setup(lifecycleScope)
 
-    private fun observeSettingsInBackground() = observe(settingsViewModel.inBackground) { inBackground ->
-        onBackPressed.setBehavior {
-            if (!inBackground) settingsViewModel.setInBackground(true)
-            inBackground
-        }
-        fadeTitleAndExtraButtons(inBackground)
-        fadeAdContainer(!inBackground)
-    }
+    private fun observeMenusInBackground() = listOf(settingsViewModel, gameModesViewModel, failureViewModel)
+        .forEach(::observeMenu)
 
-    private fun observeGameModesInBackground() = observe(gameModesViewModel.inBackground) { inBackground ->
+    private fun observeMenu(menu: Menu) = observe(menu.inBackground) { inBackground ->
         onBackPressed.setBehavior {
-            if (!inBackground) gameModesViewModel.setInBackground(true)
-            inBackground
+            if (!inBackground) {
+                menu.setInBackground(true)
+                BackEvent.Consumed
+            } else BackEvent.CallSuper
         }
         fadeTitleAndExtraButtons(inBackground)
         fadeAdContainer(!inBackground)
@@ -82,25 +86,39 @@ class MainFragment : BaseFragment() {
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
+        if (it != GameState.Failure) failureViewModel.setInBackground(true)
+        if (it != GameState.Watch && it != GameState.Input) inGame = false
         when (it) {
             GameState.MainMenu -> onMainMenu()
+            GameState.Failure -> onFailure()
             else -> onGame()
         }
     }
 
     private fun onMainMenu() {
-        onMainMenu = true
         fadeTitleAndExtraButtons(true)
-        instructions.cancelAnimation()
-        instructions.fadeOut()
+        cancelInstructions()
+    }
+
+    private fun onFailure() {
+        SoundManager.failure.play()
+        failureViewModel.setInBackground(false)
+        cancelInstructions()
+    }
+
+    // Cancel instructions in case they're still up
+    private fun cancelInstructions() = instructions.apply {
+        cancelAnimation()
+        fadeOut()
     }
 
     private fun onGame() {
-        if (onMainMenu) {
-            onMainMenu = false
+        if (!inGame) {
+            inGame = true
             fadeTitleAndExtraButtons(false, FadeSpeed.Slow)
             instructions.animateInstructions()
             gamePlayer.startGame()
+            setInGameBackBehavior()
         }
     }
 
@@ -117,13 +135,24 @@ class MainFragment : BaseFragment() {
         }
     }
 
-    private fun fadeAdContainer(fadeIn: Boolean) {
-        if (fadeIn) {
-            ad_container.fadeIn()
+    private fun fadeAdContainer(fadeIn: Boolean) =
+        if (fadeIn) ad_container.fadeIn()
+        else ad_container.fadeOut()
+
+    private fun setInGameBackBehavior() = onBackPressed.setBehavior {
+        if (!justStartedGame()) {
+            DialogFactory.leaveCurrentGame(
+                onExit = { onBackPressed.callSuper() },
+                onMainMenu = { gameViewModel.setGameState(GameState.MainMenu) }
+            ).show()
         } else {
-            ad_container.fadeOut()
+            gameViewModel.setGameState(GameState.MainMenu)
         }
+        BackEvent.Consumed
     }
+
+    // Not worth presenting dialog if just started game
+    private fun justStartedGame() = gameViewModel.roundNumber.requireValue().roundNumber == 1
 
     override fun onResume() {
         super.onResume()

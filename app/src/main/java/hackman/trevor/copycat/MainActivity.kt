@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         initAdsIfNotOwned()
         initSounds()
         initBilling()
+        observeDoBackPressed()
 
         setContentView(R.layout.fragment_container)
 
@@ -47,7 +48,11 @@ class MainActivity : AppCompatActivity() {
     private fun initBilling() = BillingManager.setup(this)
 
     override fun onBackPressed() {
-        if (activityInterface.onBackPressed?.invoke() == true) return
+        if (activityInterface.onBackPressed?.invoke() == BackEvent.Consumed) return
         super.onBackPressed()
+    }
+
+    private fun observeDoBackPressed() = observe(activityInterface.callSuper) {
+        if (it) super.onBackPressed()
     }
 }

@@ -48,10 +48,10 @@ interface GameViewModel {
 
     val roundNumber: LiveData<RoundNumber>
 
-    /** Indicates which button the game presses. Null indicates release. */
+    // Indicates which button the game presses. Null indicates release.
     val buttonPlayBack: LiveData<GameButton?>
 
-    /** Indicates player pressed a button. Null indicates no buttons are pressed. */
+    // Indicates player pressed a button. Null indicates no buttons are pressed.
     val playerPushed: LiveData<GameButton?>
 
     fun setGameMode(gameMode: GameMode)
