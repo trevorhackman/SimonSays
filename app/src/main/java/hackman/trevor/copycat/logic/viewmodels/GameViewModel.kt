@@ -14,7 +14,7 @@ class GameViewModelImpl : ViewModel(), GameViewModel {
 
     override val gameState = MutableLiveData(GameState.MainMenu)
 
-    override val roundNumber = MutableLiveData(RoundNumber(1))
+    override val roundNumber = MutableLiveData(RoundNumber.start)
 
     override val buttonPlayBack = MutableLiveData<GameButton>()
 

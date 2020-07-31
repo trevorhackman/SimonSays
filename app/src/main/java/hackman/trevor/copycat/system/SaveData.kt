@@ -60,7 +60,7 @@ object SaveData {
         set(value) = set(gamesCompletedKey, value)
 
     // Get the highscore of the respective gameMode
-    fun getHighScore(gameMode: GameMode): Int = preferences.safeGetInt(gameMode.name + modeBestKey, 0)
+    fun getHighScore(gameMode: GameMode) = preferences.safeGetInt(gameMode.name + modeBestKey, 0)
 
     // Save a different highscore for each game mode
     fun saveHighScore(gameMode: GameMode, highscore: Int) = set(gameMode.name + modeBestKey, highscore)

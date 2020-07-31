@@ -51,6 +51,7 @@ dependencies {
 
     // Google Play Billing
     implementation 'com.android.billingclient:billing:3.0.0'
+    implementation 'androidx.lifecycle:lifecycle-process:2.2.0'
 
     // Required for local unit tests -- JUnit 4 framework
     testImplementation 'junit:junit:4.12'

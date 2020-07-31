@@ -29,8 +29,8 @@ class Game(private val gameMode: GameMode) {
 
     val roundNumber
         get() = when (gameMode) {
-            GameMode.TwoPlayer -> twoPlayerData.secondSequence.size
-            else -> sequence.size
+            GameMode.TwoPlayer -> RoundNumber(twoPlayerData.secondSequence.size)
+            else -> RoundNumber(sequence.size)
         }
 
     var canInput = false

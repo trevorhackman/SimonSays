@@ -12,7 +12,7 @@ class SettingsViewModelImpl : ViewModel(), SettingsViewModel {
         this.colorSet.value = colorSet
     }
 
-    override val inBackground: MutableLiveData<Boolean> = MutableLiveData(true)
+    override val inBackground = MutableLiveData(true)
 
     override fun setInBackground(inBackground: Boolean) {
         if (this.inBackground.value != inBackground)

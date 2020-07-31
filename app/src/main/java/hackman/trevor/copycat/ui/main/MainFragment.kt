@@ -33,7 +33,7 @@ class MainFragment : BaseFragment() {
     private val gameViewModel: GameViewModel by viewModels<GameViewModelImpl>()
 
     private val gamePlayer by lazy {
-        GamePlayer(gameViewModel, viewLifecycleOwner.lifecycle)
+        GamePlayer(gameViewModel, failureViewModel, viewLifecycleOwner.lifecycle)
     }
 
     private var popInRan = false

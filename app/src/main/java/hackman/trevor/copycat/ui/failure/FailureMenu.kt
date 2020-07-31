@@ -31,9 +31,12 @@ class FailureMenu @JvmOverloads constructor(
         this.failureViewModel = failureViewModel
         this.gameViewModel = gameViewModel
         this.lifecycle = lifecycle
+        setupBody()
         setupButtons()
         observeInBackground()
     }
+
+    private fun setupBody() = failure_body.setup(failureViewModel, lifecycle)
 
     private fun setupButtons() {
         failure_main_menu_button.setup(gameViewModel)

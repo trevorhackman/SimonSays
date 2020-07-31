@@ -12,7 +12,7 @@ class GameModesViewModelImpl : ViewModel(), GameModesViewModel {
         this.gameMode.value = gameMode
     }
 
-    override val inBackground: MutableLiveData<Boolean> = MutableLiveData(true)
+    override val inBackground = MutableLiveData(true)
 
     override fun setInBackground(inBackground: Boolean) {
         if (this.inBackground.value != inBackground)

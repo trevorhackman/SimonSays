@@ -10,4 +10,16 @@
 
     <string name="failure_main_menu">@string/main_menu</string>
     <string name="failure_play_again">Play Again</string>
+
+    <string name="failure_classic_0">Green</string>
+    <string name="failure_classic_1">Red</string>
+    <string name="failure_classic_2">Yellow</string>
+    <string name="failure_classic_3">Blue</string>
+
+    <string name="failure_other_0">Top Left</string>
+    <string name="failure_other_1">Top Right</string>
+    <string name="failure_other_2">Bottom Left</string>
+    <string name="failure_other_3">Bottom Right</string>
+
+    <string name="failure_null">---</string>
 </resources>

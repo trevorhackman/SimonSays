@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import hackman.trevor.copycat.logic.settings.Speed
+import hackman.trevor.copycat.logic.viewmodels.FailureViewModel
 import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.requireValue
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class GamePlayer(
     private val gameViewModel: GameViewModel,
+    private val failureViewModel: FailureViewModel,
     private val lifecycle: Lifecycle
 ) : LifecycleOwner {
 
@@ -26,6 +28,9 @@ class GamePlayer(
     // For better user experience, don't fail until all buttons are released
     private var waitingToFail = false
 
+    private var lastPressed: GameButton? = null
+    private var correctButton: GameButton? = null
+
     init {
         observeGameState()
         observePlayerPushed()
@@ -33,7 +38,7 @@ class GamePlayer(
 
     fun startGame() {
         waitingToFail = false
-        gameViewModel.setRoundNumber(RoundNumber(1))
+        gameViewModel.setRoundNumber(RoundNumber.start)
         game = Game(gameViewModel.gameMode.requireValue())
         speed = SaveData.speed
     }
@@ -77,20 +82,39 @@ class GamePlayer(
         if (gameViewModel.gameState.value != GameState.Input) return@observe
         when (it) {
             null -> onAllReleased()
-            else -> onPress(game.input(it))
+            else -> onPress(it)
         }
     }
 
     private fun onAllReleased() {
-        if (waitingToFail) gameViewModel.setGameState(GameState.Failure)
+        if (waitingToFail) onFailure()
         else if (!game.canInput) {
             gameViewModel.setGameState(GameState.Watch)
-            gameViewModel.setRoundNumber(RoundNumber(game.roundNumber))
+            gameViewModel.setRoundNumber(game.roundNumber)
         }
     }
 
-    private fun onPress(response: InputResponse) {
-        if (!response.isSuccess) waitToFail()
+    private fun onFailure() {
+        gameViewModel.setGameState(GameState.Failure)
+        failureViewModel.apply {
+            setMode(gameViewModel.gameMode.requireValue())
+            setScore(Score(gameViewModel.roundNumber.requireValue().roundNumber))
+            setBest(Score.getHighScore(gameViewModel.gameMode.requireValue()))
+            setPressed(lastPressed)
+            setCorrect(correctButton)
+        }
+    }
+
+    private fun onPress(gameButton: GameButton) {
+        lastPressed = gameButton
+        handleResponse(game.input(gameButton))
+    }
+
+    private fun handleResponse(response: InputResponse) {
+        if (!response.isSuccess) {
+            waitToFail()
+            correctButton = response.correct
+        }
     }
 
     private fun waitToFail() {
