@@ -4,22 +4,23 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 import androidx.core.view.isVisible
 
-sealed class FadeSpeed(val fadeInDuration: Long, val fadeOutDuration: Long) {
-    object Default : FadeSpeed(500L, 300L)
-    object Slow : FadeSpeed(1500L, 900L)
-}
+const val fade_in_900 = 900L
+const val fade_in_500 = 500L
+const val fade_out_300 = 300L
+const val fade_out_900 = 900L
 
-fun View.plainFadeIn(): ViewPropertyAnimator = animate().alpha(1f).setDuration(FadeSpeed.Default.fadeInDuration)
+const val scroll_in_1000 = 1000L
 
-fun View.plainFadeOut(): ViewPropertyAnimator = animate().alpha(0f).setDuration(FadeSpeed.Default.fadeOutDuration)
+fun View.plainFadeIn(): ViewPropertyAnimator = animate().alpha(1f).setDuration(fade_in_500)
+
+fun View.plainFadeOut(): ViewPropertyAnimator = animate().alpha(0f).setDuration(fade_out_300)
 
 inline fun View.fadeIn(
-    speed: FadeSpeed = FadeSpeed.Default,
     crossinline startAction: () -> Unit = {},
     crossinline endAction: () -> Unit = {}
 ): ViewPropertyAnimator {
     return animate().alpha(1f)
-        .setDuration(speed.fadeInDuration)
+        .setDuration(fade_in_500)
         .withStartAction {
             isVisible = true
             startAction()
@@ -31,12 +32,11 @@ inline fun View.fadeIn(
 }
 
 inline fun View.fadeOut(
-    speed: FadeSpeed = FadeSpeed.Default,
     crossinline startAction: () -> Unit = {},
     crossinline endAction: () -> Unit = {}
 ): ViewPropertyAnimator =
     animate().alpha(0f)
-        .setDuration(speed.fadeOutDuration)
+        .setDuration(fade_out_300)
         .withStartAction {
             isEnabled = false
             startAction()

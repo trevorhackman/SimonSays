@@ -10,10 +10,7 @@ import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.*
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager
-import hackman.trevor.copycat.ui.DialogFactory
-import hackman.trevor.copycat.ui.FadeSpeed
-import hackman.trevor.copycat.ui.fadeIn
-import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.copycat.ui.*
 import hackman.trevor.copycat.ui.game_modes.popupText
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.title.*
@@ -129,23 +126,23 @@ class MainFragment : BaseFragment() {
     private fun onGame() {
         if (!inGame) {
             inGame = true
-            fadeTitleAndExtraButtons(false, FadeSpeed.Slow)
+            fadeTitleAndExtraButtons(false, outSpeed = fade_out_900)
             instructions.animateInstructions()
             gamePlayer.startGame()
             setInGameBackBehavior()
         }
     }
 
-    private fun fadeTitleAndExtraButtons(fadeIn: Boolean, speed: FadeSpeed = FadeSpeed.Default) {
+    private fun fadeTitleAndExtraButtons(fadeIn: Boolean, inSpeed: Long = fade_in_500, outSpeed: Long = fade_out_300) {
         fade_top.pivotY = fade_top.y
         if (fadeIn) {
-            main_title.fadeIn(speed)
-            extra_buttons_layout.fadeIn(speed)
-            fade_top.animate().setDuration(speed.fadeInDuration).scaleY(1f)
+            main_title.fadeIn().duration = inSpeed
+            extra_buttons_layout.fadeIn().duration = inSpeed
+            fade_top.animate().scaleY(1f).duration = inSpeed
         } else {
-            main_title.fadeOut(speed)
-            extra_buttons_layout.fadeOut(speed)
-            fade_top.animate().setDuration(speed.fadeOutDuration).scaleY(0.5f)
+            main_title.fadeOut().duration = outSpeed
+            extra_buttons_layout.fadeOut().duration = outSpeed
+            fade_top.animate().scaleY(0.5f).duration = outSpeed
         }
     }
 

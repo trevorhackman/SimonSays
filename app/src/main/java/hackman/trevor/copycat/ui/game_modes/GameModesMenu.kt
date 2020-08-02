@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
 import hackman.trevor.copycat.observe
+import hackman.trevor.copycat.requireValue
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayHeight
 import hackman.trevor.copycat.system.displayWidth
@@ -57,7 +58,12 @@ class GameModesMenu @JvmOverloads constructor(
 
     private fun observeInBackground() = observe(gameModesViewModel.inBackground) {
         if (it) fadeOut()
-        else fadeIn()
+        else fadeIn(startAction = {
+            gameModesViewModel.isAnimatingIn = true
+            game_modes_best_text.updateText(gameModesViewModel.gameMode.requireValue())
+        }) {
+            gameModesViewModel.isAnimatingIn = false
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

@@ -35,8 +35,7 @@ class GameModesDescription @JvmOverloads constructor(
      * To prevent a shifting height from varying descriptions, find max height of TextView with
      * any game mode description
      */
-    private fun findMaxHeight(): Int =
-        GameMode.values().map { measureHeightWith(getString(it.description())) }.max()!!
+    private fun findMaxHeight() = GameMode.values().map { measureHeightWith(getString(it.description())) }.max()!!
 
     private fun measureHeightWith(text: String): Int {
         placeholder.layoutParams = layoutParams

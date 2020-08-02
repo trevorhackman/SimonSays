@@ -31,6 +31,9 @@ class GamePlayer(
     private var lastPressed: GameButton? = null
     private var correctButton: GameButton? = null
 
+    private val score: Int
+        get() = gameViewModel.roundNumber.requireValue().roundNumber - 1
+
     init {
         observeGameState()
         observePlayerPushed()
@@ -91,14 +94,26 @@ class GamePlayer(
         else if (!game.canInput) {
             gameViewModel.setGameState(GameState.Watch)
             gameViewModel.setRoundNumber(game.roundNumber)
+            if (isNewHighScore()) setNewHighScore()
         }
     }
+
+    private fun isNewHighScore(): Boolean {
+        val gameMode = gameViewModel.gameMode.requireValue()
+        val oldHighScore = SaveData.getHighScore(gameMode)
+        return score > oldHighScore
+    }
+
+    private fun setNewHighScore() = SaveData.saveHighScore(
+        gameViewModel.gameMode.requireValue(),
+        gameViewModel.roundNumber.requireValue().roundNumber - 1
+    )
 
     private fun onFailure() {
         gameViewModel.setGameState(GameState.Failure)
         failureViewModel.apply {
             setMode(gameViewModel.gameMode.requireValue())
-            setScore(Score(gameViewModel.roundNumber.requireValue().roundNumber - 1))
+            setScore(Score(this@GamePlayer.score))
             setBest(Score.getHighScore(gameViewModel.gameMode.requireValue()))
             setPressed(lastPressed)
             setCorrect(correctButton)

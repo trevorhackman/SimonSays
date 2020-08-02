@@ -52,7 +52,9 @@ class SettingsMenu @JvmOverloads constructor(
 
     private fun observeInBackground() = observe(settingsViewModel.inBackground) {
         if (it) fadeOut()
-        else fadeIn()
+        else fadeIn(startAction = {settingsViewModel.isAnimatingIn = true}) {
+            settingsViewModel.isAnimatingIn = false
+        }
     }
 
     override fun setEnabled(enabled: Boolean) {

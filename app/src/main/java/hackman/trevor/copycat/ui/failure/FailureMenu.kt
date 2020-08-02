@@ -14,6 +14,7 @@ import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.displayHeight
 import hackman.trevor.copycat.system.displayWidth
 import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.copycat.ui.scroll_in_1000
 import kotlinx.android.synthetic.main.failure_menu.view.*
 import kotlin.math.min
 import kotlin.math.sin
@@ -60,9 +61,13 @@ class FailureMenu @JvmOverloads constructor(
         isEnabled = false
         animate()
             .y((screenHeight - height) / 2)
-            .setDuration(ANIMATE_IN_DURATION)
+            .setDuration(scroll_in_1000)
             .setInterpolator(smoothMotionInterpolator)
-            .withEndAction { isEnabled = true }
+            .withStartAction { failureViewModel.isAnimatingIn = true }
+            .withEndAction {
+                failureViewModel.isAnimatingIn = false
+                isEnabled = true
+            }
     }
 
     private val smoothMotionInterpolator = { x: Float ->
@@ -82,9 +87,5 @@ class FailureMenu @JvmOverloads constructor(
         failure_main_menu_button.isEnabled = enabled
     }
 
-    override fun getLifecycle(): Lifecycle = lifecycle
-
-    companion object {
-        private const val ANIMATE_IN_DURATION = 1000L
-    }
+    override fun getLifecycle() = lifecycle
 }

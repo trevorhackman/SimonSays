@@ -52,15 +52,16 @@ class MainButton @JvmOverloads constructor(
     }
 
     private fun onMainMenu() {
-        main_button_play_icon.fadeIn(speed = FadeSpeed.Slow).scaleX(1f).scaleY(1f)
-        main_button_play_icon.gyrate()
+        main_button_play_icon.fadeIn {
+            main_button_play_icon.gyrate()
+        }.scaleX(1f).scaleY(1f).duration = fade_in_900
         main_button_game_mode_text.plainFadeIn()
-        main_button_round_text.fadeOut()
+        main_button_round_text.isVisible = false
         unshrink()
     }
 
     private fun onGame() {
-        main_button_play_icon.fadeOut(speed = FadeSpeed.Slow).scaleX(0.45f).scaleY(0.45f)
+        main_button_play_icon.fadeOut().scaleX(0.45f).scaleY(0.45f).duration = fade_out_900
         main_button_game_mode_text.plainFadeOut()
         main_button_round_text.fadeIn()
         shrink()
