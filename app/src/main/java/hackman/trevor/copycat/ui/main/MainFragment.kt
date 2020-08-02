@@ -48,6 +48,7 @@ class MainFragment : BaseFragment() {
         setupMainButton()
         setupInstructions()
         observeMenusInBackground()
+        observeFailureMenu()
         observeGameMode()
         observeGameState()
     }
@@ -66,18 +67,31 @@ class MainFragment : BaseFragment() {
 
     private fun setupInstructions() = instructions.setup(lifecycleScope)
 
-    private fun observeMenusInBackground() = listOf(settingsViewModel, gameModesViewModel, failureViewModel)
+    private fun observeMenusInBackground() = listOf(settingsViewModel, gameModesViewModel)
         .forEach(::observeMenu)
 
     private fun observeMenu(menu: Menu) = observe(menu.inBackground) { inBackground ->
         onBackPressed.setBehavior {
-            if (!inBackground) {
+            if (menu.isAnimatingIn) BackEvent.Consumed
+            else if (!inBackground) {
                 menu.setInBackground(true)
                 BackEvent.Consumed
             } else BackEvent.CallSuper
         }
         fadeTitleAndExtraButtons(inBackground)
         fadeAdContainer(!inBackground)
+    }
+
+    private fun observeFailureMenu() = observe(failureViewModel.inBackground) { inBackground ->
+        onBackPressed.setBehavior {
+            if (failureViewModel.isAnimatingIn) BackEvent.Consumed
+            else if (!inBackground) {
+                failureViewModel.setInBackground(true)
+                gameViewModel.setGameState(GameState.MainMenu)
+                BackEvent.Consumed
+            }
+            else BackEvent.CallSuper
+        }
     }
 
     private fun observeGameMode() = observe(gameModesViewModel.gameMode) {

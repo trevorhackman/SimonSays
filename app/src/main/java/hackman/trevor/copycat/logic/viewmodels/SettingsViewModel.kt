@@ -2,21 +2,13 @@ package hackman.trevor.copycat.logic.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import hackman.trevor.copycat.logic.settings.ColorSet
 
-class SettingsViewModelImpl : ViewModel(), SettingsViewModel {
+class SettingsViewModelImpl : MenuViewModel(), SettingsViewModel {
     override val colorSet = MutableLiveData<ColorSet>()
 
     override fun setColorSet(colorSet: ColorSet) {
         this.colorSet.value = colorSet
-    }
-
-    override val inBackground = MutableLiveData(true)
-
-    override fun setInBackground(inBackground: Boolean) {
-        if (this.inBackground.value != inBackground)
-            this.inBackground.value = inBackground
     }
 }
 

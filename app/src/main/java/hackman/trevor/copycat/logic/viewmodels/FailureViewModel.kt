@@ -2,19 +2,11 @@ package hackman.trevor.copycat.logic.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import hackman.trevor.copycat.logic.game.GameButton
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.game.Score
 
-class FailureViewModelImpl : ViewModel(), FailureViewModel {
-    override val inBackground = MutableLiveData(true)
-
-    override fun setInBackground(inBackground: Boolean) {
-        if (this.inBackground.value != inBackground)
-            this.inBackground.value = inBackground
-    }
-
+class FailureViewModelImpl : MenuViewModel(), FailureViewModel {
     override val mode = MutableLiveData<GameMode>()
 
     override fun setMode(mode: GameMode) {

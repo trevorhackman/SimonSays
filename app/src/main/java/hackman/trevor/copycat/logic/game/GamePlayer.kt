@@ -98,7 +98,7 @@ class GamePlayer(
         gameViewModel.setGameState(GameState.Failure)
         failureViewModel.apply {
             setMode(gameViewModel.gameMode.requireValue())
-            setScore(Score(gameViewModel.roundNumber.requireValue().roundNumber))
+            setScore(Score(gameViewModel.roundNumber.requireValue().roundNumber - 1))
             setBest(Score.getHighScore(gameViewModel.gameMode.requireValue()))
             setPressed(lastPressed)
             setCorrect(correctButton)
