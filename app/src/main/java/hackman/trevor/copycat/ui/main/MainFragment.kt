@@ -155,7 +155,7 @@ class MainFragment : BaseFragment() {
             DialogFactory.leaveCurrentGame(
                 onExit = { onBackPressed.callSuper() },
                 onMainMenu = { gameViewModel.setGameState(GameState.MainMenu) }
-            ).show()
+            ).showCorrectly()
         } else {
             gameViewModel.setGameState(GameState.MainMenu)
         }

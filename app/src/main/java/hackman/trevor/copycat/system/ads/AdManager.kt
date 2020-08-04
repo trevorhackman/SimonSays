@@ -91,12 +91,11 @@ object AdManager : LifecycleObserver {
      * Banner ad does not resize when the screen resizes
      * This method must be called to recreate & resize a banner ad when the screen size changes
      */
-    fun buildBannerAd(): AdView =
-        BannerAdBuilder(activity.get()!!, ::requestNewBannerAd).build().also {
-            removeView()
-            bannerAd = it
-            requestNewBannerAd()
-        }
+    fun buildBannerAd(): AdView = BannerAdBuilder(activity.get()!!, ::requestNewBannerAd).build().also {
+        removeView()
+        bannerAd = it
+        requestNewBannerAd()
+    }
 
     private fun removeView() {
         bannerAd?.parent?.let { parent ->

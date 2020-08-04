@@ -6,6 +6,7 @@ import com.android.billingclient.api.*
 import com.android.billingclient.api.Purchase.PurchasesResult
 import hackman.trevor.copycat.system.*
 import hackman.trevor.copycat.ui.DialogFactory
+import hackman.trevor.copycat.ui.showCorrectly
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,6 +19,8 @@ import java.lang.ref.WeakReference
  * Google documentation (garbage documentation) : https://developer.android.com/google/play/billing/billing_library_overview
  */
 object BillingManager {
+
+    var isConnected = false
 
     private lateinit var activity: WeakReference<AppCompatActivity>
 
@@ -32,6 +35,7 @@ object BillingManager {
 
     fun setup(activity: AppCompatActivity) {
         this.activity = WeakReference(activity)
+        billingClient
     }
 
     /**
@@ -42,7 +46,7 @@ object BillingManager {
      */
     fun startPurchaseFlow() {
         if (!billingClient.isReady) {
-            DialogFactory.billingUnavailable().show()
+            DialogFactory.billingUnavailable().showCorrectly()
             return
         }
 
@@ -75,7 +79,7 @@ object BillingManager {
     // TODO This can happen if billing failed to connect
     private fun onSkuError() {
         report("This shouldn't happen. Null details on OK response : " + billingClient.isReady)
-        DialogFactory.failedNetwork().show()
+        DialogFactory.failedNetwork().showCorrectly()
     }
 
     private fun onSuccessfulSkuRetrieval(skuDetails: List<SkuDetails>) {
@@ -100,7 +104,7 @@ object BillingManager {
 
     private fun onFailedSkuRetrieval(billingResult: BillingResult) {
         flog("querySkuDetailsAsync failed : ${billingResponseToName(billingResult)} ${billingResult.debugMessage} ${billingClient.isReady}")
-        DialogFactory.failedNetwork().show()
+        DialogFactory.failedNetwork().showCorrectly()
     }
 
     //endregion
@@ -129,7 +133,7 @@ object BillingManager {
 
     private fun onPurchaseError(billingResult: BillingResult) {
         report("Unexpected failure to make purchase ${billingClient.isReady} ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
-        DialogFactory.unknownError("Sorry, there was an error with your purchase").show()
+        DialogFactory.unknownError("Sorry, there was an error with your purchase").showCorrectly()
     }
 
     private fun onSuccessfulPurchase(purchases: List<Purchase>) {
@@ -170,7 +174,7 @@ object BillingManager {
 
     private fun onSuccessfulAcknowledgement() {
         flog("Successfully acknowledged")
-        DialogFactory.successfulNoAdsPurchase().show()
+        DialogFactory.successfulNoAdsPurchase().showCorrectly()
     }
 
     // I hope this doesn't happen. Not sure what to do since I believe user already paid, but acknowledgement is required
@@ -194,6 +198,7 @@ object BillingManager {
 
         private fun onSuccessfulConnection() {
             flog("startConnection succeeded")
+            isConnected = true
             reconnectJob?.cancel()
             queryPurchases()
         }
@@ -238,6 +243,7 @@ object BillingManager {
 
         private fun onFailedConnection(billingResult: BillingResult) {
             flog("startConnection failed ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
+            isConnected = false
             attemptReconnect()
         }
 
@@ -296,6 +302,11 @@ object BillingManager {
 
     @TestOnly // Reset all purchases for testing
     fun forTestingConsumeAllPurchases() {
+        if (!isConnected) {
+            log("Billing not connected")
+            return
+        }
+
         val listener = ConsumeResponseListener { billingResult, purchaseToken ->
             if (billingResult.isSuccessful()) log("Consumed purchase successfully : $purchaseToken")
             else log("Consume failed : ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")

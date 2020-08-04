@@ -9,6 +9,7 @@ import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
+import hackman.trevor.copycat.ui.showCorrectly
 
 class NoAdsButton @JvmOverloads constructor(
     context: Context,
@@ -36,7 +37,7 @@ class NoAdsButton @JvmOverloads constructor(
 
     private fun setOnClickListener() = setOnClickListener {
         SoundManager.click.play()
-        if (SaveData.isNoAdsOwned == Ownership.Owned) noAdsAlreadyPurchased.show()
-        else noAdsDialog.show()
+        if (SaveData.isNoAdsOwned == Ownership.Owned) noAdsAlreadyPurchased.showCorrectly()
+        else noAdsDialog.showCorrectly()
     }
 }

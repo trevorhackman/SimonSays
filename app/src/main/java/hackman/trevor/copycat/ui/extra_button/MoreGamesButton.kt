@@ -7,6 +7,7 @@ import hackman.trevor.copycat.system.ShowMoreGames
 import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
+import hackman.trevor.copycat.ui.showCorrectly
 
 class MoreGamesButton @JvmOverloads constructor(
     context: Context,
@@ -23,7 +24,7 @@ class MoreGamesButton @JvmOverloads constructor(
         background = getDrawable(R.drawable.more_games)
         setOnClickListener {
             SoundManager.click.play()
-            moreGamesDialog.show()
+            moreGamesDialog.showCorrectly()
         }
     }
 }

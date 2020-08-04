@@ -7,6 +7,7 @@ import hackman.trevor.copycat.system.RateTheApp
 import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
+import hackman.trevor.copycat.ui.showCorrectly
 
 class RateAppButton @JvmOverloads constructor(
     context: Context,
@@ -23,7 +24,7 @@ class RateAppButton @JvmOverloads constructor(
         background = getDrawable(R.drawable.star)
         setOnClickListener {
             SoundManager.click.play()
-            rateTheAppDialog.show()
+            rateTheAppDialog.showCorrectly()
         }
     }
 }

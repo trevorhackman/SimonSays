@@ -3,6 +3,7 @@ package hackman.trevor.copycat.ui
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.AlertDialog.THEME_HOLO_DARK
+import android.view.WindowManager
 import hackman.trevor.copycat.R
 import java.lang.ref.WeakReference
 
@@ -84,4 +85,10 @@ object DialogFactory {
             .setMessage(errorMessage)
             .setNeutralButton(R.string.dialog_ok_button, null)
             .create()
+}
+
+// Don't show status bar when dialog appears. Dialogs are so overly complicated. Foogle.
+fun AlertDialog.showCorrectly() {
+    window!!.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+    show()
 }
