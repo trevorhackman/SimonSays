@@ -89,6 +89,6 @@ object DialogFactory {
 
 // Don't show status bar when dialog appears. Dialogs are so overly complicated. Foogle.
 fun AlertDialog.showCorrectly() {
-    window!!.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+    window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     show()
 }

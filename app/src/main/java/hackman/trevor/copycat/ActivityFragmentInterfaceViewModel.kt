@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 fun MainActivity.activityInterface(): Lazy<ActivityInterface> = viewModels<ActivityFragmentInterfaceViewModel>()
-fun BaseFragment.onBackPressed(): Lazy<OnBackPressed> = activityViewModels<ActivityFragmentInterfaceViewModel>()
+fun BaseFragment.fragmentInterface(): Lazy<FragmentInterface> = activityViewModels<ActivityFragmentInterfaceViewModel>()
 
-class ActivityFragmentInterfaceViewModel : ViewModel(), ActivityInterface, OnBackPressed {
+class ActivityFragmentInterfaceViewModel : ViewModel(), ActivityInterface, FragmentInterface {
     override var onBackPressed: (() -> BackEvent)? = null
 
-    override fun setBehavior(onBackPressed: (() -> BackEvent)?) {
+    override fun setBackBehavior(onBackPressed: (() -> BackEvent)?) {
         this.onBackPressed = onBackPressed
     }
 
@@ -22,25 +22,36 @@ class ActivityFragmentInterfaceViewModel : ViewModel(), ActivityInterface, OnBac
         callSuper.value = true
         callSuper.value = false
     }
+
+    override val requestedOrientation = MutableLiveData(Orientation.User)
+
+    override fun setOrientation(orientation: Orientation) {
+        requestedOrientation.value = orientation
+    }
 }
 
 interface ActivityInterface {
     val onBackPressed: (() -> BackEvent)?
 
     val callSuper: LiveData<Boolean>
+
+    val requestedOrientation: LiveData<Orientation>
 }
 
-interface OnBackPressed {
+interface FragmentInterface {
     /**
      * What will happen when Android's back button is pressed
      *
      * @param onBackPressed
      * On a return of [BackEvent.Consumed], the back event is consumed, else the activity's super.onBackPressed will be called
      */
-    fun setBehavior(onBackPressed: (() -> BackEvent)?)
+    fun setBackBehavior(onBackPressed: (() -> BackEvent)?)
 
     // Triggers the activity's super.onBackPressed()
     fun callSuper()
+
+    // Set the requested orientation of the device
+    fun setOrientation(orientation: Orientation)
 }
 
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
@@ -50,3 +61,5 @@ inline class BackEvent private constructor(val consumed: Boolean) {
         val CallSuper = BackEvent(false)
     }
 }
+
+enum class Orientation { User, Locked }

@@ -24,7 +24,8 @@
             android:value="ca-app-pub-9667393179892638~7004321704" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|fontScale|layoutDirection|smallestScreenSize|density">
+            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|fontScale|layoutDirection|smallestScreenSize|density"
+            android:screenOrientation="user">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

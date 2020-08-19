@@ -22,7 +22,7 @@ class MainFragment : BaseFragment() {
         viewLifecycleOwner.lifecycle
     }
 
-    private val onBackPressed: OnBackPressed by onBackPressed()
+    private val fragmentInterface by fragmentInterface()
 
     private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
     private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
@@ -68,7 +68,7 @@ class MainFragment : BaseFragment() {
         .forEach(::observeMenu)
 
     private fun observeMenu(menu: Menu) = observe(menu.inBackground) { inBackground ->
-        onBackPressed.setBehavior {
+        fragmentInterface.setBackBehavior {
             if (menu.isAnimatingIn) BackEvent.Consumed
             else if (!inBackground) {
                 menu.setInBackground(true)
@@ -80,14 +80,13 @@ class MainFragment : BaseFragment() {
     }
 
     private fun observeFailureMenu() = observe(failureViewModel.inBackground) { inBackground ->
-        onBackPressed.setBehavior {
+        fragmentInterface.setBackBehavior {
             if (failureViewModel.isAnimatingIn) BackEvent.Consumed
             else if (!inBackground) {
                 failureViewModel.setInBackground(true)
                 gameViewModel.setGameState(GameState.MainMenu)
                 BackEvent.Consumed
-            }
-            else BackEvent.CallSuper
+            } else BackEvent.CallSuper
         }
     }
 
@@ -98,12 +97,13 @@ class MainFragment : BaseFragment() {
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
         if (it != GameState.Failure) failureViewModel.setInBackground(true)
-        if (it != GameState.Watch && it != GameState.Input) inGame = false
+        if (!it.inGame) inGame = false
         when (it) {
             GameState.MainMenu -> onMainMenu()
             GameState.Failure -> onFailure()
             else -> onGame()
         }
+        fragmentInterface.setOrientation(if (it.inGame) Orientation.Locked else Orientation.User)
     }
 
     private fun onMainMenu() {
@@ -150,10 +150,10 @@ class MainFragment : BaseFragment() {
         if (fadeIn) ad_container.fadeIn()
         else ad_container.fadeOut()
 
-    private fun setInGameBackBehavior() = onBackPressed.setBehavior {
+    private fun setInGameBackBehavior() = fragmentInterface.setBackBehavior {
         if (!justStartedGame()) {
             DialogFactory.leaveCurrentGame(
-                onExit = { onBackPressed.callSuper() },
+                onExit = { fragmentInterface.callSuper() },
                 onMainMenu = { gameViewModel.setGameState(GameState.MainMenu) }
             ).showCorrectly()
         } else {

@@ -1,6 +1,7 @@
 package hackman.trevor.copycat
 
 import android.app.Application
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import hackman.trevor.copycat.system.SaveData
@@ -23,8 +24,12 @@ class MainActivity : AppCompatActivity() {
         initSounds()
         initBilling()
         observeDoBackPressed()
+        observeRequestedOrientation()
 
         setContentView(R.layout.fragment_container)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
 
         // TODO Splash screen
         supportFragmentManager.beginTransaction().add(
@@ -54,5 +59,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeDoBackPressed() = observe(activityInterface.callSuper) {
         if (it) super.onBackPressed()
+    }
+
+    private fun observeRequestedOrientation() = observe(activityInterface.requestedOrientation) {
+        requestedOrientation = when (it) {
+            Orientation.User -> ActivityInfo.SCREEN_ORIENTATION_USER
+            Orientation.Locked -> ActivityInfo.SCREEN_ORIENTATION_LOCKED
+        }
     }
 }

@@ -4,5 +4,8 @@ enum class GameState {
     MainMenu,
     Watch,
     Input,
-    Failure
+    Failure;
+
+    val inGame
+        get() = this == Watch || this == Input
 }
