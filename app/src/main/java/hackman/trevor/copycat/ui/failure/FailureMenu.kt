@@ -79,6 +79,13 @@ class FailureMenu @JvmOverloads constructor(
         super.onMeasure(width, heightMeasureSpec)
     }
 
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+
+        // If orientation change happens during scroll to center animation, position will change and animation must reset
+        if (changed && failureViewModel.isAnimatingIn) animateIn()
+    }
+
     private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
 
     override fun setEnabled(enabled: Boolean) {
