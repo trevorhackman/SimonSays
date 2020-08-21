@@ -41,7 +41,8 @@ object AdManager : LifecycleObserver {
     }
 
     // Check this before showing ads
-    fun isEnabled() = isInitialized && SaveData.isNoAdsOwned == Ownership.ConfirmedUnowned
+    val isEnabled
+        get() = isInitialized && SaveData.isNoAdsOwned == Ownership.ConfirmedUnowned
 
     fun setup(activity: AppCompatActivity) {
         this.activity = WeakReference(activity)
@@ -91,7 +92,7 @@ object AdManager : LifecycleObserver {
      * Banner ad does not resize when the screen resizes
      * This method must be called to recreate & resize a banner ad when the screen size changes
      */
-    fun buildBannerAd(): AdView = BannerAdBuilder(activity.get()!!, ::requestNewBannerAd).build().also {
+    fun buildBannerAd() = BannerAdBuilder(activity.get()!!, ::requestNewBannerAd).build().also {
         removeView()
         bannerAd = it
         requestNewBannerAd()
@@ -105,17 +106,21 @@ object AdManager : LifecycleObserver {
 
     /**
      * Show interstitial ad if possible
-     * Return whether shown
+     * @param probability [0,1] chance of showing ad
+     * @return whether shown
      */
-    fun showInterstitialAd(): Boolean =
-        if (interstitialAd.isLoaded) {
-            interstitialAd.show()
-            true
-        } else {
-            log("Interstitial ad is not loaded and cannot be shown")
-            if (!interstitialAd.isLoading) requestNewInterstitialAd()
-            false
-        }
+    fun showInterstitialAd(probability: Double): Boolean {
+        return if (probability > Math.random()) {
+            if (interstitialAd.isLoaded) {
+                interstitialAd.show()
+                true
+            } else {
+                log("Interstitial ad is not loaded and cannot be shown")
+                if (!interstitialAd.isLoading) requestNewInterstitialAd()
+                false
+            }
+        } else false
+    }
 
     /**
      * The meaning of the error codes that AdMob may return

@@ -8,6 +8,8 @@ import hackman.trevor.copycat.*
 import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.*
+import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.*
@@ -115,7 +117,12 @@ class MainFragment : BaseFragment() {
         SoundManager.failure.play()
         failureViewModel.setInBackground(false)
         cancelInstructions()
+        SaveData.gamesCompleted++
+        if (AdManager.isEnabled && !wouldBeBadInitialExperience()) AdManager.showInterstitialAd(0.40)
     }
+
+    // Would be bad initial experience to show ad on first couple games
+    private fun wouldBeBadInitialExperience() = SaveData.gamesCompleted < 4
 
     // Cancel instructions in case they're still up
     private fun cancelInstructions() = instructions.apply {

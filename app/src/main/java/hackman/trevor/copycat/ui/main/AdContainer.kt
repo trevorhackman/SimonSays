@@ -19,12 +19,12 @@ class AdContainer @JvmOverloads constructor(
     private var onMeasureHeightMeasureSpec = 0
 
     init {
-        if (AdManager.isEnabled()) addView(AdManager.getBannerAd())
+        if (AdManager.isEnabled) addView(AdManager.getBannerAd())
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (AdManager.isEnabled()) {
+        if (AdManager.isEnabled) {
             onMeasureWidthMeasureSpec = widthMeasureSpec
             onMeasureHeightMeasureSpec = heightMeasureSpec
             if (initial) onInitial()
