@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.settings.ColorSet
+import hackman.trevor.copycat.logic.settings.FailureSound
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.system.billing.Ownership
 
@@ -43,6 +44,11 @@ object SaveData {
     var colorSet: ColorSet
         get() = ColorSet.values()[preferences.safeGetInt(colorSetKey, ColorSet.Classic.ordinal)]
         set(value) = set(colorSetKey, value.ordinal)
+
+    // Remember the failure sound selected in the settings
+    var failureSound: FailureSound
+        get() = FailureSound.values()[preferences.safeGetInt(failureSoundKey, FailureSound.ClassicError.ordinal)]
+        set(value) = set(failureSoundKey, value.ordinal)
 
     // Whether or not rating dialog has been displayed before
     var isRatingRequestDisplayed: Boolean
@@ -94,6 +100,7 @@ object SaveData {
     private const val gamesCompletedKey = "gamesCompleted"
     private const val speedKey = "speed"
     private const val colorSetKey = "colors"
+    private const val failureSoundKey = "failureSound"
     private const val gameModeKey = "gameMode"
     private const val modeBestKey = "Best"
 }

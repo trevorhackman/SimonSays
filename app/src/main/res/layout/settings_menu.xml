@@ -38,10 +38,16 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/settings_option_speed" />
 
+    <hackman.trevor.copycat.ui.settings.SettingsFailureSoundRow
+        android:id="@+id/settings_option_failure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/settings_option_color" />
+
     <hackman.trevor.copycat.ui.CloseButton
         android:id="@+id/settings_close_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_option_color" />
+        app:layout_constraintTop_toBottomOf="@id/settings_option_failure" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

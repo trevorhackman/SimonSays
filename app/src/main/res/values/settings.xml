@@ -15,4 +15,8 @@
     <string name="settings_color_royal">Royal</string>
     <string name="settings_color_inverted">Inverted</string>
     <string name="settings_color_greyed">Greyed</string>
+
+    <string name="settings_setting_failure_sound">Failure</string>
+    <string name="settings_failure_error_tone">Tone</string>
+    <string name="settings_failure_bit_generated">Wuwu</string>
 </resources>

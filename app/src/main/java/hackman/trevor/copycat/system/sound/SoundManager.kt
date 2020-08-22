@@ -33,7 +33,8 @@ object SoundManager : LifecycleObserver {
     val chip2 = createSound(R.raw.chip2_amp, VOLUME_CHIP2) // Sound 2
     val chip3 = createSound(R.raw.chip3_amp, VOLUME_CHIP3) // Sound 3
     val chip4 = createSound(R.raw.chip4_amp, VOLUME_CHIP4) // Sound 4 (Lowest)
-    val failure = createSound(R.raw.failure, VOLUME_FAILURE) // Fail sound
+    val failure_error = createSound(R.raw.failure_error, VOLUME_FAILURE) // Fail sound
+    val failure_bit = createSound(R.raw.failure_bit, VOLUME_FAILURE) // Fail sound
     val click = createSound(R.raw.click, VOLUME_CLICK) // Button click sound
 
     fun setup(activity: AppCompatActivity) {

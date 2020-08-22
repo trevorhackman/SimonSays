@@ -7,11 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import hackman.trevor.copycat.*
 import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
+import hackman.trevor.copycat.logic.settings.toSound
 import hackman.trevor.copycat.logic.viewmodels.*
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.*
 import hackman.trevor.copycat.ui.game_modes.popupText
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -114,7 +114,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun onFailure() {
-        SoundManager.failure.play()
+        SaveData.failureSound.toSound().play()
         failureViewModel.setInBackground(false)
         cancelInstructions()
         SaveData.gamesCompleted++

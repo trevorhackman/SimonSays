@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.LinearLayout
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.settings.ColorSet
+import hackman.trevor.copycat.logic.settings.FailureSound
 import hackman.trevor.copycat.logic.settings.NameId
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
@@ -30,7 +31,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
             settings_left_arrow.isEnabled = isLeftArrowEnabled()
             settings_right_arrow.isEnabled = isRightArrowEnabled()
             saveValueSelected()
-            if (::settingsViewModel.isInitialized) onChange(value)
+            if (::settingsViewModel.isInitialized) onChange()
         }
 
     private fun isLeftArrowEnabled() = optionSelected != constants.first()
@@ -41,7 +42,6 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
         View.inflate(context, R.layout.settings_option_row, this)
         settings_left_arrow.setOnClickListener { onLeftArrow() }
         settings_right_arrow.setOnClickListener { onRightArrow() }
-        initializeValue()
     }
 
     private fun onLeftArrow() {
@@ -58,14 +58,15 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 
     fun setup(settingsViewModel: SettingsViewModel) {
         this.settingsViewModel = settingsViewModel
-        onChange(optionSelected)
+        initializeValue()
     }
 
     protected abstract fun initializeValue()
 
     protected abstract fun saveValueSelected()
 
-    protected open fun onChange(value: T) {}
+    // Immediate change upon option
+    protected open fun onChange() {}
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
@@ -109,7 +110,29 @@ class SettingsColorRow @JvmOverloads constructor(
         SaveData.colorSet = optionSelected
     }
 
-    override fun onChange(value: ColorSet) {
-        settingsViewModel.setColorSet(value)
+    override fun onChange() {
+        settingsViewModel.setColorSet(optionSelected)
+    }
+}
+
+class SettingsFailureSoundRow @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null
+) : SettingsRow<FailureSound>(context, attributeSet, FailureSound.values()) {
+
+    init {
+        settings_option.text = getString(R.string.settings_setting_failure_sound)
+    }
+
+    override fun initializeValue() {
+        optionSelected = SaveData.failureSound
+    }
+
+    override fun saveValueSelected() {
+        SaveData.failureSound = optionSelected
+    }
+
+    override fun onChange() {
+        settingsViewModel.setFailureSound(optionSelected)
     }
 }

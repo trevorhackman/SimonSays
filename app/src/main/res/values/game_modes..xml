@@ -14,7 +14,7 @@
     <string name="game_modes_mode_chaos_description">The whole sequence is randomized each round.</string>
     <string name="game_modes_mode_single_description">Only the newest color added to the sequence plays back. You must still repeat the whole sequence.</string>
     <string name="game_modes_mode_opposite_description">You must replay the opposite buttons that you see play!</string>
-    <string name="game_modes_mode_two_player_description">Two alternating games of Classic. Good for 2 Players, or one who likes a great challenge.</string>
+    <string name="game_modes_mode_two_player_description">Two alternating games of Classic. Good for either two players, or one who likes a great challenge.</string>
 
     <string name="game_modes_mode_classic_popup">Watch and repeat</string>
     <string name="game_modes_mode_reverse_popup">Playing Reverse</string>

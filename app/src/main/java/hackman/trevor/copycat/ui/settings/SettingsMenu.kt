@@ -37,6 +37,7 @@ class SettingsMenu @JvmOverloads constructor(
         this.lifecycle = lifecycle
         setupSpeedOption()
         setupColorOption()
+        setupFailureOption()
         setOnCloseClickListener()
         observeInBackground()
     }
@@ -45,6 +46,8 @@ class SettingsMenu @JvmOverloads constructor(
 
     private fun setupColorOption() = settings_option_color.setup(settingsViewModel)
 
+    private fun setupFailureOption() = settings_option_failure.setup(settingsViewModel)
+
     private fun setOnCloseClickListener() = settings_close_button.setOnClickListener {
         settingsViewModel.setInBackground(true)
         SoundManager.click.play()
@@ -52,7 +55,7 @@ class SettingsMenu @JvmOverloads constructor(
 
     private fun observeInBackground() = observe(settingsViewModel.inBackground) {
         if (it) fadeOut()
-        else fadeIn(startAction = {settingsViewModel.isAnimatingIn = true}) {
+        else fadeIn(startAction = { settingsViewModel.isAnimatingIn = true }) {
             settingsViewModel.isAnimatingIn = false
         }
     }
@@ -61,6 +64,7 @@ class SettingsMenu @JvmOverloads constructor(
         super.setEnabled(enabled)
         settings_option_speed.isEnabled = enabled
         settings_option_color.isEnabled = enabled
+        settings_option_failure.isEnabled = enabled
         settings_close_button.isEnabled = enabled
     }
 
