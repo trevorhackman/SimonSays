@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:soundEffectsEnabled">false</item>
+        <item name="android:navigationBarColor">@color/Black</item>
     </style>
 
     <style name="Text">

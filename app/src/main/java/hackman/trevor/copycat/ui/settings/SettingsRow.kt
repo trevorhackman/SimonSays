@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.view.setMargins
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.FailureSound
@@ -11,6 +12,7 @@ import hackman.trevor.copycat.logic.settings.NameId
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager
 import kotlinx.android.synthetic.main.settings_option_row.view.*
@@ -40,6 +42,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 
     init {
         View.inflate(context, R.layout.settings_option_row, this)
+        (settings_option_row.layoutParams as LayoutParams).setMargins((displayMinimum() * 0.01).toInt())
         settings_left_arrow.setOnClickListener { onLeftArrow() }
         settings_right_arrow.setOnClickListener { onRightArrow() }
     }
