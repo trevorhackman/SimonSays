@@ -50,6 +50,7 @@ class MainFragment : BaseFragment() {
         observeFailureMenu()
         observeGameMode()
         observeGameState()
+        observeFailureSetting()
     }
 
     private fun setupColorButtons() = color_buttons.setup(settingsViewModel, gameViewModel, viewLifecycle)
@@ -171,6 +172,16 @@ class MainFragment : BaseFragment() {
 
     // Not worth presenting dialog if just started game
     private fun justStartedGame() = gameViewModel.roundNumber.requireValue().roundNumber == 1
+
+    private var isInitial = true
+
+    private fun observeFailureSetting() = observe(settingsViewModel.failureSound) {
+        if (isInitial) {
+            isInitial = false
+            return@observe
+        }
+        it.toSound().play()
+    }
 
     override fun onResume() {
         super.onResume()
