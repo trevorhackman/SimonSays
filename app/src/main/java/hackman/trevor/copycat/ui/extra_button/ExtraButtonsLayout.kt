@@ -17,7 +17,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var gameModesViewModel: GameModesViewModel
 
-    private var isPortrait = isPortrait()
+    private var oldIsPortrait = isPortrait()
 
     init {
         inflateLayout()
@@ -25,7 +25,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
 
     private fun inflateLayout() = View.inflate(
         context,
-        if (isPortrait) R.layout.extra_buttons_portrait else R.layout.extra_buttons_landscape,
+        if (oldIsPortrait) R.layout.extra_buttons_portrait else R.layout.extra_buttons_landscape,
         this
     )
 
@@ -40,10 +40,10 @@ class ExtraButtonsLayout @JvmOverloads constructor(
         }
     }
 
-    private fun orientationChanged() = isPortrait != isPortrait()
+    private fun orientationChanged() = oldIsPortrait != isPortrait()
 
     private fun updateOrientation() {
-        isPortrait = isPortrait()
+        oldIsPortrait = isPortrait()
     }
 
     fun setup(settingsViewModel: SettingsViewModel, gameModesViewModel: GameModesViewModel) {

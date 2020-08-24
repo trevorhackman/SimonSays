@@ -27,6 +27,11 @@ class GameModesDescription @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // This is super necessary for measuredWidth to have correct value when finding max height
+        // Placeholder is given width of this view, then measure max height of placeholder with varying text,
+        // But we don't know width of this view until one regular measurement pass is done
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
         val maxHeight = MeasureSpec.makeMeasureSpec(findMaxHeight(), MeasureSpec.EXACTLY)
         super.onMeasure(widthMeasureSpec, maxHeight)
     }
