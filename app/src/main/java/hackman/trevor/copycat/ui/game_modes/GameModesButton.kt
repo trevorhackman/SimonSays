@@ -7,10 +7,7 @@ import androidx.appcompat.widget.AppCompatButton
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
-import hackman.trevor.copycat.system.SaveData
-import hackman.trevor.copycat.system.displayMinimum
-import hackman.trevor.copycat.system.getColor
-import hackman.trevor.copycat.system.getDrawable
+import hackman.trevor.copycat.system.*
 import hackman.trevor.copycat.system.sound.SoundManager
 
 class GameModesButton @JvmOverloads constructor(
@@ -30,7 +27,7 @@ class GameModesButton @JvmOverloads constructor(
 
     init {
         typeface = Typeface.DEFAULT_BOLD
-        textSize = displayMinimum() * .016f
+        pixelTextSize = displayMinimum() * .045f
         updateBackground()
     }
 

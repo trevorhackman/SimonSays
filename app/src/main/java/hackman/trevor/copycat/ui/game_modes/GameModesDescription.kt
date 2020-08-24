@@ -18,8 +18,8 @@ class GameModesDescription @JvmOverloads constructor(
     private val placeholder = TextView(context)
 
     init {
-        updateText(SaveData.gameMode)
         pixelTextSize = displayMinimum() * .05f
+        updateText(SaveData.gameMode)
     }
 
     fun updateText(gameMode: GameMode) {

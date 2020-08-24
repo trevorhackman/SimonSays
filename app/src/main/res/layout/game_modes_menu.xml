@@ -44,7 +44,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/game_modes_buttons"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.8"
+        tools:text="@string/game_modes_mode_classic_description"/>
 
     <hackman.trevor.copycat.ui.game_modes.GameModesBestText
         android:id="@+id/game_modes_best_text"
@@ -55,7 +56,8 @@
         android:layout_marginTop="6dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_modes_description" />
+        app:layout_constraintTop_toBottomOf="@id/game_modes_description"
+        tools:text="Classic Best 3"/>
 
     <hackman.trevor.copycat.ui.CloseButton
         android:id="@+id/game_modes_close_button"

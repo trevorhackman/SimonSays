@@ -17,7 +17,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var gameModesViewModel: GameModesViewModel
 
-    private var isPortrait: Boolean = isPortrait()
+    private var isPortrait = isPortrait()
 
     init {
         inflateLayout()

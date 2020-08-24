@@ -16,8 +16,8 @@ class GameModesBestText @JvmOverloads constructor(
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
-        updateText(SaveData.gameMode)
         pixelTextSize = displayMinimum() * .04f
+        updateText(SaveData.gameMode)
     }
 
     fun updateText(gameMode: GameMode) {
