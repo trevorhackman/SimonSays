@@ -20,8 +20,6 @@ import java.lang.ref.WeakReference
  */
 object BillingManager {
 
-    var isConnected = false
-
     private lateinit var activity: WeakReference<AppCompatActivity>
 
     /** Attempt to periodically reconnect if [BillingClient.startConnection] fails */
@@ -50,7 +48,7 @@ object BillingManager {
             return
         }
 
-        val skuList: List<String> = listOf(NO_ADS) // List of product IDs. Determined in Google Developer Console
+        val skuList = listOf(NO_ADS) // List of product IDs. Determined in Google Developer Console
         val skuDetailsParams = SkuDetailsParams.newBuilder()
             .setSkusList(skuList)
             .setType(BillingClient.SkuType.INAPP)
@@ -70,15 +68,17 @@ object BillingManager {
 
     private val skuRetrievalListener = SkuDetailsResponseListener { billingResult, skuDetails ->
         when {
-            skuDetails.isNullOrEmpty() -> onSkuError()
+            skuDetails.isNullOrEmpty() -> onSkuError(billingResult)
             billingResult.isSuccessful() -> onSuccessfulSkuRetrieval(skuDetails)
             else -> onFailedSkuRetrieval(billingResult)
         }
     }
 
-    // TODO This can happen if billing failed to connect
-    private fun onSkuError() {
-        report("This shouldn't happen. Null details on OK response : " + billingClient.isReady)
+    /**
+     * This can happen if billing is not connected - [billingStateListener]
+     */
+    private fun onSkuError(billingResult: BillingResult) {
+        report("Null details on OK response : ${billingResponseToName(billingResult)} ${billingResult.debugMessage} ${billingClient.isReady}")
         DialogFactory.failedNetwork().showCorrectly()
     }
 
@@ -198,7 +198,6 @@ object BillingManager {
 
         private fun onSuccessfulConnection() {
             flog("startConnection succeeded")
-            isConnected = true
             reconnectJob?.cancel()
             queryPurchases()
         }
@@ -243,7 +242,6 @@ object BillingManager {
 
         private fun onFailedConnection(billingResult: BillingResult) {
             flog("startConnection failed ${billingResponseToName(billingResult)} ${billingResult.debugMessage}")
-            isConnected = false
             attemptReconnect()
         }
 
@@ -302,7 +300,7 @@ object BillingManager {
 
     @TestOnly // Reset all purchases for testing
     fun forTestingConsumeAllPurchases() {
-        if (!isConnected) {
+        if (!billingClient.isReady) {
             log("Billing not connected")
             return
         }

@@ -73,5 +73,5 @@ class GameModesMenu @JvmOverloads constructor(
 
     private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
 
-    override fun getLifecycle(): Lifecycle = lifecycle
+    override fun getLifecycle() = lifecycle
 }
