@@ -6,7 +6,7 @@ package hackman.trevor.copycat.system
  */
 fun intToExcelName(integer: Int): String {
     if (integer < 1) {
-        // TODO report("Invalid argument, integer can't be less than 1")
+        report("Invalid argument, integer can't be less than 1")
         return "ERROR"
     }
     val result = StringBuilder()

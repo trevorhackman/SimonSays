@@ -3,8 +3,11 @@ package hackman.trevor.copycat
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.TESTING
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.billing.BillingManager
 import hackman.trevor.copycat.system.billing.Ownership
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         initAdsIfNotOwned()
         initSounds()
         initBilling()
+        initCrashlytics()
         observeDoBackPressed()
         observeRequestedOrientation()
 
@@ -36,8 +40,6 @@ class MainActivity : AppCompatActivity() {
             R.id.fragment_container,
             MainFragment()
         ).commit()
-
-        log("Logging is working")
     }
 
     private fun initSaveData() = SaveData.setup(applicationContext as Application)
@@ -51,6 +53,14 @@ class MainActivity : AppCompatActivity() {
     private fun initSounds() = SoundManager.setup(this)
 
     private fun initBilling() = BillingManager.setup(this)
+
+    private fun initCrashlytics() {
+        // Crashlytics disabled by default, automatically enable it here if not testing
+        if (!TESTING) {
+            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true) // Enable crashlytics
+            Log.e("TT_", "Release Mode")
+        } else log("TESTING")
+    }
 
     override fun onBackPressed() {
         if (activityInterface.onBackPressed?.invoke() == BackEvent.Consumed) return

@@ -1,11 +1,12 @@
 package hackman.trevor.copycat.system
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.io.PrintWriter
 import java.io.StringWriter
-import hackman.trevor.copycat.BuildConfig as MyBuildConfig
+import hackman.trevor.copycat.BuildConfig as MyBuildConfig // Important or else wrong BuildConfig is chosen by default
 
+// Making this const can possibly introduce compilation problems if BuildConfig.DEBUG isn't const
 val TESTING = MyBuildConfig.DEBUG
 
 // Logs to logcat, uses Log.ERROR
@@ -26,7 +27,7 @@ fun log(any: Any?) {
 // Firebase logs are only sent if a crash occurs or a report is made
 fun flog(any: Any?) {
     if (TESTING) log(any)
-    else Crashlytics.log(any.toString())
+    else FirebaseCrashlytics.getInstance().log(any.toString())
 }
 
 // Makes a report to firebase if not testing
@@ -40,7 +41,7 @@ fun report(exception: Throwable) {
         log(exceptionAsString)
     } else {
         flog(exception)
-        Crashlytics.logException(exception)
+        FirebaseCrashlytics.getInstance().recordException(exception)
     }
 }
 
@@ -55,4 +56,4 @@ fun report(exception: Throwable, message: String?) {
 
 private var charTracker = 0 // For getTag
 
-private fun getTag(): String = "TT_" + intToExcelName(++charTracker)
+private fun getTag() = "TT_" + intToExcelName(++charTracker)

@@ -164,10 +164,13 @@ class MainFragment : BaseFragment() {
                 onExit = { fragmentInterface.callSuper() },
                 onMainMenu = { gameViewModel.setGameState(GameState.MainMenu) }
             ).showCorrectly()
-        } else {
+            BackEvent.Consumed
+        } else if (gameViewModel.gameState.value != GameState.MainMenu){
             gameViewModel.setGameState(GameState.MainMenu)
+            BackEvent.Consumed
+        } else {
+            BackEvent.CallSuper
         }
-        BackEvent.Consumed
     }
 
     // Not worth presenting dialog if just started game

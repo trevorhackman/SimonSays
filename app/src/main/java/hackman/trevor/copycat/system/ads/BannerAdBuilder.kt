@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 import hackman.trevor.copycat.system.TESTING
 import hackman.trevor.copycat.system.log
 
@@ -32,9 +33,9 @@ class BannerAdBuilder(
         /**
          * There are automatic retries in 1 minute intervals for banner ads
          */
-        override fun onAdFailedToLoad(errorCode: Int) {
-            super.onAdFailedToLoad(errorCode)
-            log("Banner ad failed to load: " + AdManager.errorCodeToString(errorCode))
+        override fun onAdFailedToLoad(adError: LoadAdError) {
+            super.onAdFailedToLoad(adError)
+            log("Banner ad failed to load: $adError")
         }
     }
 }
