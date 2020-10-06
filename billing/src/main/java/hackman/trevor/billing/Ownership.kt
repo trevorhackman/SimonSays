@@ -1,4 +1,4 @@
-package hackman.trevor.copycat.system.billing
+package hackman.trevor.billing
 
 /**
  * Represent whether or not a billing product is owned

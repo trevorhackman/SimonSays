@@ -4,16 +4,14 @@ import android.media.SoundPool
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
-import java.lang.ref.WeakReference
 
 object SoundManager : LifecycleObserver {
 
-    private lateinit var activity: WeakReference<AppCompatActivity>
+    private var activity: AppCompatActivity? = null
 
     private var soundPool: SoundPool? = null
 
@@ -28,6 +26,7 @@ object SoundManager : LifecycleObserver {
     private const val VOLUME_FAILURE = 1.0f
     private const val VOLUME_CLICK = 0.3f
 
+    // TODO Observe a view model and play sounds via it to remove dependency
     private val allSounds = mutableListOf<SoundImpl>()
     val chip1 = createSound(R.raw.chip1_amp, VOLUME_CHIP1) // Sound 1 (Highest)
     val chip2 = createSound(R.raw.chip2_amp, VOLUME_CHIP2) // Sound 2
@@ -38,30 +37,35 @@ object SoundManager : LifecycleObserver {
     val click = createSound(R.raw.click, VOLUME_CLICK) // Button click sound
 
     fun setup(activity: AppCompatActivity) {
-        this.activity = WeakReference(activity)
+        this.activity = activity
         activity.lifecycle.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(owner: LifecycleOwner) {
+    private fun onCreate() {
         buildSoundPoolIfNeeded()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart(owner: LifecycleOwner) {
+    private fun onStart() {
         buildSoundPoolIfNeeded()
         enableAllSounds()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(owner: LifecycleOwner) {
+    private fun onResume() {
         buildSoundPoolIfNeeded()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop(owner: LifecycleOwner) {
+    private fun onStop() {
         releaseResources()
         disableAllSounds()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    private fun onDestroy() {
+        activity = null
     }
 
     private fun buildSoundPoolIfNeeded() {
@@ -78,7 +82,7 @@ object SoundManager : LifecycleObserver {
     }
 
     private fun loadSoundAndGetId(resource: Int): Int =
-        soundPool?.load(activity.get(), resource, 1) ?: {
+        soundPool?.load(activity, resource, 1) ?: {
             report("Attempted to load sound on null SoundPool")
             0
         }.invoke()

@@ -4,16 +4,15 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.system.SaveData
-import hackman.trevor.copycat.system.billing.Ownership
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
-import java.lang.ref.WeakReference
 
 /**
  * Admob Ads with Firebase
@@ -30,30 +29,29 @@ import java.lang.ref.WeakReference
  */
 object AdManager : LifecycleObserver {
 
-    private lateinit var activity: WeakReference<AppCompatActivity>
+    private var activity: AppCompatActivity? = null
 
     private var isInitialized = false
 
     private var bannerAd: AdView? = null
 
-    private val interstitialAd by lazy {
-        InterstitialAdBuilder(activity.get()!!, ::requestNewInterstitialAd).build()
-    }
+    private var interstitialAd: InterstitialAd? = null
 
     // Check this before showing ads
     val isEnabled
         get() = isInitialized && SaveData.isNoAdsOwned == Ownership.ConfirmedUnowned
 
     fun setup(activity: AppCompatActivity) {
-        this.activity = WeakReference(activity)
-        activity.lifecycle.addObserver(this)
+        this.activity = activity
+        interstitialAd = InterstitialAdBuilder(activity, ::requestNewInterstitialAd).build()
         isInitialized = true
+        activity.lifecycle.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         @Suppress("DEPRECATION") // Despite deprecation, this function is recommended
-        MobileAds.initialize(activity.get(), admobId)
+        MobileAds.initialize(activity, admobId)
         requestNewInterstitialAd()
     }
 
@@ -70,6 +68,9 @@ object AdManager : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         bannerAd?.destroy()
+        bannerAd = null
+        interstitialAd = null
+        activity = null
     }
 
     private fun requestNewBannerAd() {
@@ -79,7 +80,7 @@ object AdManager : LifecycleObserver {
 
     private fun requestNewInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
-        interstitialAd.loadAd(adRequest)
+        interstitialAd?.loadAd(adRequest)
     }
 
     // Get the whole banner ad in order to display it somewhere
@@ -92,7 +93,7 @@ object AdManager : LifecycleObserver {
      * Banner ad does not resize when the screen resizes
      * This method must be called to recreate & resize a banner ad when the screen size changes
      */
-    fun buildBannerAd() = BannerAdBuilder(activity.get()!!, ::requestNewBannerAd).build().also {
+    fun buildBannerAd() = BannerAdBuilder(activity!!, ::requestNewBannerAd).build().also {
         removeView()
         bannerAd = it
         requestNewBannerAd()
@@ -110,6 +111,10 @@ object AdManager : LifecycleObserver {
      * @return whether shown
      */
     fun showInterstitialAd(probability: Double): Boolean {
+        val interstitialAd = interstitialAd ?: kotlin.run {
+            report("Interstitial ad is null")
+            return false
+        }
         return if (probability > Math.random()) {
             if (interstitialAd.isLoaded) {
                 interstitialAd.show()

@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import hackman.trevor.billing.Billing
+import hackman.trevor.billing.BillingResponse.*
 import hackman.trevor.copycat.*
 import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
+import hackman.trevor.copycat.logic.remove_ads.Prices
 import hackman.trevor.copycat.logic.settings.toSound
 import hackman.trevor.copycat.logic.viewmodels.*
 import hackman.trevor.copycat.system.SaveData
@@ -26,10 +29,11 @@ class MainFragment : BaseFragment() {
 
     private val fragmentInterface by fragmentInterface()
 
-    private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
-    private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
     private val failureViewModel: FailureViewModel by viewModels<FailureViewModelImpl>()
+    private val gameModesViewModel: GameModesViewModel by viewModels<GameModesViewModelImpl>()
     private val gameViewModel: GameViewModel by viewModels<GameViewModelImpl>()
+    private val removeAdsViewModel: RemoveAdsViewModel by viewModels<RemoveAdsViewModelImpl>()
+    private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
 
     private val gamePlayer by lazy {
         GamePlayer(gameViewModel, failureViewModel, viewLifecycleOwner.lifecycle)
@@ -44,8 +48,13 @@ class MainFragment : BaseFragment() {
         setupSettingsMenu()
         setupGameModesMenu()
         setupFailureMenu()
+        setupRemoveAdsMenu()
         setupMainButton()
         setupInstructions()
+        setupAdContainer()
+        observeBillingSkuDetails()
+        observeBillingRetrySku()
+        observeBillingResponse()
         observeMenusInBackground()
         observeFailureMenu()
         observeGameMode()
@@ -53,9 +62,21 @@ class MainFragment : BaseFragment() {
         observeFailureSetting()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!popInRan) {
+            main_title.popIn()
+            popInRan = true
+        }
+    }
+
     private fun setupColorButtons() = color_buttons.setup(settingsViewModel, gameViewModel, viewLifecycle)
 
-    private fun setupExtraButtons() = extra_buttons_layout.setup(settingsViewModel, gameModesViewModel)
+    private fun setupExtraButtons() = extra_buttons_layout.setup(
+        settingsViewModel,
+        gameModesViewModel,
+        removeAdsViewModel
+    )
 
     private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycle)
 
@@ -63,12 +84,36 @@ class MainFragment : BaseFragment() {
 
     private fun setupFailureMenu() = failure_menu.setup(failureViewModel, gameViewModel, viewLifecycle)
 
+    private fun setupRemoveAdsMenu() = remove_ads_menu.setup(removeAdsViewModel, viewLifecycle)
+
     private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycle)
 
     private fun setupInstructions() = instructions.setup(lifecycleScope)
 
-    private fun observeMenusInBackground() = listOf(settingsViewModel, gameModesViewModel)
-        .forEach(::observeMenu)
+    private fun setupAdContainer() = ad_container.setup(viewLifecycle)
+
+    private fun observeBillingSkuDetails() = observe(Billing.liveData.skuDetails) {
+        removeAdsViewModel.prices.value = Prices(it[0].price, it[1].price, it[2].price, it[3].price)
+    }
+
+    private fun observeBillingRetrySku() = observe(Billing.liveData.retrySkuRetrievalSuccess) {
+        when {
+            gameViewModel.gameState.requireValue().inGame -> return@observe
+            it -> removeAdsViewModel.setInBackground(false)
+            else -> DialogFactory.failedNetwork().showCorrectly()
+        }
+    }
+
+    private fun observeBillingResponse() = observe(Billing.liveData.billingResponse) {
+        when (it) {
+            SUCCESSFUL_PURCHASE -> DialogFactory.successfulNoAdsPurchase().showCorrectly()
+            BILLING_UNAVAILABLE -> DialogFactory.billingUnavailable().showCorrectly()
+            NETWORK_ERROR -> DialogFactory.failedNetwork().showCorrectly()
+            UNKNOWN_ERROR -> DialogFactory.unknownError(it.errorMessage).showCorrectly()
+        }
+    }
+
+    private fun observeMenusInBackground() = listOf(settingsViewModel, gameModesViewModel, removeAdsViewModel).forEach(::observeMenu)
 
     private fun observeMenu(menu: Menu) = observe(menu.inBackground) { inBackground ->
         fragmentInterface.setBackBehavior {
@@ -165,7 +210,7 @@ class MainFragment : BaseFragment() {
                 onMainMenu = { gameViewModel.setGameState(GameState.MainMenu) }
             ).showCorrectly()
             BackEvent.Consumed
-        } else if (gameViewModel.gameState.value != GameState.MainMenu){
+        } else if (gameViewModel.gameState.value != GameState.MainMenu) {
             gameViewModel.setGameState(GameState.MainMenu)
             BackEvent.Consumed
         } else {
@@ -184,13 +229,5 @@ class MainFragment : BaseFragment() {
             return@observe
         }
         it.toSound().play()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!popInRan) {
-            main_title.popIn()
-            popInRan = true
-        }
     }
 }

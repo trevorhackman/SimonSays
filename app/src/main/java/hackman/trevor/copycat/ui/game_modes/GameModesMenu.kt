@@ -66,6 +66,12 @@ class GameModesMenu @JvmOverloads constructor(
         }
     }
 
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        game_modes_close_button.isEnabled = enabled
+        game_modes_buttons.isEnabled = enabled
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.makeMeasureSpec(determineWidth(), MeasureSpec.EXACTLY)
         super.onMeasure(width, heightMeasureSpec)

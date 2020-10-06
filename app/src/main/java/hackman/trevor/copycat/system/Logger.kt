@@ -6,7 +6,7 @@ import java.io.PrintWriter
 import java.io.StringWriter
 import hackman.trevor.copycat.BuildConfig as MyBuildConfig // Important or else wrong BuildConfig is chosen by default
 
-// Making this const can possibly introduce compilation problems if BuildConfig.DEBUG isn't const
+// Making this const can situationally introduce compilation problems if BuildConfig.DEBUG isn't const
 val TESTING = MyBuildConfig.DEBUG
 
 // Logs to logcat, uses Log.ERROR

@@ -13,6 +13,8 @@ enum class ColorSet(
     Cool(R.string.settings_color_cool, coolColors),
     Royal(R.string.settings_color_royal, royalColors),
     Inverted(R.string.settings_color_inverted, invertedColors),
+    Dull(R.string.settings_color_dull, dullColors),
+    Space(R.string.settings_color_soft, softColors),
     Greyed(R.string.settings_color_greyed, greyedColors);
 
     override val nameId = StringResource(id)
@@ -34,9 +36,24 @@ data class ColorQuad(
 
 private val classicColors =
     ColorQuad(R.color.classic0, R.color.classic1, R.color.classic2, R.color.classic3)
-private val warmColors = ColorQuad(R.color.warm0, R.color.warm1, R.color.warm2, R.color.warm3)
-private val coolColors = ColorQuad(R.color.cool0, R.color.cool1, R.color.cool2, R.color.cool3)
-private val royalColors = ColorQuad(R.color.royal0, R.color.royal1, R.color.royal2, R.color.royal3)
+
+private val warmColors =
+    ColorQuad(R.color.warm0, R.color.warm1, R.color.warm2, R.color.warm3)
+
+private val coolColors =
+    ColorQuad(R.color.cool0, R.color.cool1, R.color.cool2, R.color.cool3)
+
+private val royalColors =
+    ColorQuad(R.color.royal0, R.color.royal1, R.color.royal2, R.color.royal3)
+
 private val invertedColors =
     ColorQuad(R.color.inverted0, R.color.inverted1, R.color.inverted2, R.color.inverted3)
-private val greyedColors = ColorQuad(R.color.greyed, R.color.greyed, R.color.greyed, R.color.greyed)
+
+private val dullColors =
+    ColorQuad(R.color.dull0, R.color.dull1, R.color.dull2, R.color.dull3)
+
+private val softColors = 
+    ColorQuad(R.color.soft0, R.color.soft1, R.color.soft2, R.color.soft3)
+
+private val greyedColors =
+    ColorQuad(R.color.greyed, R.color.greyed, R.color.greyed, R.color.greyed)

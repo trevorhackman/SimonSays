@@ -36,5 +36,15 @@
     <color name="inverted2">#0000BF</color>
     <color name="inverted3">#DFDF00</color>
 
+    <color name="dull0">#453034</color>
+    <color name="dull1">#A8AE95</color>
+    <color name="dull2">#D98541</color>
+    <color name="dull3">#F8C067</color>
+
+    <color name="soft0">#375E97</color>
+    <color name="soft1">#FB6542</color>
+    <color name="soft2">#FFBB00</color>
+    <color name="soft3">#3F681C</color>
+
     <color name="greyed">@color/Grey700</color>
 </resources>

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
+import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
 import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.system.isPortrait
 
@@ -16,6 +17,7 @@ class ExtraButtonsLayout @JvmOverloads constructor(
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var gameModesViewModel: GameModesViewModel
+    private lateinit var removeAdsViewModel: RemoveAdsViewModel
 
     private var oldIsPortrait = isPortrait()
 
@@ -46,20 +48,28 @@ class ExtraButtonsLayout @JvmOverloads constructor(
         oldIsPortrait = isPortrait()
     }
 
-    fun setup(settingsViewModel: SettingsViewModel, gameModesViewModel: GameModesViewModel) {
+    fun setup(
+        settingsViewModel: SettingsViewModel,
+        gameModesViewModel: GameModesViewModel,
+        removeAdsViewModel: RemoveAdsViewModel
+    ) {
         this.settingsViewModel = settingsViewModel
         this.gameModesViewModel = gameModesViewModel
+        this.removeAdsViewModel = removeAdsViewModel
         setupAll()
     }
 
     private fun setupAll() {
         setupSettingsButton()
         setupGameModesButton()
+        setupNoAdsButton()
     }
 
     private fun setupSettingsButton() = findSettingsButton().setup(settingsViewModel)
 
     private fun setupGameModesButton() = findGameModesButton().setup(gameModesViewModel)
+
+    private fun setupNoAdsButton() = findNoAdsButton().setup(removeAdsViewModel)
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)

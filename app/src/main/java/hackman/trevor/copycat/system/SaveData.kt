@@ -3,11 +3,11 @@ package hackman.trevor.copycat.system
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.FailureSound
 import hackman.trevor.copycat.logic.settings.Speed
-import hackman.trevor.copycat.system.billing.Ownership
 
 /**
  * Wrapper object handling persistent data via [SharedPreferences]

@@ -48,8 +48,8 @@ class GameModesButton @JvmOverloads constructor(
     }
 
     private fun setOnClickListener() = setOnClickListener {
+        SoundManager.click.play()
         SaveData.gameMode = gameMode
         gameModesViewModel.setGameMode(gameMode)
-        SoundManager.click.play()
     }
 }

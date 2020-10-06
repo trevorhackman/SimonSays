@@ -67,7 +67,7 @@ class GameModesButtonLayout @JvmOverloads constructor(
         val heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         it.measure(widthSpec, heightSpec)
         it.measuredWidth
-    }.max()!!
+    }.maxOrNull()!!
 
     private fun setTextToAllButtons() = buttons.forEachIndexed { index, button ->
         button.text = getString(GameMode.values()[index].name())
@@ -93,6 +93,13 @@ class GameModesButtonLayout @JvmOverloads constructor(
         val highlightedIndex = GameMode.values().indexOf(gameMode)
         buttons.forEachIndexed { index, button ->
             button.highlighted = index == highlightedIndex
+        }
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        buttons.forEach {
+            it.isEnabled = enabled
         }
     }
 }

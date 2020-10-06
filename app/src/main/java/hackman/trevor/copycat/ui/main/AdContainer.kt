@@ -3,12 +3,19 @@ package hackman.trevor.copycat.ui.main
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import hackman.trevor.billing.Billing
+import hackman.trevor.billing.Ownership
+import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.ads.AdManager
 
 class AdContainer @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : FrameLayout(context, attributeSet) {
+) : FrameLayout(context, attributeSet), LifecycleOwner {
+
+    private lateinit var lifecycle: Lifecycle
 
     private var initial = true
 
@@ -20,6 +27,18 @@ class AdContainer @JvmOverloads constructor(
 
     init {
         if (AdManager.isEnabled) addView(AdManager.getBannerAd())
+    }
+
+    fun setup(lifecycle: Lifecycle) {
+        this.lifecycle = lifecycle
+        observeBillingOwnership()
+    }
+
+    // Remove banner ads from current session when purchase is made
+    private fun observeBillingOwnership() = observe(Billing.liveData.ownership) {
+        if (it == Ownership.Owned) {
+            removeAllViews()
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -51,4 +70,6 @@ class AdContainer @JvmOverloads constructor(
         AdManager.buildBannerAd()
         addView(AdManager.getBannerAd())
     }
+
+    override fun getLifecycle() = lifecycle
 }

@@ -5,18 +5,21 @@ import android.app.AlertDialog
 import android.app.AlertDialog.THEME_HOLO_DARK
 import android.view.WindowManager
 import hackman.trevor.copycat.R
-import java.lang.ref.WeakReference
 
 object DialogFactory {
 
-    private lateinit var activity: WeakReference<Activity>
+    private var activity: Activity? = null
 
     fun setup(activity: Activity) {
-        this.activity = WeakReference(activity)
+        this.activity = activity
+    }
+
+    fun dispose() {
+        activity = null
     }
 
     @Suppress("DEPRECATION") // THEME_HOLO_DARK is dank
-    private fun buildStyle() = AlertDialog.Builder(activity.get(), THEME_HOLO_DARK)
+    private fun buildStyle() = AlertDialog.Builder(activity, THEME_HOLO_DARK)
 
     fun leaveCurrentGame(onExit: () -> Unit, onMainMenu: () -> Unit): AlertDialog =
         buildStyle()
