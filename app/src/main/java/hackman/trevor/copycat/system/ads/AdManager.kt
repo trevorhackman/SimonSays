@@ -49,24 +49,24 @@ object AdManager : LifecycleObserver {
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    private fun onCreate() {
         @Suppress("DEPRECATION") // Despite deprecation, this function is recommended
         MobileAds.initialize(activity, admobId)
         requestNewInterstitialAd()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    private fun onResume() {
         bannerAd?.resume()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    private fun onPause() {
         bannerAd?.pause()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    private fun onDestroy() {
         bannerAd?.destroy()
         bannerAd = null
         interstitialAd = null

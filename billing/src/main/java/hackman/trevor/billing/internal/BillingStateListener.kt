@@ -60,7 +60,6 @@ internal object BillingStateListener : BillingClientStateListener {
         }
     }
 
-    // TODO Can see ads in the same session that no_ads purchase was found after a purchase query
     private fun onFoundNoAdsPurchased(purchase: Purchase) {
         if (!purchase.isAcknowledged) BillingManager.acknowledgePurchase(purchase)
 

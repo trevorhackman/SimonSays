@@ -1,5 +1,6 @@
 package hackman.trevor.billing
 
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -79,6 +80,7 @@ object BillingManager : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
         // TODO TEST THIS GETS CALLED
+        Log.e("TT_", "TEST ON DESTROY CALLED")
         activity = null
     }
 

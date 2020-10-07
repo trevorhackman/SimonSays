@@ -81,9 +81,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        //if (activityInterface.onBackPressed?.invoke() == BackEvent.Consumed) return
-        //super.onBackPressed()
-        BillingManager.forTestingConsumeAllPurchases()
+        if (activityInterface.onBackPressed?.invoke() == BackEvent.Consumed) return
+        super.onBackPressed()
     }
 
     private fun observeDoBackPressed() = observe(activityInterface.callSuper) {
