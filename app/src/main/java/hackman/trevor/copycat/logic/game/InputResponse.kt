@@ -1,11 +1,11 @@
 package hackman.trevor.copycat.logic.game
 
+sealed class InputResponse
+
+object InputSuccessResponse : InputResponse()
+
 /**
- * The response to an input
- * @param isSuccess True if correct button pressed at correct time. False otherwise.
- * @param correct The correct button that should've been pressed if failed. Null if success.
+ * @param correct The correct button that should've been pressed.
+ * Null if no correct button, happens if there's extra input.
  */
-data class InputResponse(
-    val isSuccess: Boolean,
-    val correct: GameButton? = null
-)
+class InputFailedResponse(val correct: GameButton?) : InputResponse()

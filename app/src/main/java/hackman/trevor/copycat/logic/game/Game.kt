@@ -7,6 +7,7 @@ import java.util.*
  *
  * [Game.input] Take a series of int inputs - color buttons pressed mapped to ints
  * [InputResponse] Get success or failed at each step
+ * [Game.finishInput] 'Enter', when done inputting, move onto next round if successful
  * [Game.playBack] Get a series of int outputs - playback next round of colors
  *
  * [processInput] represents game state (playing vs watching)
@@ -27,6 +28,9 @@ class Game(private val gameMode: GameMode) {
             else -> sequence
         }
 
+    val isTimeToFinishInput
+        get() = !isFinished && index == selectSequence.size - 1
+
     val roundNumber
         get() = when (gameMode) {
             GameMode.TwoPlayer -> RoundNumber(twoPlayerData.secondSequence.size)
@@ -36,27 +40,71 @@ class Game(private val gameMode: GameMode) {
     var canInput = false
         private set
 
+    // Indefinitely true once failure happens
+    var isFinished = false
+        private set
+
+    val victor
+        get() = twoPlayerData.victor
+
     fun input(pressed: GameButton): InputResponse =
         if (canInput) processInput(pressed)
-        else InputResponse(false)
+        else onBadInputFailure()
 
     fun playBack(): GameButton? =
         if (!canInput) processPlayBack()
         else null
 
+    fun finishInput(): InputResponse =
+        if (isTimeToFinishInput) InputSuccessResponse.also { onNextRound() }
+        else onBadInputFailure()
+
     private fun generateGameButton() = GameButton(random.nextInt(buttonNumber))
 
     private fun processInput(pressed: GameButton): InputResponse =
         if (pressed == correctButton()) onSuccess()
-        else onFailure()
+        else onWrongButtonFailure()
 
     private fun onSuccess(): InputResponse {
-        if (index == selectSequence.size - 1) nextLevel()
+        if (index == selectSequence.size - 1) canInput = false
         else index++
-        return InputResponse(true)
+        return InputSuccessResponse
     }
 
-    private fun onFailure() = InputResponse(false, correctButton())
+    private fun onBadInputFailure() = InputFailedResponse(null).also {
+        onFailure()
+    }
+
+    private fun onWrongButtonFailure() = InputFailedResponse(correctButton()).also {
+        onFailure()
+    }
+
+    private fun onFailure() = when(gameMode) {
+        GameMode.TwoPlayer -> onTwoPlayerFailure()
+        else -> isFinished = true
+    }
+
+    private fun onTwoPlayerFailure() {
+        if (twoPlayerData.isSecondPlayerTurn) onSecondPlayerFailure()
+        else onFirstPlayerFailure()
+    }
+
+    private fun onSecondPlayerFailure() {
+        isFinished = true
+        determineTieOrPlayer1Victory()
+    }
+
+    private fun determineTieOrPlayer1Victory() {
+        twoPlayerData.victor = if (twoPlayerData.player1Failed) {
+            TwoPlayerVictor.Tie
+        } else {
+            TwoPlayerVictor.Player1
+        }
+    }
+
+    private fun onFirstPlayerFailure() {
+        twoPlayerData.player1Failed = true
+    }
 
     private fun correctButton() = when (gameMode) {
         GameMode.Reverse -> sequence[sequence.size - 1 - index]
@@ -64,7 +112,7 @@ class Game(private val gameMode: GameMode) {
         else -> selectSequence[index]
     }
 
-    private fun nextLevel() {
+    private fun onNextRound() {
         if (gameMode == GameMode.Chaos) {
             for (i in sequence.indices) {
                 sequence[i] = generateGameButton()
@@ -76,6 +124,10 @@ class Game(private val gameMode: GameMode) {
         index = 0
 
         if (gameMode == GameMode.TwoPlayer) {
+            if (twoPlayerData.isSecondPlayerTurn && twoPlayerData.player1Failed) {
+                isFinished = true
+                twoPlayerData.victor = TwoPlayerVictor.Player2
+            }
             twoPlayerData.isSecondPlayerTurn = !twoPlayerData.isSecondPlayerTurn
         }
     }
@@ -103,4 +155,11 @@ class Game(private val gameMode: GameMode) {
 private class TwoPlayerData(randomButton: GameButton) {
     val secondSequence = mutableListOf(randomButton)
     var isSecondPlayerTurn = false
+
+    // When player 1 fails, we play one more sequence for player 2, giving player 1 a chance to tie
+    var player1Failed = false
+
+    lateinit var victor: TwoPlayerVictor
 }
+
+enum class TwoPlayerVictor { Tie, Player1, Player2 }

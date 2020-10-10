@@ -1,8 +1,6 @@
 package hackman.trevor.copycat
 
-import hackman.trevor.copycat.logic.game.Game
-import hackman.trevor.copycat.logic.game.GameButton
-import hackman.trevor.copycat.logic.game.GameMode
+import hackman.trevor.copycat.logic.game.*
 import org.junit.Test
 
 /**
@@ -24,10 +22,12 @@ class GameTest {
     private fun playSequence(sequence: List<GameButton>) {
         sequence.forEach {
             val result = game.input(it)
-            assert(result.isSuccess) {
+            assert(result is InputSuccessResponse) {
                 "Failed playing $sequence Size ${sequence.size}"
             }
         }
+        val result = game.finishInput()
+        assert(result is InputSuccessResponse)
     }
 
     @Test
@@ -106,5 +106,68 @@ class GameTest {
                 player2Sequence = sequence
             }
         }
+    }
+
+    @Test
+    fun testTwoPlayerVictory() {
+        testPlayer1Wins()
+        testPlayer2Wins()
+        testTwoPlayerTie()
+    }
+
+    // Player 2 fails after player 1 succeeds
+    private fun testPlayer1Wins() {
+        game = Game(GameMode.TwoPlayer)
+
+        var sequence = readSequence()
+        sequence.forEach(game::input)
+        game.finishInput()
+
+        sequence = readSequence()
+        val wrongSequence = sequence + sequence[0]
+        val firstResult = game.input(wrongSequence[0])
+        assert(firstResult is InputSuccessResponse)
+        val secondResult = game.input(wrongSequence[1])
+        assert(secondResult is InputFailedResponse && secondResult.correct == null)
+
+        assert(game.isFinished)
+        assert(game.victor == TwoPlayerVictor.Player1)
+    }
+
+    // Player 2 succeeds after player 1 fails
+    private fun testPlayer2Wins() {
+        game = Game(GameMode.TwoPlayer)
+
+        var sequence = readSequence()
+        val wrongSequence = sequence + GameButton(0)
+
+        wrongSequence.forEach(game::input)
+        game.finishInput()
+        assert(!game.isFinished)
+
+        sequence = readSequence()
+        sequence.forEach(game::input)
+        game.finishInput()
+        assert(game.isFinished)
+        assert(game.victor == TwoPlayerVictor.Player2)
+    }
+
+    // PLayer 2 fails after player 1 fails
+    private fun testTwoPlayerTie() {
+        game = Game(GameMode.TwoPlayer)
+
+        var sequence = readSequence()
+        var wrongSequence = sequence + GameButton(0)
+
+        wrongSequence.forEach(game::input)
+        game.finishInput()
+        assert(!game.isFinished)
+
+        sequence = readSequence()
+        wrongSequence = sequence + GameButton(0)
+
+        wrongSequence.forEach(game::input)
+        assert(game.isFinished)
+        assert(game.victor == TwoPlayerVictor.Tie)
     }
 }

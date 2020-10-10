@@ -91,7 +91,8 @@ class GamePlayer(
 
     private fun onAllReleased() {
         if (waitingToFail) onFailure()
-        else if (!game.canInput) {
+        else if (game.isTimeToFinishInput) {
+            game.finishInput()
             gameViewModel.setGameState(GameState.Watch)
             gameViewModel.setRoundNumber(game.roundNumber)
             if (isNewHighScore()) setNewHighScore()
@@ -126,7 +127,7 @@ class GamePlayer(
     }
 
     private fun handleResponse(response: InputResponse) {
-        if (!response.isSuccess) {
+        if (response is InputFailedResponse) {
             waitToFail()
             correctButton = response.correct
         }

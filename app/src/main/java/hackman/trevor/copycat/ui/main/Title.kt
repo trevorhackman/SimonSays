@@ -13,6 +13,7 @@ class Title @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : AppCompatImageView(context, attributeSet) {
+
     private val interpolator: TimeInterpolator = TimeInterpolator { v ->
         -2 * v * v + 3 * v // Allows me two animations in one! Peaks at v = 0.75 then down to (1,1)
     }
