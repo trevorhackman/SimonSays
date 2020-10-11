@@ -12,7 +12,6 @@ import hackman.trevor.copycat.logic.viewmodels.FailureViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.ui.game_modes.name
 import kotlinx.android.synthetic.main.failure_body.view.*
 
 class FailureBody @JvmOverloads constructor(
@@ -30,15 +29,20 @@ class FailureBody @JvmOverloads constructor(
     fun setup(failureViewModel: FailureViewModel, lifecycle: Lifecycle) {
         this.failureViewModel = failureViewModel
         this.lifecycle = lifecycle
-        observeMode()
+        observeTopField()
+        observeTopValue()
         observeScore()
         observeBest()
         observePressed()
         observeCorrect()
     }
 
-    private fun observeMode() = observe(failureViewModel.mode) {
-        failure_value_mode.text = getString(it.name())
+    private fun observeTopField() = observe(failureViewModel.topTextField) {
+        failure_field_top.text = getString(it)
+    }
+
+    private fun observeTopValue() = observe(failureViewModel.topTextValue) {
+        failure_value_top.text = getString(it)
     }
 
     private fun observeScore() = observe(failureViewModel.score) {

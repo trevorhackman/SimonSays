@@ -26,6 +26,10 @@ class GameTest {
                 "Failed playing $sequence Size ${sequence.size}"
             }
         }
+        finishInput()
+    }
+
+    private fun finishInput() {
         val result = game.finishInput()
         assert(result is InputSuccessResponse)
     }
@@ -121,7 +125,7 @@ class GameTest {
 
         var sequence = readSequence()
         sequence.forEach(game::input)
-        game.finishInput()
+        finishInput()
 
         sequence = readSequence()
         val wrongSequence = sequence + sequence[0]
@@ -130,7 +134,7 @@ class GameTest {
         val secondResult = game.input(wrongSequence[1])
         assert(secondResult is InputFailedResponse && secondResult.correct == null)
 
-        assert(game.isFinished)
+        assert(game.gameOver)
         assert(game.victor == TwoPlayerVictor.Player1)
     }
 
@@ -142,13 +146,13 @@ class GameTest {
         val wrongSequence = sequence + GameButton(0)
 
         wrongSequence.forEach(game::input)
-        game.finishInput()
-        assert(!game.isFinished)
+        finishInput()
+        assert(!game.gameOver)
 
         sequence = readSequence()
         sequence.forEach(game::input)
-        game.finishInput()
-        assert(game.isFinished)
+        finishInput()
+        assert(game.gameOver)
         assert(game.victor == TwoPlayerVictor.Player2)
     }
 
@@ -160,14 +164,40 @@ class GameTest {
         var wrongSequence = sequence + GameButton(0)
 
         wrongSequence.forEach(game::input)
-        game.finishInput()
-        assert(!game.isFinished)
+        finishInput()
+        assert(!game.gameOver)
 
         sequence = readSequence()
         wrongSequence = sequence + GameButton(0)
 
         wrongSequence.forEach(game::input)
-        assert(game.isFinished)
+        assert(game.gameOver)
         assert(game.victor == TwoPlayerVictor.Tie)
+    }
+
+    @Test
+    fun testTimeToFinishInput() {
+        testTimeToFinishInputClassic()
+        testTimeToFinishInputTwoPlayer()
+    }
+
+    private fun testTimeToFinishInputClassic() {
+        game = Game(GameMode.Classic)
+
+        assert(!game.isTimeToFinishInput)
+
+        val sequence = readSequence()
+        sequence.forEach(game::input)
+
+        assert(game.isTimeToFinishInput)
+    }
+
+    private fun testTimeToFinishInputTwoPlayer() {
+        game = Game(GameMode.TwoPlayer)
+
+        val sequence = readSequence()
+        game.input(GameButton(sequence[0].buttonNumber + 1))
+
+        assert(game.isTimeToFinishInput)
     }
 }

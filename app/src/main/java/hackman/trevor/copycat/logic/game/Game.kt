@@ -29,7 +29,8 @@ class Game(private val gameMode: GameMode) {
         }
 
     val isTimeToFinishInput
-        get() = !isFinished && index == selectSequence.size - 1
+        get() = !gameOver && (index == -1 ||
+                (gameMode == GameMode.TwoPlayer && !twoPlayerData.isSecondPlayerTurn && twoPlayerData.player1Failed))
 
     val roundNumber
         get() = when (gameMode) {
@@ -40,8 +41,8 @@ class Game(private val gameMode: GameMode) {
     var canInput = false
         private set
 
-    // Indefinitely true once failure happens
-    var isFinished = false
+    // Indefinitely true once game is over
+    var gameOver = false
         private set
 
     val victor
@@ -65,10 +66,11 @@ class Game(private val gameMode: GameMode) {
         if (pressed == correctButton()) onSuccess()
         else onWrongButtonFailure()
 
-    private fun onSuccess(): InputResponse {
-        if (index == selectSequence.size - 1) canInput = false
-        else index++
-        return InputSuccessResponse
+    private fun onSuccess() = InputSuccessResponse.also {
+        if (index == selectSequence.size - 1) {
+            canInput = false
+            index = -1
+        } else index++
     }
 
     private fun onBadInputFailure() = InputFailedResponse(null).also {
@@ -79,9 +81,9 @@ class Game(private val gameMode: GameMode) {
         onFailure()
     }
 
-    private fun onFailure() = when(gameMode) {
+    private fun onFailure() = when (gameMode) {
         GameMode.TwoPlayer -> onTwoPlayerFailure()
-        else -> isFinished = true
+        else -> gameOver = true
     }
 
     private fun onTwoPlayerFailure() {
@@ -90,7 +92,7 @@ class Game(private val gameMode: GameMode) {
     }
 
     private fun onSecondPlayerFailure() {
-        isFinished = true
+        gameOver = true
         determineTieOrPlayer1Victory()
     }
 
@@ -125,7 +127,7 @@ class Game(private val gameMode: GameMode) {
 
         if (gameMode == GameMode.TwoPlayer) {
             if (twoPlayerData.isSecondPlayerTurn && twoPlayerData.player1Failed) {
-                isFinished = true
+                gameOver = true
                 twoPlayerData.victor = TwoPlayerVictor.Player2
             }
             twoPlayerData.isSecondPlayerTurn = !twoPlayerData.isSecondPlayerTurn

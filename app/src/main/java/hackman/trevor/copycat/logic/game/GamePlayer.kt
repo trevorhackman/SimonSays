@@ -9,6 +9,7 @@ import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.requireValue
 import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.report
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -92,7 +93,8 @@ class GamePlayer(
     private fun onAllReleased() {
         if (waitingToFail) onFailure()
         else if (game.isTimeToFinishInput) {
-            game.finishInput()
+            val result = game.finishInput()
+            if (result is InputFailedResponse) report("GamePlayer made a faulty call to finish input")
             gameViewModel.setGameState(GameState.Watch)
             gameViewModel.setRoundNumber(game.roundNumber)
             if (isNewHighScore()) setNewHighScore()
@@ -111,14 +113,15 @@ class GamePlayer(
     )
 
     private fun onFailure() {
-        gameViewModel.setGameState(GameState.Failure)
         failureViewModel.apply {
-            setMode(gameViewModel.gameMode.requireValue())
-            setScore(Score(this@GamePlayer.score))
-            setBest(Score.getHighScore(gameViewModel.gameMode.requireValue()))
-            setPressed(lastPressed)
-            setCorrect(correctButton)
+            if (gameViewModel.gameMode.requireValue() == GameMode.TwoPlayer) setTwoPlayerMode(game.victor)
+            else setMode(gameViewModel.gameMode.requireValue())
+            score.value = Score(this@GamePlayer.score)
+            best.value = Score.getHighScore(gameViewModel.gameMode.requireValue())
+            pressed.value = lastPressed
+            correct.value = correctButton
         }
+        gameViewModel.setGameState(GameState.Failure)
     }
 
     private fun onPress(gameButton: GameButton) {
@@ -128,13 +131,9 @@ class GamePlayer(
 
     private fun handleResponse(response: InputResponse) {
         if (response is InputFailedResponse) {
-            waitToFail()
+            if (game.gameOver) waitingToFail = true
             correctButton = response.correct
         }
-    }
-
-    private fun waitToFail() {
-        waitingToFail = true
     }
 
     override fun getLifecycle(): Lifecycle = lifecycle

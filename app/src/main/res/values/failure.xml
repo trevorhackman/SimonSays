@@ -3,6 +3,8 @@
     <string name="failure_title">Game Over</string>
 
     <string name="failure_row_mode">Mode</string>
+    <string name="failure_row_victor">Winner</string>
+
     <string name="failure_row_score">Score</string>
     <string name="failure_row_best">Best</string>
     <string name="failure_row_pressed">Pressed</string>
@@ -22,4 +24,8 @@
     <string name="failure_other_3">Bottom Right</string>
 
     <string name="failure_null">---</string>
+
+    <string name="failure_player1_wins">Player 1!</string>
+    <string name="failure_player2_wins">Player 2!</string>
+    <string name="failure_players_tie">Tie!</string>
 </resources>

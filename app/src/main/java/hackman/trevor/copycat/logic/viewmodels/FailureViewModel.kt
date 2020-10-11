@@ -2,60 +2,60 @@ package hackman.trevor.copycat.logic.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.game.GameButton
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.game.Score
+import hackman.trevor.copycat.logic.game.TwoPlayerVictor
+import hackman.trevor.copycat.system.StringResource
+import hackman.trevor.copycat.ui.game_modes.name
 
 class FailureViewModelImpl : MenuViewModel(), FailureViewModel {
-    override val mode = MutableLiveData<GameMode>()
+    override val topTextField = MutableLiveData<StringResource>()
+
+    override val topTextValue = MutableLiveData<StringResource>()
 
     override fun setMode(mode: GameMode) {
-        this.mode.value = mode
+        topTextField.value = StringResource(R.string.failure_row_mode)
+        topTextValue.value = mode.name()
+    }
+
+    override fun setTwoPlayerMode(victor: TwoPlayerVictor) {
+        topTextField.value = StringResource(R.string.failure_row_victor)
+        topTextValue.value = victor.name()
     }
 
     override val score = MutableLiveData<Score>()
 
-    override fun setScore(score: Score) {
-        this.score.value = score
-    }
-
     override val best = MutableLiveData<Score>()
 
-    override fun setBest(best: Score) {
-        this.best.value = best
-    }
+    override val pressed = MutableLiveData<GameButton?>()
 
-    override val pressed = MutableLiveData<GameButton>()
-
-    override fun setPressed(pressed: GameButton?) {
-        this.pressed.value = pressed
-    }
-
-    override val correct = MutableLiveData<GameButton>()
-
-    override fun setCorrect(correct: GameButton?) {
-        this.correct.value = correct
-    }
+    override val correct = MutableLiveData<GameButton?>()
 }
 
 interface FailureViewModel : Menu {
-    val mode: LiveData<GameMode>
+    val topTextField: LiveData<StringResource>
+
+    val topTextValue: LiveData<StringResource>
 
     fun setMode(mode: GameMode)
 
-    val score: LiveData<Score>
+    fun setTwoPlayerMode(victor: TwoPlayerVictor)
 
-    fun setScore(score: Score)
+    val score: MutableLiveData<Score>
 
-    val best: LiveData<Score>
+    val best: MutableLiveData<Score>
 
-    fun setBest(best: Score)
+    val pressed: MutableLiveData<GameButton?>
 
-    val pressed: LiveData<GameButton?>
-
-    fun setPressed(pressed: GameButton?)
-
-    val correct: LiveData<GameButton?>
-
-    fun setCorrect(correct: GameButton?)
+    val correct: MutableLiveData<GameButton?>
 }
+
+private fun TwoPlayerVictor.name() = StringResource(
+    when(this) {
+        TwoPlayerVictor.Player1 -> R.string.failure_player1_wins
+        TwoPlayerVictor.Player2 -> R.string.failure_player2_wins
+        TwoPlayerVictor.Tie -> R.string.failure_players_tie
+    }
+)

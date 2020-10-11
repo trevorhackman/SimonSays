@@ -16,7 +16,7 @@
         app:layout_constraintGuide_percent="0.167" />
 
     <hackman.trevor.copycat.ui.failure.FailureBodyText
-        android:id="@+id/failure_field_mode"
+        android:id="@+id/failure_field_top"
         style="@style/Text.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="@string/failure_row_score"
         app:layout_constraintLeft_toLeftOf="@id/failure_body_start"
-        app:layout_constraintTop_toBottomOf="@id/failure_field_mode" />
+        app:layout_constraintTop_toBottomOf="@id/failure_field_top" />
 
     <hackman.trevor.copycat.ui.failure.FailureBodyText
         android:id="@+id/failure_field_best"
@@ -68,12 +68,12 @@
         app:layout_constraintGuide_percent="0.583" />
 
     <hackman.trevor.copycat.ui.failure.FailureBodyText
-        android:id="@+id/failure_value_mode"
+        android:id="@+id/failure_value_top"
         style="@style/Text.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="@id/failure_body_end"
-        app:layout_constraintTop_toTopOf="@id/failure_field_mode"
+        app:layout_constraintTop_toTopOf="@id/failure_field_top"
         tools:text="Classic" />
 
     <hackman.trevor.copycat.ui.failure.FailureBodyText
