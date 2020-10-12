@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import hackman.trevor.copycat.logic.settings.Speed
+import hackman.trevor.copycat.logic.settings.toSound
 import hackman.trevor.copycat.logic.viewmodels.FailureViewModel
 import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
@@ -92,12 +93,17 @@ class GamePlayer(
 
     private fun onAllReleased() {
         if (waitingToFail) onFailure()
-        else if (game.isTimeToFinishInput) {
+        if (game.isTimeToFinishInput) {
             val result = game.finishInput()
+            // TODO Check this never happens
             if (result is InputFailedResponse) report("GamePlayer made a faulty call to finish input")
+
             gameViewModel.setGameState(GameState.Watch)
             gameViewModel.setRoundNumber(game.roundNumber)
             if (isNewHighScore()) setNewHighScore()
+
+            // Happens when player 2 succeeds after player 1 fails
+            if (game.gameOver) onGameOver()
         }
     }
 
@@ -113,13 +119,21 @@ class GamePlayer(
     )
 
     private fun onFailure() {
+        SaveData.failureSound.toSound().play()
         failureViewModel.apply {
-            if (gameViewModel.gameMode.requireValue() == GameMode.TwoPlayer) setTwoPlayerMode(game.victor)
+            pressed.value = lastPressed
+            correct.value = correctButton
+        }
+        if (game.gameOver) onGameOver()
+        else waitingToFail = false
+    }
+
+    private fun onGameOver() {
+        failureViewModel.apply {
+            if (gameViewModel.gameMode.requireValue() == GameMode.TwoPlayer) setTwoPlayerVictor(game.victor)
             else setMode(gameViewModel.gameMode.requireValue())
             score.value = Score(this@GamePlayer.score)
             best.value = Score.getHighScore(gameViewModel.gameMode.requireValue())
-            pressed.value = lastPressed
-            correct.value = correctButton
         }
         gameViewModel.setGameState(GameState.Failure)
     }
@@ -131,7 +145,7 @@ class GamePlayer(
 
     private fun handleResponse(response: InputResponse) {
         if (response is InputFailedResponse) {
-            if (game.gameOver) waitingToFail = true
+            waitingToFail = true
             correctButton = response.correct
         }
     }

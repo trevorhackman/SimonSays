@@ -20,7 +20,7 @@ class FailureViewModelImpl : MenuViewModel(), FailureViewModel {
         topTextValue.value = mode.name()
     }
 
-    override fun setTwoPlayerMode(victor: TwoPlayerVictor) {
+    override fun setTwoPlayerVictor(victor: TwoPlayerVictor) {
         topTextField.value = StringResource(R.string.failure_row_victor)
         topTextValue.value = victor.name()
     }
@@ -41,7 +41,7 @@ interface FailureViewModel : Menu {
 
     fun setMode(mode: GameMode)
 
-    fun setTwoPlayerMode(victor: TwoPlayerVictor)
+    fun setTwoPlayerVictor(victor: TwoPlayerVictor)
 
     val score: MutableLiveData<Score>
 

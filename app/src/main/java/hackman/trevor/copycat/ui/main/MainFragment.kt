@@ -160,7 +160,6 @@ class MainFragment : BaseFragment() {
     }
 
     private fun onFailure() {
-        SaveData.failureSound.toSound().play()
         failureViewModel.setInBackground(false)
         cancelInstructions()
         SaveData.gamesCompleted++
