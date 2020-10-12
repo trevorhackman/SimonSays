@@ -10,7 +10,7 @@ import java.util.*
  * [Game.finishInput] 'Enter', when done inputting, move onto next round if successful
  * [Game.playBack] Get a series of int outputs - playback next round of colors
  *
- * [processInput] represents game state (playing vs watching)
+ * [handleInput] represents game state (playing vs watching)
  */
 class Game(private val gameMode: GameMode) {
     private val buttonNumber = 4
@@ -49,20 +49,20 @@ class Game(private val gameMode: GameMode) {
         get() = twoPlayerData.victor
 
     fun input(pressed: GameButton): InputResponse =
-        if (canInput) processInput(pressed)
+        if (canInput) handleInput(pressed)
         else onBadInputFailure()
 
     fun playBack(): GameButton? =
-        if (!canInput) processPlayBack()
+        if (!canInput) handlePlayBack()
         else null
 
     fun finishInput(): InputResponse =
-        if (isTimeToFinishInput) InputSuccessResponse.also { onNextRound() }
+        if (isTimeToFinishInput) InputSuccessResponse.also { handleFinishInput() }
         else onBadInputFailure()
 
     private fun generateGameButton() = GameButton(random.nextInt(buttonNumber))
 
-    private fun processInput(pressed: GameButton): InputResponse =
+    private fun handleInput(pressed: GameButton): InputResponse =
         if (pressed == correctButton()) onSuccess()
         else onWrongButtonFailure()
 
@@ -114,6 +114,15 @@ class Game(private val gameMode: GameMode) {
         else -> selectSequence[index]
     }
 
+    private fun handleFinishInput() {
+        if (gameMode == GameMode.TwoPlayer && twoPlayerData.isSecondPlayerTurn && twoPlayerData.player1Failed) {
+            gameOver = true
+            twoPlayerData.victor = TwoPlayerVictor.Player2
+        } else {
+            onNextRound()
+        }
+    }
+
     private fun onNextRound() {
         if (gameMode == GameMode.Chaos) {
             for (i in sequence.indices) {
@@ -126,15 +135,11 @@ class Game(private val gameMode: GameMode) {
         index = 0
 
         if (gameMode == GameMode.TwoPlayer) {
-            if (twoPlayerData.isSecondPlayerTurn && twoPlayerData.player1Failed) {
-                gameOver = true
-                twoPlayerData.victor = TwoPlayerVictor.Player2
-            }
             twoPlayerData.isSecondPlayerTurn = !twoPlayerData.isSecondPlayerTurn
         }
     }
 
-    private fun processPlayBack() = when (gameMode) {
+    private fun handlePlayBack() = when (gameMode) {
         GameMode.Single -> {
             onFinishedPlayBack()
             sequence[sequence.size - 1]

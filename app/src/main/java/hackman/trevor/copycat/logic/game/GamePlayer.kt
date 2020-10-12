@@ -11,6 +11,7 @@ import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.requireValue
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.report
+import hackman.trevor.copycat.system.sound.SoundManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -95,15 +96,16 @@ class GamePlayer(
         if (waitingToFail) onFailure()
         if (game.isTimeToFinishInput) {
             val result = game.finishInput()
-            // TODO Check this never happens
+            // TODO Should never happen, check crashlytics and remove this todo once I have some data
             if (result is InputFailedResponse) report("GamePlayer made a faulty call to finish input")
-
-            gameViewModel.setGameState(GameState.Watch)
-            gameViewModel.setRoundNumber(game.roundNumber)
-            if (isNewHighScore()) setNewHighScore()
 
             // Happens when player 2 succeeds after player 1 fails
             if (game.gameOver) onGameOver()
+            else {
+                gameViewModel.setGameState(GameState.Watch)
+                gameViewModel.setRoundNumber(game.roundNumber)
+                if (isNewHighScore()) setNewHighScore()
+            }
         }
     }
 
@@ -119,6 +121,7 @@ class GamePlayer(
     )
 
     private fun onFailure() {
+        SoundManager.stopAllSounds() // Stop other sounds so failure sound isn't hidden
         SaveData.failureSound.toSound().play()
         failureViewModel.apply {
             pressed.value = lastPressed

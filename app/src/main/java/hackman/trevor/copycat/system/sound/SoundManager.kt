@@ -36,6 +36,10 @@ object SoundManager : LifecycleObserver {
     val failure_bit = createSound(R.raw.failure_bit, VOLUME_FAILURE) // Fail sound
     val click = createSound(R.raw.click, VOLUME_CLICK) // Button click sound
 
+    fun stopAllSounds() {
+        soundPool?.autoPause()
+    }
+
     fun setup(activity: AppCompatActivity) {
         this.activity = activity
         activity.lifecycle.addObserver(this)
