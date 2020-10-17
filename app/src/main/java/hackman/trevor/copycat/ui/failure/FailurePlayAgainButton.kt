@@ -24,6 +24,6 @@ class FailurePlayAgainButton @JvmOverloads constructor(
     }
 
     fun setOnClickListener() = setOnClickListener {
-        gameViewModel.setGameState(GameState.Watch)
+        gameViewModel.gameState.value = GameState.Watch
     }
 }

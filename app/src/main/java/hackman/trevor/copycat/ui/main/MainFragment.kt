@@ -49,7 +49,6 @@ class MainFragment : BaseFragment() {
         setupGameModesMenu()
         setupFailureMenu()
         setupRemoveAdsMenu()
-        setupMainButton()
         setupInstructions()
         setupAdContainer()
         observeBillingSkuDetails()
@@ -85,8 +84,6 @@ class MainFragment : BaseFragment() {
     private fun setupFailureMenu() = failure_menu.setup(failureViewModel, gameViewModel, viewLifecycle)
 
     private fun setupRemoveAdsMenu() = remove_ads_menu.setup(removeAdsViewModel, viewLifecycle)
-
-    private fun setupMainButton() = main_button.setup(gameViewModel, viewLifecycle)
 
     private fun setupInstructions() = instructions.setup(lifecycleScope)
 
@@ -132,14 +129,14 @@ class MainFragment : BaseFragment() {
             if (failureViewModel.isAnimatingIn) BackEvent.Consumed
             else if (!inBackground) {
                 failureViewModel.setInBackground(true)
-                gameViewModel.setGameState(GameState.MainMenu)
+                gameViewModel.gameState.value = GameState.MainMenu
                 BackEvent.Consumed
             } else BackEvent.CallSuper
         }
     }
 
     private fun observeGameMode() = observe(gameModesViewModel.gameMode) {
-        gameViewModel.setGameMode(it)
+        gameViewModel.gameMode.value = it
         instructions.text = getString(it.popupText())
     }
 
@@ -206,11 +203,11 @@ class MainFragment : BaseFragment() {
         if (!justStartedGame()) {
             DialogFactory.leaveCurrentGame(
                 onExit = { fragmentInterface.callSuper() },
-                onMainMenu = { gameViewModel.setGameState(GameState.MainMenu) }
+                onMainMenu = { gameViewModel.gameState.value = GameState.MainMenu }
             ).showCorrectly()
             BackEvent.Consumed
         } else if (gameViewModel.gameState.value != GameState.MainMenu) {
-            gameViewModel.setGameState(GameState.MainMenu)
+            gameViewModel.gameState.value = GameState.MainMenu
             BackEvent.Consumed
         } else {
             BackEvent.CallSuper

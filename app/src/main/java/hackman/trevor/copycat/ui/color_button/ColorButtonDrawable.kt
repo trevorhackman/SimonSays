@@ -3,8 +3,6 @@ package hackman.trevor.copycat.ui.color_button
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
-import android.graphics.drawable.StateListDrawable
-import android.util.StateSet
 import androidx.annotation.ColorInt
 import hackman.trevor.copycat.system.Color
 import hackman.trevor.copycat.system.brightenColor
@@ -20,19 +18,13 @@ class ColorButtonDrawable(
     private val minDimension = min(height, width)
     private val cornerRadius = maxDimension / 15f
 
-    fun build(): StateListDrawable =
-        StateListDrawable().apply {
-            addState(intArrayOf(android.R.attr.state_pressed), pressedGraphic())
-            addState(StateSet.WILD_CARD, normalGraphic())
-        }
-
-    private fun normalGraphic(): Drawable =
+    fun normalGraphic(): Drawable =
         GradientDrawable().apply {
             setColor(buttonColor)
             cornerRadius = this@ColorButtonDrawable.cornerRadius
         }
 
-    private fun pressedGraphic(): Drawable =
+    fun pressedGraphic(): Drawable =
         LayerDrawable(arrayOf(highlight(), shrunkButtonWithGlow()))
 
     private fun highlight(): Drawable =

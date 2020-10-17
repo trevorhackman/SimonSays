@@ -1,12 +1,13 @@
 package hackman.trevor.copycat.logic.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.game.GameButton
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.game.RoundNumber
+import hackman.trevor.copycat.system.StringResource
 
 class GameViewModelImpl : ViewModel(), GameViewModel {
 
@@ -16,51 +17,25 @@ class GameViewModelImpl : ViewModel(), GameViewModel {
 
     override val roundNumber = MutableLiveData(RoundNumber.start)
 
-    override val buttonPlayBack = MutableLiveData<GameButton>()
+    override val buttonPlayBack = MutableLiveData<GameButton?>()
 
-    override val playerPushed = MutableLiveData<GameButton>()
+    override val playerPushed = MutableLiveData<GameButton?>()
 
-    override fun setGameMode(gameMode: GameMode) {
-        this.gameMode.value = gameMode
-    }
-
-    override fun setGameState(gameState: GameState) {
-        this.gameState.value = gameState
-    }
-
-    override fun setRoundNumber(roundNumber: RoundNumber) {
-        this.roundNumber.value = roundNumber
-    }
-
-    override fun setButtonPlayBack(gameButton: GameButton?) {
-        this.buttonPlayBack.value = gameButton
-    }
-
-    override fun setPlayerPushed(gameButton: GameButton?) {
-        this.playerPushed.value = gameButton
-    }
+    override val infoText = MutableLiveData(StringResource(R.string.info_text_player1))
 }
 
 interface GameViewModel {
-    val gameMode: LiveData<GameMode>
+    val gameMode: MutableLiveData<GameMode>
 
-    val gameState: LiveData<GameState>
+    val gameState: MutableLiveData<GameState>
 
-    val roundNumber: LiveData<RoundNumber>
+    val roundNumber: MutableLiveData<RoundNumber>
 
     // Indicates which button the game presses. Null indicates release.
-    val buttonPlayBack: LiveData<GameButton?>
+    val buttonPlayBack: MutableLiveData<GameButton?>
 
     // Indicates player pressed a button. Null indicates no buttons are pressed.
-    val playerPushed: LiveData<GameButton?>
+    val playerPushed: MutableLiveData<GameButton?>
 
-    fun setGameMode(gameMode: GameMode)
-
-    fun setGameState(gameState: GameState)
-
-    fun setRoundNumber(roundNumber: RoundNumber)
-
-    fun setButtonPlayBack(gameButton: GameButton?)
-
-    fun setPlayerPushed(gameButton: GameButton?)
+    val infoText: MutableLiveData<StringResource>
 }

@@ -48,8 +48,8 @@ class GameModesDescription @JvmOverloads constructor(
         placeholder.text = text
 
         val widthSpec = MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY)
-        val heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        placeholder.measure(widthSpec, heightSpec)
+        val wrapHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        placeholder.measure(widthSpec, wrapHeightSpec)
 
         return placeholder.measuredHeight
     }

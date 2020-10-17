@@ -3,6 +3,7 @@ package hackman.trevor.copycat.logic.game
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.settings.Speed
 import hackman.trevor.copycat.logic.settings.toSound
 import hackman.trevor.copycat.logic.viewmodels.FailureViewModel
@@ -10,6 +11,7 @@ import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.requireValue
 import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.StringResource
 import hackman.trevor.copycat.system.report
 import hackman.trevor.copycat.system.sound.SoundManager
 import kotlinx.coroutines.Job
@@ -44,9 +46,10 @@ class GamePlayer(
 
     fun startGame() {
         waitingToFail = false
-        gameViewModel.setRoundNumber(RoundNumber.start)
+        gameViewModel.roundNumber.value = RoundNumber.start
         game = Game(gameViewModel.gameMode.requireValue())
         speed = SaveData.speed
+        updateTwoPlayerInfoText()
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
@@ -72,13 +75,13 @@ class GamePlayer(
         sequence.forEachIndexed { i, gameButton ->
             playButton(gameButton, i == sequence.lastIndex)
         }
-        gameViewModel.setGameState(GameState.Input)
+        gameViewModel.gameState.value = GameState.Input
     }
 
     private suspend fun playButton(button: GameButton, isLast: Boolean) {
-        gameViewModel.setButtonPlayBack(button)
+        gameViewModel.buttonPlayBack.value = button
         delay(speed.lightDuration)
-        gameViewModel.setButtonPlayBack(null)
+        gameViewModel.buttonPlayBack.value = null
         if (!isLast) delay(speed.delayDuration)
     }
 
@@ -102,11 +105,16 @@ class GamePlayer(
             // Happens when player 2 succeeds after player 1 fails
             if (game.gameOver) onGameOver()
             else {
-                gameViewModel.setGameState(GameState.Watch)
-                gameViewModel.setRoundNumber(game.roundNumber)
-                if (isNewHighScore()) setNewHighScore()
+                gameViewModel.gameState.value = GameState.Watch
+                gameViewModel.roundNumber.value = game.roundNumber
+                updateHighScore()
+                updateTwoPlayerInfoText()
             }
         }
+    }
+
+    private fun updateHighScore() {
+        if (isNewHighScore()) setNewHighScore()
     }
 
     private fun isNewHighScore(): Boolean {
@@ -119,6 +127,15 @@ class GamePlayer(
         gameViewModel.gameMode.requireValue(),
         gameViewModel.roundNumber.requireValue().roundNumber - 1
     )
+
+    private fun updateTwoPlayerInfoText() {
+        if (gameViewModel.gameMode.requireValue() == GameMode.TwoPlayer) {
+            gameViewModel.infoText.value = when (game.isSecondPlayerTurn) {
+                false -> StringResource(R.string.info_text_player1)
+                true -> StringResource(R.string.info_text_player2)
+            }
+        }
+    }
 
     private fun onFailure() {
         SoundManager.stopAllSounds() // Stop other sounds so failure sound isn't hidden
@@ -138,7 +155,7 @@ class GamePlayer(
             score.value = Score(this@GamePlayer.score)
             best.value = Score.getHighScore(gameViewModel.gameMode.requireValue())
         }
-        gameViewModel.setGameState(GameState.Failure)
+        gameViewModel.gameState.value = GameState.Failure
     }
 
     private fun onPress(gameButton: GameButton) {
@@ -153,5 +170,5 @@ class GamePlayer(
         }
     }
 
-    override fun getLifecycle(): Lifecycle = lifecycle
+    override fun getLifecycle() = lifecycle
 }

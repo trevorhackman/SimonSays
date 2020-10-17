@@ -12,16 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <hackman.trevor.copycat.ui.main.main_button.MainButton
-        android:id="@+id/main_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="12" />
-
     <hackman.trevor.copycat.ui.main.Instructions
         android:id="@+id/instructions"
         style="@style/Text.Bold"
@@ -30,8 +20,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_button"
-        app:layout_constraintVertical_bias=".35"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".75"
         tools:text="@string/game_modes_mode_classic_popup" />
 
     <ImageView
@@ -40,16 +30,8 @@
         android:layout_height="0dp"
         android:background="@drawable/top_fade"
         android:focusable="false"
-        app:layout_constraintBottom_toTopOf="@id/main_button"
+        app:layout_constraintHeight_percent="0.40"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/makeshift_guideline"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_button"
-        app:layout_constraintVertical_bias="0.5"/>
 
     <ImageView
         android:id="@+id/fade_bottom"
@@ -58,7 +40,7 @@
         android:background="@drawable/bottom_fade"
         android:focusable="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/makeshift_guideline" />
+        app:layout_constraintHeight_percent="0.25" />
 
     <include layout="@layout/title" />
 

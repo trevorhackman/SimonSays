@@ -16,7 +16,7 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
         // Context of the app under test.
-        override val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("hackman.trevor.billing.test", appContext.packageName)
     }
 }

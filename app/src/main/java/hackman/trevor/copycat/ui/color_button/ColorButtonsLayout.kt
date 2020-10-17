@@ -40,12 +40,21 @@ class ColorButtonsLayout @JvmOverloads constructor(
         this.settingsViewModel = settingsViewModel
         this.gameViewModel = gameViewModel
         this.lifecycle = lifecycle
+        setupInfoText()
+        setupMainButton()
         setSounds()
         setListeners()
         observeColorSettings()
         observeButtonPlayBack()
         observeGameState()
     }
+
+    private fun setupInfoText() {
+        info_text_left_switcher.setup(gameViewModel, lifecycle)
+        info_text_right_switcher.setup(gameViewModel, lifecycle)
+    }
+
+    private fun setupMainButton() = main_button.setup(gameViewModel, lifecycle)
 
     private fun setSounds() {
         color_button_top_left.sound = SoundManager.chip1
@@ -72,12 +81,14 @@ class ColorButtonsLayout @JvmOverloads constructor(
 
     private fun onPress(colorButton: ColorButton) {
         colorButton.playSound()
-        gameViewModel.setPlayerPushed(GameButton(buttons.indexOf(colorButton)))
+        gameViewModel.playerPushed.value = GameButton(buttons.indexOf(colorButton))
     }
 
     private fun nonePushed() = buttons.none { it.pushed }
 
-    private fun setNonePushed() = gameViewModel.setPlayerPushed(null)
+    private fun setNonePushed() {
+        gameViewModel.playerPushed.value = null
+    }
 
     private fun observeColorSettings() = observe(settingsViewModel.colorSet) {
         color_button_top_left.setColorResource(it.colors.topLeft)

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_game_modes_button">@string/game_modes</string>
+
+    <string name="info_text_player1">PLAYER 1</string>
+    <string name="info_text_player2">PLAYER 2</string>
 </resources>

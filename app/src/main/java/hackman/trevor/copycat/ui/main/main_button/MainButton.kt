@@ -82,7 +82,9 @@ class MainButton @JvmOverloads constructor(
 
     private fun isMainMenu() = gameViewModel.gameState.value == GameState.MainMenu
 
-    private fun startGame() = gameViewModel.setGameState(GameState.Watch)
+    private fun startGame() {
+        gameViewModel.gameState.value = GameState.Watch
+    }
 
-    override fun getLifecycle(): Lifecycle = lifecycle
+    override fun getLifecycle() = lifecycle
 }

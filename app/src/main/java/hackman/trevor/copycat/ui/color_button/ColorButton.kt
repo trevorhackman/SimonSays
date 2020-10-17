@@ -1,6 +1,7 @@
 package hackman.trevor.copycat.ui.color_button
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatImageButton
@@ -15,18 +16,23 @@ class ColorButton @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : AppCompatImageButton(context, attributeSet) {
 
+    private lateinit var normalGraphic: Drawable
+    private lateinit var pressedGraphic: Drawable
+
     var sound: Sound = NullSound
 
     var pushed = false
         set(value) {
             field = value
-            if (value) {
-                background.state = intArrayOf(android.R.attr.state_pressed)
-                playSound()
-            } else {
-                background.state = intArrayOf()
-            }
+            if (value) playSound()
+            updateBackground()
         }
+
+    private fun updateBackground() {
+        background =
+            if (pushed) pressedGraphic
+            else normalGraphic
+    }
 
     @ColorInt
     private var buttonColor: Int = 0
@@ -50,6 +56,10 @@ class ColorButton @JvmOverloads constructor(
     }
 
     private fun createBackground(width: Int, height: Int) {
-        background = ColorButtonDrawable(width, height, buttonColor).build()
+        ColorButtonDrawable(width, height, buttonColor).let {
+            normalGraphic = it.normalGraphic()
+            pressedGraphic = it.pressedGraphic()
+        }
+        updateBackground()
     }
 }

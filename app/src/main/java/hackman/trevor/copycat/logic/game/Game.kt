@@ -48,6 +48,9 @@ class Game(private val gameMode: GameMode) {
     val victor
         get() = twoPlayerData.victor
 
+    val isSecondPlayerTurn
+        get() = twoPlayerData.isSecondPlayerTurn
+
     fun input(pressed: GameButton): InputResponse =
         if (canInput) handleInput(pressed)
         else onBadInputFailure()
@@ -170,3 +173,5 @@ private class TwoPlayerData(randomButton: GameButton) {
 }
 
 enum class TwoPlayerVictor { Tie, Player1, Player2 }
+
+enum class Player { Player1, Player2 }

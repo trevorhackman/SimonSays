@@ -24,6 +24,6 @@ class FailureMainMenuButton @JvmOverloads constructor(
     }
 
     fun setOnClickListener() = setOnClickListener {
-        gameViewModel.setGameState(GameState.MainMenu)
+        gameViewModel.gameState.value = GameState.MainMenu
     }
 }

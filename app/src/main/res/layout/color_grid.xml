@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="2dp">
+    android:padding="2dp"
+    tools:background="@color/colorPrimaryDark">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/color_grid_vertical_guide"
@@ -12,12 +14,12 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/color_grid_horizontal_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+    <!--    <androidx.constraintlayout.widget.Guideline-->
+    <!--        android:id="@+id/color_grid_horizontal_guide"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        app:layout_constraintGuide_percent="0.5" />-->
 
     <hackman.trevor.copycat.ui.color_button.ColorButton
         android:id="@+id/color_button_top_left"
@@ -25,7 +27,7 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/main_color_button_margin"
         app:button_color="@color/classic0"
-        app:layout_constraintBottom_toBottomOf="@id/color_grid_horizontal_guide"
+        app:layout_constraintBottom_toTopOf="@id/info_text_left_switcher"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/color_grid_vertical_guide"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +38,7 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/main_color_button_margin"
         app:button_color="@color/classic1"
-        app:layout_constraintBottom_toBottomOf="@id/color_grid_horizontal_guide"
+        app:layout_constraintBottom_toTopOf="@id/info_text_right_switcher"
         app:layout_constraintLeft_toLeftOf="@id/color_grid_vertical_guide"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/color_grid_vertical_guide"
-        app:layout_constraintTop_toTopOf="@id/color_grid_horizontal_guide" />
+        app:layout_constraintTop_toBottomOf="@id/info_text_left_switcher" />
 
     <hackman.trevor.copycat.ui.color_button.ColorButton
         android:id="@+id/color_button_bottom_right"
@@ -61,6 +63,72 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/color_grid_vertical_guide"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/color_grid_horizontal_guide" />
+        app:layout_constraintTop_toBottomOf="@id/info_text_right_switcher" />
+
+    <hackman.trevor.copycat.ui.main.main_button.MainButton
+        android:id="@+id/main_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12" />
+
+    <hackman.trevor.copycat.ui.color_button.InfoTextSwitcher
+        android:id="@+id/info_text_left_switcher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/main_button"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <hackman.trevor.copycat.ui.color_button.InfoText
+            android:id="@+id/info_text_left"
+            style="@style/Text.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            tools:text="PLAYER 1" />
+
+        <hackman.trevor.copycat.ui.color_button.InfoText
+            android:id="@+id/info_text_left2"
+            style="@style/Text.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            tools:text="PLAYER 1" />
+
+    </hackman.trevor.copycat.ui.color_button.InfoTextSwitcher>
+
+    <hackman.trevor.copycat.ui.color_button.InfoTextSwitcher
+        android:id="@+id/info_text_right_switcher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/main_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <hackman.trevor.copycat.ui.color_button.InfoText
+            style="@style/Text.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            tools:text="PLAYER 1" />
+
+        <hackman.trevor.copycat.ui.color_button.InfoText
+            style="@style/Text.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            tools:text="PLAYER 1" />
+
+    </hackman.trevor.copycat.ui.color_button.InfoTextSwitcher>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
