@@ -8,6 +8,7 @@ import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.pixelTextSize
 import kotlin.properties.Delegates
 
+// TODO Would be nice to improve theoretical performance, repeating the same animation & measurement calculations four times for the four instances of InfoText, could eliminate repeat calculations
 class InfoText @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
