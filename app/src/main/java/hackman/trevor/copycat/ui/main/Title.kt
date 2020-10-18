@@ -35,11 +35,11 @@ class Title @JvmOverloads constructor(
             .scaleX(1.0f)
             .scaleY(1.0f)
             .alpha(1.0f)
-            .setDuration(titlePopDuration.toLong())
+            .setDuration(titlePopDuration)
             .interpolator = interpolator
     }
 
     companion object {
-        private const val titlePopDuration = 1100
+        private const val titlePopDuration = 1100L
     }
 }

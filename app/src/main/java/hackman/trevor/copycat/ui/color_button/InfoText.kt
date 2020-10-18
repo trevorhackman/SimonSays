@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.pixelTextSize
-import kotlin.properties.Delegates
 
 // TODO Would be nice to improve theoretical performance, repeating the same animation & measurement calculations four times for the four instances of InfoText, could eliminate repeat calculations
 class InfoText @JvmOverloads constructor(
@@ -16,7 +15,7 @@ class InfoText @JvmOverloads constructor(
 
     private val placeholder = TextView(context)
 
-    private var fullHeight: Int by Delegates.notNull()
+    private var fullHeight = 0
     private var interpolatedHeight = 0
 
     var shrinked = true
@@ -32,40 +31,45 @@ class InfoText @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Perform one pass to get width for placeholder
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        // TODO Do we need to measure this everytime? Could improve theoretical performance again here
+        measureFullHeight(widthMeasureSpec)
 
-        measurePlaceholderHeight()
-
-        // Keep measured width, use interpolated height for cool animation
-        setMeasuredDimension(measuredWidth, interpolatedHeight)
+        // Use interpolated height for cool animation
+        setMeasuredDimension(widthMeasureSpec, interpolatedHeight)
     }
 
     // Measure would-be height with wrap_content
-    private fun measurePlaceholderHeight() {
+    private fun measureFullHeight(widthMeasureSpec: Int) {
         placeholder.layoutParams = layoutParams
         placeholder.pixelTextSize = textSize
         placeholder.text = text
 
-        val widthSpec = MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY)
+        val widthSpec = MeasureSpec.makeMeasureSpec(widthMeasureSpec, MeasureSpec.EXACTLY)
         val wrapHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         placeholder.measure(widthSpec, wrapHeightSpec)
         if (placeholder.measuredHeight > 0) fullHeight = placeholder.measuredHeight
     }
 
     private fun shrink() {
-        val fullHeight = this.fullHeight // Cache b/c it changes during animation
-        animate().alpha(1f).setDuration(800).setUpdateListener {
-            interpolatedHeight = fullHeight - (fullHeight * it.animatedFraction).toInt()
-            height = interpolatedHeight
+        nonstandardAnimate().setDuration(slideAnimationDuration).setUpdateListener {
+            interpolatedHeight = (fullHeight * (1 - it.animatedFraction)).toInt()
+            requestLayout()
+            invalidate()
         }
     }
 
     private fun unshrink() {
-        val fullHeight = this.fullHeight // Cache b/c it changes during animation
-        animate().alpha(1f).setDuration(800).setUpdateListener {
+        nonstandardAnimate().setDuration(slideAnimationDuration).setUpdateListener {
             interpolatedHeight = (fullHeight * it.animatedFraction).toInt()
-            height = interpolatedHeight
+            requestLayout()
+            invalidate()
         }
+    }
+
+    // Pointless alpha animation done b/c ViewPropertyAnimator was written to not do anything without any 'standard' property
+    private fun nonstandardAnimate() = animate().alpha(this.alpha)
+
+    private companion object {
+        const val slideAnimationDuration = 800L
     }
 }
