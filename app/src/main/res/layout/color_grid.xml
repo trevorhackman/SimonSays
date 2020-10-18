@@ -80,7 +80,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <hackman.trevor.copycat.ui.color_button.InfoText
-            android:id="@+id/info_text_left"
             style="@style/Text.Bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +87,6 @@
             tools:text="PLAYER 1" />
 
         <hackman.trevor.copycat.ui.color_button.InfoText
-            android:id="@+id/info_text_left2"
             style="@style/Text.Bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
