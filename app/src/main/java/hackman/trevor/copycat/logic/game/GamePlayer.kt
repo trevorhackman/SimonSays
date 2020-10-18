@@ -54,7 +54,7 @@ class GamePlayer(
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
         if (it == GameState.Watch) playSequence()
-        else if (it != GameState.Input) stopPlayBack()
+        else if (!it.inGame) stopPlayBack()
     }
 
     private fun playSequence() {
@@ -85,7 +85,9 @@ class GamePlayer(
         if (!isLast) delay(speed.delayDuration)
     }
 
-    private fun stopPlayBack() = playerJob.cancel()
+    private fun stopPlayBack() = playerJob.cancel().also {
+        gameViewModel.buttonPlayBack.value = null
+    }
 
     private fun observePlayerPushed() = observe(gameViewModel.playerPushed) {
         if (gameViewModel.gameState.value != GameState.Input) return@observe
