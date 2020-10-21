@@ -47,4 +47,5 @@
     <color name="soft3">#3F681C</color>
 
     <color name="greyed">@color/Grey700</color>
+    <color name="blacked">@color/colorPrimaryDark</color>
 </resources>

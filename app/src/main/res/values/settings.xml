@@ -17,6 +17,7 @@
     <string name="settings_color_dull">Dull</string>
     <string name="settings_color_soft">Soft</string>
     <string name="settings_color_greyed">Greyed</string>
+    <string name="settings_color_blacked">Blacked</string>
 
     <string name="settings_setting_failure_sound">Failure</string>
     <string name="settings_failure_error_tone">Tone</string>
