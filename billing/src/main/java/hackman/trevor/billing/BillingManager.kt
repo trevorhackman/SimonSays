@@ -69,7 +69,6 @@ object BillingManager : LifecycleObserver {
         billingClient.querySkuDetailsAsync(skuDetailsParams, SkuRetrievalListener)
     }
 
-    // TODO Don't show successful purchase dialog in acknowledgement, bad flow, got error message and success purchase message in one. But still saw ads.
     internal fun acknowledgePurchase(purchase: Purchase) {
         val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
@@ -79,7 +78,6 @@ object BillingManager : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
-        // TODO TEST THIS GETS CALLED
         Log.e("TT_", "TEST ON DESTROY CALLED")
         activity = null
     }
