@@ -71,6 +71,8 @@ class GamePlayer(
     }
 
     private fun playOneAtATime() = lifecycleScope.launch {
+        if (score == 0) delay(startGameDelay)
+        else if (gameViewModel.gameMode.requireValue() == GameMode.TwoPlayer) delay(twoPlayerTurnSwitchDelay)
         delay(speed.startDelay)
         sequence.forEachIndexed { i, gameButton ->
             playButton(gameButton, i == sequence.lastIndex)
@@ -173,4 +175,9 @@ class GamePlayer(
     }
 
     override fun getLifecycle() = lifecycle
+
+    companion object {
+        private const val startGameDelay = 1000L
+        private const val twoPlayerTurnSwitchDelay = 500L
+    }
 }

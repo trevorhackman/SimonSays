@@ -69,7 +69,7 @@ class InfoText @JvmOverloads constructor(
     // Pointless alpha animation done b/c ViewPropertyAnimator was written to not do anything without any 'standard' property
     private fun nonstandardAnimate() = animate().alpha(this.alpha)
 
-    private companion object {
-        const val slideAnimationDuration = 800L
+    companion object {
+        private const val slideAnimationDuration = 800L
     }
 }
