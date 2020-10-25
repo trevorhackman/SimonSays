@@ -22,7 +22,7 @@ android {
         applicationId "hackman.trevor.copycat"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 53
+        versionCode 54
         versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
