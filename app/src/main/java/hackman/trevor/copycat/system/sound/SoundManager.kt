@@ -19,9 +19,9 @@ object SoundManager : LifecycleObserver {
      * Volume levels
      * Balancing the volume out some b/c the higher pitched notes 'sound' louder than lower pitched notes
      */
-    private const val VOLUME_CHIP1 = 0.45f
-    private const val VOLUME_CHIP2 = 0.55f
-    private const val VOLUME_CHIP3 = 0.65f
+    private const val VOLUME_CHIP1 = 0.54f
+    private const val VOLUME_CHIP2 = 0.61f
+    private const val VOLUME_CHIP3 = 0.68f
     private const val VOLUME_CHIP4 = 0.75f
     private const val VOLUME_FAILURE = 1.0f
     private const val VOLUME_CLICK = 0.3f

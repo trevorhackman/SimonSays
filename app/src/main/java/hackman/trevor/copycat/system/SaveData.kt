@@ -47,7 +47,7 @@ object SaveData {
 
     // Remember the failure sound selected in the settings
     var failureSound: FailureSound
-        get() = FailureSound.values()[preferences.safeGetInt(failureSoundKey, FailureSound.ClassicError.ordinal)]
+        get() = FailureSound.values()[preferences.safeGetInt(failureSoundKey, FailureSound.BitGenerated.ordinal)]
         set(value) = set(failureSoundKey, value.ordinal)
 
     // Whether or not rating dialog has been displayed before
