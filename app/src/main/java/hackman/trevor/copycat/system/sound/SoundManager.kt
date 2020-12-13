@@ -89,7 +89,7 @@ object SoundManager : LifecycleObserver {
         soundPool?.load(activity, resource, 1) ?: {
             report("Attempted to load sound on null SoundPool")
             0
-        }.invoke()
+        }()
 
     /**
      * Release all sound resources

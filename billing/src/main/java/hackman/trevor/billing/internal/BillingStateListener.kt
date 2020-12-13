@@ -64,7 +64,7 @@ internal object BillingStateListener : BillingClientStateListener {
         if (!purchase.isAcknowledged) BillingManager.acknowledgePurchase(purchase)
 
         model.ownership.value = Ownership.Owned
-        model.flog.value = "$NO_ADS_1 owned"
+        model.flog.value = "${purchase.sku} owned"
     }
 
     private fun onFoundUnknownPurchase(purchase: Purchase) {

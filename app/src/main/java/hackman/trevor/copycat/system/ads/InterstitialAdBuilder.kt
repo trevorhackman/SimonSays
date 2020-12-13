@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.LoadAdError
 import hackman.trevor.copycat.system.TESTING
 import hackman.trevor.copycat.system.log
 import kotlinx.coroutines.delay
@@ -34,13 +35,13 @@ class InterstitialAdBuilder(
          * Interstitial ads don't automatically retry
          * Implement 1-minute retry policy
          */
-        override fun onAdFailedToLoad(errorCode: Int) {
-            super.onAdFailedToLoad(errorCode)
+        override fun onAdFailedToLoad(adError: LoadAdError) {
+            super.onAdFailedToLoad(adError)
             activity.lifecycleScope.launch {
                 delay(60000)
                 requestNewInterstitialAd()
             }
-            log("Interstitial ad failed to load: " + AdManager.errorCodeToString(errorCode))
+            log("Interstitial ad failed to load: $adError")
         }
     }
 }
