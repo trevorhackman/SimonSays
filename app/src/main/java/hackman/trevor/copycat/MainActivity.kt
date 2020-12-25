@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        DialogFactory.dispose()
 
         flog("Activity Destroyed")
     }

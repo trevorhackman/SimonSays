@@ -4,17 +4,23 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.AlertDialog.THEME_HOLO_DARK
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import hackman.trevor.copycat.R
 
-object DialogFactory {
+object DialogFactory: LifecycleObserver {
 
     private var activity: Activity? = null
 
-    fun setup(activity: Activity) {
+    fun setup(activity: AppCompatActivity) {
         this.activity = activity
+        activity.lifecycle.addObserver(this)
     }
 
-    fun dispose() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    private fun onDestroy() {
         activity = null
     }
 
