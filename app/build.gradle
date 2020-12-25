@@ -22,8 +22,8 @@ android {
         applicationId "hackman.trevor.copycat"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 54
-        versionName "3.0.0"
+        versionCode 56
+        versionName "3.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -63,8 +63,8 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
     implementation 'androidx.lifecycle:lifecycle-process:2.2.0'
 
-    // Google Ads
-    implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    // Google Ads - 19.6.0 was causing a rare crash (Simon version code 55) that I haven't seen with version 19.4.0
+    implementation 'com.google.android.gms:play-services-ads:19.4.0'
 
     // Firebase Crashlytics
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'

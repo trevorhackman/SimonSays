@@ -36,11 +36,15 @@ class MainActivity : AppCompatActivity() {
             R.id.fragment_container,
             MainFragment()
         ).commit()
+
+        flog("Activity Created")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         DialogFactory.dispose()
+
+        flog("Activity Destroyed")
     }
 
     private fun initSaveData() = SaveData.setup(applicationContext as Application)
