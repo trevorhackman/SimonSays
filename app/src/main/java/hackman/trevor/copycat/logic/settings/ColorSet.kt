@@ -10,8 +10,8 @@ enum class ColorSet(
 ) : NameId {
     Classic(R.string.settings_color_classic, classicColors),
     Soft(R.string.settings_color_soft, softColors),
-    Inverted(R.string.settings_color_inverted, invertedColors),
     Dull(R.string.settings_color_dull, dullColors),
+    Inverted(R.string.settings_color_inverted, invertedColors),
     Warm(R.string.settings_color_warm, warmColors),
     Cool(R.string.settings_color_cool, coolColors),
     Royal(R.string.settings_color_royal, royalColors),

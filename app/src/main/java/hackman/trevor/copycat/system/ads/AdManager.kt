@@ -84,7 +84,8 @@ object AdManager : LifecycleObserver {
     }
 
     // Get the whole banner ad in order to display it somewhere
-    fun getBannerAd(): AdView {
+    fun getBannerAd(): AdView? {
+        if (activity == null) return null
         removeView()
         return bannerAd ?: buildBannerAd()
     }

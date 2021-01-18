@@ -2,6 +2,7 @@ package hackman.trevor.copycat.ui.main
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -54,7 +55,7 @@ class AdContainer @JvmOverloads constructor(
     private fun onInitial() {
         rememberSize()
         initial = false
-        if (childCount == 0) addView(AdManager.getBannerAd())
+        if (childCount == 0) addViewIfNotNull(AdManager.getBannerAd())
     }
 
     private fun rememberSize() {
@@ -68,7 +69,11 @@ class AdContainer @JvmOverloads constructor(
     private fun onScreenSizeChanged() {
         rememberSize()
         AdManager.buildBannerAd()
-        addView(AdManager.getBannerAd())
+        addViewIfNotNull(AdManager.getBannerAd())
+    }
+
+    private fun addViewIfNotNull(view: View?) {
+        view?.let { addView(it) }
     }
 
     override fun getLifecycle() = lifecycle
