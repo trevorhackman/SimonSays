@@ -160,11 +160,11 @@ class MainFragment : BaseFragment() {
         failureViewModel.setInBackground(false)
         cancelInstructions()
         SaveData.gamesCompleted++
-        if (AdManager.isEnabled && !wouldBeBadInitialExperience()) AdManager.showInterstitialAd(0.40)
+        if (AdManager.isEnabled && !wouldBeBadInitialExperience()) AdManager.showInterstitialAd(0.30)
     }
 
-    // Would be bad initial experience to show ad on first couple games
-    private fun wouldBeBadInitialExperience() = SaveData.gamesCompleted < 4
+    // Would be bad initial experience to show ad on first several games
+    private fun wouldBeBadInitialExperience() = SaveData.gamesCompleted < 6
 
     // Cancel instructions in case they're still up
     private fun cancelInstructions() = instructions.apply {
