@@ -1,5 +1,6 @@
 package hackman.trevor.copycat.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.AlertDialog.THEME_HOLO_DARK
@@ -10,6 +11,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import hackman.trevor.copycat.R
 
+@SuppressLint("StaticFieldLeak")
 object DialogFactory: LifecycleObserver {
 
     private var activity: Activity? = null

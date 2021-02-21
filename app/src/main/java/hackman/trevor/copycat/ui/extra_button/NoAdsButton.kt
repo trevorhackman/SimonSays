@@ -27,10 +27,6 @@ class NoAdsButton @JvmOverloads constructor(
         DialogFactory.billingUnavailable()
     }
 
-    private val networkError by lazy {
-        DialogFactory.failedNetwork()
-    }
-
     init {
         setBackground()
         setOnClickListener()

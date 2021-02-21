@@ -4,6 +4,8 @@
     package="hackman.trevor.copycat"
     android:installLocation="auto">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="hackman.trevor.copycat.SimonApplication"
         android:allowBackup="true"

@@ -69,6 +69,7 @@ object SoundManager : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
+        releaseResources()
         activity = null
     }
 

@@ -50,8 +50,9 @@ object AdManager : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     private fun onCreate() {
-        @Suppress("DEPRECATION") // Despite deprecation, this function is recommended
-        MobileAds.initialize(activity, admobId)
+        MobileAds.initialize(activity) {
+            // Required on initialization complete listener
+        }
         requestNewInterstitialAd()
     }
 

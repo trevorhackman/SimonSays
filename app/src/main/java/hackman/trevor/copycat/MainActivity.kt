@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hackman.trevor.billing.Billing
 import hackman.trevor.billing.BillingManager
-import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.system.*
-import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
 import hackman.trevor.copycat.ui.main.MainFragment
@@ -51,7 +49,8 @@ class MainActivity : AppCompatActivity() {
     private fun initDialogFactory() = DialogFactory.setup(this)
 
     private fun initAdsIfNotOwned() {
-        if (SaveData.isNoAdsOwned != Ownership.Owned) AdManager.setup(this)
+        // TODO Disabling ads for everyone to try to improve experience and boost user acquisition for some time
+        // if (SaveData.isNoAdsOwned != Ownership.Owned) AdManager.setup(this)
     }
 
     private fun initSounds() = SoundManager.setup(this)
