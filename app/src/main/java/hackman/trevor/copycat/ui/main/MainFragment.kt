@@ -39,6 +39,13 @@ class MainFragment : BaseFragment() {
         GamePlayer(gameViewModel, failureViewModel, viewLifecycleOwner.lifecycle)
     }
 
+    private val leaveGameDialog by lazy {
+        DialogFactory.leaveCurrentGame(
+            onExit = { fragmentInterface.callSuper() },
+            onMainMenu = { gameViewModel.gameState.value = GameState.MainMenu }
+        )
+    }
+
     private var popInRan = false
     private var inGame = false
 
@@ -110,7 +117,8 @@ class MainFragment : BaseFragment() {
         }
     }
 
-    private fun observeMenusInBackground() = listOf(settingsViewModel, gameModesViewModel, removeAdsViewModel).forEach(::observeMenu)
+    private fun observeMenusInBackground() =
+        listOf(settingsViewModel, gameModesViewModel, removeAdsViewModel).forEach(::observeMenu)
 
     private fun observeMenu(menu: Menu) = observe(menu.inBackground) { inBackground ->
         fragmentInterface.setBackBehavior {
@@ -200,11 +208,8 @@ class MainFragment : BaseFragment() {
         else ad_container.fadeOut()
 
     private fun setInGameBackBehavior() = fragmentInterface.setBackBehavior {
-        if (!justStartedGame()) {
-            DialogFactory.leaveCurrentGame(
-                onExit = { fragmentInterface.callSuper() },
-                onMainMenu = { gameViewModel.gameState.value = GameState.MainMenu }
-            ).showCorrectly()
+        if (inLongGame()) {
+            leaveGameDialog.showCorrectly()
             BackEvent.Consumed
         } else if (gameViewModel.gameState.value != GameState.MainMenu) {
             gameViewModel.gameState.value = GameState.MainMenu
@@ -215,7 +220,9 @@ class MainFragment : BaseFragment() {
     }
 
     // Not worth presenting dialog if just started game
-    private fun justStartedGame() = gameViewModel.roundNumber.requireValue().roundNumber == 1
+    private fun inLongGame() =
+            gameViewModel.roundNumber.requireValue().roundNumber > 1 &&
+            gameViewModel.gameState.requireValue().inGame
 
     private var isInitial = true
 
