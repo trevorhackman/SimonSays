@@ -14,7 +14,7 @@ import hackman.trevor.copycat.system.report
 // A new instance of the same activity can be created without waiting for the last one to be destroyed.
 // This results in two instances of the same activity, going through different lifecycle states, to exist simultaneously.
 // This messes up and causes unexpected issues in a singleton lifecycle-dependent class like this. Tried on API 30.
-// Fixed by removing old observer. 
+// Fixed by removing old observer.
 object SoundManager : LifecycleObserver {
 
     private var activity: AppCompatActivity? = null
