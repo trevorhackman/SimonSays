@@ -12,6 +12,7 @@
 .externalNativeBuild
 .cxx
 .aab
+/app/release/app-release.aab
 
 # Private Keys
 AdKeys.kt
