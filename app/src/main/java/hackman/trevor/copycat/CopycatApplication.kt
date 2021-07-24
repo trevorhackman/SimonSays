@@ -3,7 +3,7 @@ package hackman.trevor.copycat
 import android.app.Application
 import hackman.trevor.copycat.system.flog
 
-class SimonApplication: Application() {
+class CopycatApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         flog("Application onCreate")

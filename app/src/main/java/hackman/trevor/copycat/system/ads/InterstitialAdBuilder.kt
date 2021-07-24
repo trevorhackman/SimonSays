@@ -6,7 +6,9 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.LoadAdError
 import hackman.trevor.copycat.system.TESTING
+import hackman.trevor.copycat.system.interstitialAdId
 import hackman.trevor.copycat.system.log
+import hackman.trevor.copycat.system.testInterstitialAdId
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

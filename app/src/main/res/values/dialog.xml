@@ -19,7 +19,7 @@
 
     <!-- Rate the app dialog -->
     <string name="dialog_rate_app_title">Rate App</string>
-    <string name="dialog_rate_app_message">Simon Says is made by a single person so your reviews mean a lot. Thank you for the effort.</string>
+    <string name="dialog_rate_app_message">Copycat is made by a single person so your reviews mean a lot. Thank you for the effort.</string>
     <string name="dialog_rate_app_rate_button">Rate</string>
     <!---->
 

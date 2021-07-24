@@ -3,7 +3,7 @@ package hackman.trevor.copycat.logic.game
 import java.util.*
 
 /**
- * Summarizes Simon Says and various game modes as:
+ * Summarizes Simon Says (CopyCat) and various game modes as:
  *
  * [Game.input] Take a series of int inputs - color buttons pressed mapped to ints
  * [InputResponse] Get success or failed at each step

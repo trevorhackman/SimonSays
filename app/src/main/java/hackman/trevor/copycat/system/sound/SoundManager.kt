@@ -9,6 +9,12 @@ import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
 
+// Multiple instances of the same activity can momentarily exist, even with singleInstance launch mode.
+// I found, rapidly closing/opening the app to reliably reproduce this. An activity can take time to be destroyed.
+// A new instance of the same activity can be created without waiting for the last one to be destroyed.
+// This results in two instances of the same activity, going through different lifecycle states, to exist simultaneously.
+// This messes up and causes unexpected issues in a singleton lifecycle-dependent class like this. Tried on API 30.
+// Fixed by removing old observer. 
 object SoundManager : LifecycleObserver {
 
     private var activity: AppCompatActivity? = null
@@ -41,6 +47,7 @@ object SoundManager : LifecycleObserver {
     }
 
     fun setup(activity: AppCompatActivity) {
+        this.activity?.lifecycle?.removeObserver(this) // Necessary to fix vulnerabilities from multiple activities
         this.activity = activity
         activity.lifecycle.addObserver(this)
     }
@@ -63,13 +70,13 @@ object SoundManager : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     private fun onStop() {
-        releaseResources()
+        releaseResources(initial = true)
         disableAllSounds()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
-        releaseResources()
+        releaseResources(initial = false) // For safety
         activity = null
     }
 
@@ -87,21 +94,25 @@ object SoundManager : LifecycleObserver {
     }
 
     private fun loadSoundAndGetId(resource: Int): Int =
-        soundPool?.load(activity, resource, 1) ?: {
+        soundPool?.load(activity, resource, 1) ?: run {
             report("Attempted to load sound on null SoundPool")
             0
-        }()
+        }
 
     /**
      * Release all sound resources
      * Don't hog resources from other apps when not in front; don't leak memory and stop sound errors
      */
-    private fun releaseResources() =
+    private fun releaseResources(initial: Boolean) {
         soundPool?.let {
+            if (!initial) report("Initial release didn't null SoundPool")
             unloadAllSounds()
             it.release()
             soundPool = null
-        } ?: report("Attempted to release on null SoundPool")
+        } ?: run {
+            if (initial) report("Attempted to release on null SoundPool")
+        }
+    }
 
     private fun unloadAllSounds() = allSounds.forEach { unloadSound(it) }
 

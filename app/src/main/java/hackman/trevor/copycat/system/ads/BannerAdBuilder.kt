@@ -6,7 +6,9 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import hackman.trevor.copycat.system.TESTING
+import hackman.trevor.copycat.system.bannerAdId
 import hackman.trevor.copycat.system.log
+import hackman.trevor.copycat.system.testBannerAdId
 
 class BannerAdBuilder(
     private val activity: AppCompatActivity,

@@ -1,7 +1,5 @@
 package hackman.trevor.copycat.ui
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.AlertDialog.THEME_HOLO_DARK
 import android.view.WindowManager
@@ -11,12 +9,12 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import hackman.trevor.copycat.R
 
-@SuppressLint("StaticFieldLeak")
 object DialogFactory: LifecycleObserver {
 
-    private var activity: Activity? = null
+    private var activity: AppCompatActivity? = null
 
     fun setup(activity: AppCompatActivity) {
+        this.activity?.lifecycle?.removeObserver(this) // Necessary to fix vulnerabilities from multiple activities
         this.activity = activity
         activity.lifecycle.addObserver(this)
     }

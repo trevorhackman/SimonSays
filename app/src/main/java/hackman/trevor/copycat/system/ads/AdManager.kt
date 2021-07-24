@@ -42,6 +42,7 @@ object AdManager : LifecycleObserver {
         get() = isInitialized && SaveData.isNoAdsOwned == Ownership.ConfirmedUnowned
 
     fun setup(activity: AppCompatActivity) {
+        this.activity?.lifecycle?.removeObserver(this) // Necessary to fix vulnerabilities from multiple activities
         this.activity = activity
         interstitialAd = InterstitialAdBuilder(activity, ::requestNewInterstitialAd).build()
         isInitialized = true
@@ -113,7 +114,7 @@ object AdManager : LifecycleObserver {
      * @return whether shown
      */
     fun showInterstitialAd(probability: Double): Boolean {
-        val interstitialAd = interstitialAd ?: kotlin.run {
+        val interstitialAd = interstitialAd ?: run {
             report("Interstitial ad is null")
             return false
         }

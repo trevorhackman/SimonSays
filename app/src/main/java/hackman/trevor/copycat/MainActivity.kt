@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private val activityInterface: ActivityInterface by activityInterface()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        flog("Activity Created ${hashCode()}")
         super.onCreate(savedInstanceState)
         initSaveData()
         initDialogFactory()
@@ -34,14 +35,11 @@ class MainActivity : AppCompatActivity() {
             R.id.fragment_container,
             MainFragment()
         ).commit()
-
-        flog("Activity Created")
     }
 
     override fun onDestroy() {
+        flog("Activity Destroyed ${hashCode()}")
         super.onDestroy()
-
-        flog("Activity Destroyed")
     }
 
     private fun initSaveData() = SaveData.setup(applicationContext as Application)
