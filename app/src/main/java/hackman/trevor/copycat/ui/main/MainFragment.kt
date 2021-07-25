@@ -194,11 +194,11 @@ class MainFragment : BaseFragment() {
         fade_top.pivotY = fade_top.y
         if (fadeIn) {
             main_title.fadeIn().duration = inSpeed
-            extra_buttons_layout.fadeIn().duration = inSpeed
+            extra_buttons_layout.animate { fadeIn().setDuration(inSpeed) }
             fade_top.animate().scaleY(1f).duration = inSpeed
         } else {
             main_title.fadeOut().duration = outSpeed
-            extra_buttons_layout.fadeOut().duration = outSpeed
+            extra_buttons_layout.animate { fadeOut().setDuration(outSpeed) }
             fade_top.animate().scaleY(0.5f).duration = outSpeed
         }
     }

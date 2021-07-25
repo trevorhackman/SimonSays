@@ -3,6 +3,7 @@ package hackman.trevor.copycat.ui.extra_button
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewPropertyAnimator
 import androidx.constraintlayout.widget.ConstraintLayout
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
@@ -31,9 +32,31 @@ class ExtraButtonsLayout @JvmOverloads constructor(
         this
     )
 
+    // Checks for orientation change before animation,
+    // that way the new layout triggered by orientation change
+    // doesn't interrupt the animation
+    fun animate(animation: ExtraButtonsLayout.() -> ViewPropertyAnimator) {
+        ifOrientationChanged()
+        animation()
+    }
+
+    fun setup(
+        settingsViewModel: SettingsViewModel,
+        gameModesViewModel: GameModesViewModel,
+        removeAdsViewModel: RemoveAdsViewModel
+    ) {
+        this.settingsViewModel = settingsViewModel
+        this.gameModesViewModel = gameModesViewModel
+        this.removeAdsViewModel = removeAdsViewModel
+        setupAll()
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        ifOrientationChanged()
+    }
 
+    private fun ifOrientationChanged() {
         if (orientationChanged()) {
             updateOrientation()
             removeAllViews()
@@ -46,17 +69,6 @@ class ExtraButtonsLayout @JvmOverloads constructor(
 
     private fun updateOrientation() {
         oldIsPortrait = isPortrait()
-    }
-
-    fun setup(
-        settingsViewModel: SettingsViewModel,
-        gameModesViewModel: GameModesViewModel,
-        removeAdsViewModel: RemoveAdsViewModel
-    ) {
-        this.settingsViewModel = settingsViewModel
-        this.gameModesViewModel = gameModesViewModel
-        this.removeAdsViewModel = removeAdsViewModel
-        setupAll()
     }
 
     private fun setupAll() {
