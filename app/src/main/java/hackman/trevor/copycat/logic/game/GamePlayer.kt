@@ -109,8 +109,9 @@ class GamePlayer(
             // Happens when player 2 succeeds after player 1 fails
             if (game.gameOver) onGameOver()
             else {
-                gameViewModel.gameState.value = GameState.Watch
+                // Important to update round number before we update game state
                 gameViewModel.roundNumber.value = game.roundNumber
+                gameViewModel.gameState.value = GameState.Watch
                 updateHighScore()
                 updateTwoPlayerInfoText()
             }
