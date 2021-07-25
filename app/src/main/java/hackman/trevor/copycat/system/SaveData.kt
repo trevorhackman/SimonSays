@@ -42,7 +42,7 @@ object SaveData {
 
     // Remember the color theme selected in the settings
     var colorSet: ColorSet
-        get() = ColorSet.values()[preferences.safeGetInt(colorSetKey, ColorSet.Classic.ordinal)]
+        get() = ColorSet.values()[preferences.safeGetInt(colorSetKey, ColorSet.Normal.ordinal)]
         set(value) = set(colorSetKey, value.ordinal)
 
     // Remember the failure sound selected in the settings
@@ -57,7 +57,7 @@ object SaveData {
 
     // Remember the game mode last selected
     var gameMode: GameMode
-        get() = GameMode.values()[preferences.safeGetInt(gameModeKey, GameMode.Classic.ordinal)]
+        get() = GameMode.values()[preferences.safeGetInt(gameModeKey, GameMode.Normal.ordinal)]
         set(value) = set(gameModeKey, value.ordinal)
 
     // Track the number of games completed

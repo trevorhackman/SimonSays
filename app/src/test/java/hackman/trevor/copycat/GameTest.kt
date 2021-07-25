@@ -35,8 +35,8 @@ class GameTest {
     }
 
     @Test
-    fun testClassic() {
-        game = Game(GameMode.Classic)
+    fun testNormal() {
+        game = Game(GameMode.Normal)
         var previousSequence = listOf<GameButton>()
         repeat(100) {
             val sequence = readSequence()
@@ -177,12 +177,12 @@ class GameTest {
 
     @Test
     fun testTimeToFinishInput() {
-        testTimeToFinishInputClassic()
+        testTimeToFinishInputNormal()
         testTimeToFinishInputTwoPlayer()
     }
 
-    private fun testTimeToFinishInputClassic() {
-        game = Game(GameMode.Classic)
+    private fun testTimeToFinishInputNormal() {
+        game = Game(GameMode.Normal)
 
         assert(!game.isTimeToFinishInput)
 

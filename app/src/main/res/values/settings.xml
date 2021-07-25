@@ -9,7 +9,7 @@
     <string name="settings_speed_insane">Insane</string>
 
     <string name="settings_setting_color">Colors</string>
-    <string name="settings_color_classic">Classic</string>
+    <string name="settings_color_normal">Normal</string>
     <string name="settings_color_warm">Warm</string>
     <string name="settings_color_cool">Cool</string>
     <string name="settings_color_royal">Royal</string>

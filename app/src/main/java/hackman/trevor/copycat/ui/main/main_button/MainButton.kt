@@ -41,7 +41,7 @@ class MainButton @JvmOverloads constructor(
 
     private fun observeGameMode() = observe(gameViewModel.gameMode) {
         main_button_game_mode_text.text = getString(it.name())
-        main_button_game_mode_text.isVisible = it != GameMode.Classic
+        main_button_game_mode_text.isVisible = it != GameMode.Normal
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {

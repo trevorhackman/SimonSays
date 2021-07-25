@@ -8,15 +8,15 @@ import hackman.trevor.copycat.system.StringResource
 inline class GameButton(val buttonNumber: Int)
 
 fun GameButton?.name(colorSet: ColorSet) = when (colorSet) {
-    ColorSet.Classic -> classicName()
+    ColorSet.Normal -> normalName()
     else -> otherName()
 }
 
-private fun GameButton?.classicName() = when (this?.buttonNumber) {
-    0 -> StringResource(R.string.failure_classic_0)
-    1 -> StringResource(R.string.failure_classic_1)
-    2 -> StringResource(R.string.failure_classic_2)
-    3 -> StringResource(R.string.failure_classic_3)
+private fun GameButton?.normalName() = when (this?.buttonNumber) {
+    0 -> StringResource(R.string.failure_normal_0)
+    1 -> StringResource(R.string.failure_normal_1)
+    2 -> StringResource(R.string.failure_normal_2)
+    3 -> StringResource(R.string.failure_normal_3)
     else -> StringResource(R.string.failure_null)
 }
 

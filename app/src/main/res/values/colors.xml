@@ -11,10 +11,10 @@
 
     <color name="instructions_background">#EA757575</color>
 
-    <color name="classic0">#40FF00</color>
-    <color name="classic1">#FF4000</color>
-    <color name="classic2">#FFFF40</color>
-    <color name="classic3">#2020FF</color>
+    <color name="normal0">#40FF00</color>
+    <color name="normal1">#FF4000</color>
+    <color name="normal2">#FFFF40</color>
+    <color name="normal3">#2020FF</color>
 
     <color name="warm0">@color/Yellow500</color>
     <color name="warm1">@color/Amber500</color>

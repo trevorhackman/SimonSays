@@ -6,12 +6,12 @@ import hackman.trevor.copycat.system.sound.SoundManager
 
 enum class FailureSound(id: Int): NameId {
     BitGenerated(R.string.settings_failure_bit_generated),
-    ClassicError(R.string.settings_failure_error_tone);
+    NormalError(R.string.settings_failure_error_tone);
 
     override val nameId = StringResource(id)
 }
 
 fun FailureSound.toSound() = when(this) {
     FailureSound.BitGenerated -> SoundManager.failure_bit
-    FailureSound.ClassicError -> SoundManager.failure_error
+    FailureSound.NormalError -> SoundManager.failure_error
 }

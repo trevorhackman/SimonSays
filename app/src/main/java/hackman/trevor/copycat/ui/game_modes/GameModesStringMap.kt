@@ -6,7 +6,7 @@ import hackman.trevor.copycat.system.StringResource
 
 fun GameMode.name() = StringResource(
     when (this) {
-        GameMode.Classic -> R.string.game_modes_mode_classic
+        GameMode.Normal -> R.string.game_modes_mode_normal
         GameMode.Reverse -> R.string.game_modes_mode_reverse
         GameMode.Chaos -> R.string.game_modes_mode_chaos
         GameMode.Single -> R.string.game_modes_mode_single
@@ -17,7 +17,7 @@ fun GameMode.name() = StringResource(
 
 fun GameMode.description() = StringResource(
     when (this) {
-        GameMode.Classic -> R.string.game_modes_mode_classic_description
+        GameMode.Normal -> R.string.game_modes_mode_normal_description
         GameMode.Reverse -> R.string.game_modes_mode_reverse_description
         GameMode.Chaos -> R.string.game_modes_mode_chaos_description
         GameMode.Single -> R.string.game_modes_mode_single_description
@@ -28,7 +28,7 @@ fun GameMode.description() = StringResource(
 
 fun GameMode.popupText() = StringResource(
     when (this) {
-        GameMode.Classic -> R.string.game_modes_mode_classic_popup
+        GameMode.Normal -> R.string.game_modes_mode_normal_popup
         GameMode.Reverse -> R.string.game_modes_mode_reverse_popup
         GameMode.Chaos -> R.string.game_modes_mode_chaos_popup
         GameMode.Single -> R.string.game_modes_mode_single_popup

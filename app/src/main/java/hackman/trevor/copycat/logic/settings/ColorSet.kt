@@ -8,7 +8,7 @@ enum class ColorSet(
     id: Int,
     val colors: ColorQuad
 ) : NameId {
-    Classic(R.string.settings_color_classic, classicColors),
+    Normal(R.string.settings_color_normal, normalColors),
     Soft(R.string.settings_color_soft, softColors),
     Dull(R.string.settings_color_dull, dullColors),
     Inverted(R.string.settings_color_inverted, invertedColors),
@@ -35,8 +35,8 @@ data class ColorQuad(
     )
 }
 
-private val classicColors =
-    ColorQuad(R.color.classic0, R.color.classic1, R.color.classic2, R.color.classic3)
+private val normalColors =
+    ColorQuad(R.color.normal0, R.color.normal1, R.color.normal2, R.color.normal3)
 
 private val softColors =
     ColorQuad(R.color.soft0, R.color.soft1, R.color.soft2, R.color.soft3)

@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="@id/failure_body_end"
         app:layout_constraintTop_toTopOf="@id/failure_field_top"
-        tools:text="Classic" />
+        tools:text="Normal" />
 
     <hackman.trevor.copycat.ui.failure.FailureBodyText
         android:id="@+id/failure_value_score"
