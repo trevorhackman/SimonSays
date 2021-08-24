@@ -7,14 +7,6 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    signingConfigs {
-        test {
-            storeFile file('C:\\Users\\Trevor\\StudioProjects\\android2.jks')
-            storePassword 'rocketship'
-            keyPassword 'rocketship'
-            keyAlias 'StepUp'
-        }
-    }
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
@@ -22,8 +14,8 @@ android {
         applicationId "hackman.trevor.copycat"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 62
-        versionName "3.1.1"
+        versionCode 63
+        versionName "3.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
