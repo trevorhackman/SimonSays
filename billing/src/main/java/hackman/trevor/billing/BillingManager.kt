@@ -20,6 +20,7 @@ object BillingManager : LifecycleObserver {
     internal lateinit var billingClient: BillingClient
 
     fun setup(activity: FragmentActivity) {
+        this.activity?.lifecycle?.removeObserver(this) // Necessary to fix vulnerabilities from multiple activities
         this.activity = activity
         activity.lifecycle.addObserver(this)
         billingClient = BillingClient.newBuilder(activity).enablePendingPurchases()
