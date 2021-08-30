@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     private fun initDialogFactory() = DialogFactory.setup(this)
 
     private fun initAdsIfNotOwned() {
-        // TODO Disabling ads for everyone to try to improve experience and boost user acquisition for some time
+        // TODO Disabling ads for everyone
         // if (SaveData.isNoAdsOwned != Ownership.Owned) AdManager.setup(this)
     }
 
