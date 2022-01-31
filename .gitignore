@@ -14,6 +14,9 @@
 .aab
 /app/release/app-release.aab
 
+# Stores absolute path of SDK
+/local.properties
+
 # Private Keys
 AdKeys.kt
 BillingProductIds.kt

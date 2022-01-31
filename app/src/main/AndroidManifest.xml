@@ -29,7 +29,8 @@
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|fontScale|layoutDirection|smallestScreenSize|density"
             android:launchMode="singleInstance"
-            android:screenOrientation="user">
+            android:screenOrientation="user"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
