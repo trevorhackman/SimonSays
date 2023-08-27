@@ -1,11 +1,23 @@
 package hackman.trevor.billing
 
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import com.android.billingclient.api.*
-import hackman.trevor.billing.internal.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.ConsumeResponseListener
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
+import hackman.trevor.billing.internal.AcknowledgeListener
+import hackman.trevor.billing.internal.BillingStateListener
+import hackman.trevor.billing.internal.PurchaseListener
+import hackman.trevor.billing.internal.SkuRetrievalListener
+import hackman.trevor.billing.internal.billingResponseToName
+import hackman.trevor.billing.internal.isSuccessful
 import org.jetbrains.annotations.TestOnly
 
 /**
@@ -13,7 +25,7 @@ import org.jetbrains.annotations.TestOnly
  * There's two major reasons why billing may not work. No network connection or Google Play Store (required) not installed/force stopped/disabled/updating.
  * Google documentation (garbage documentation) : https://developer.android.com/google/play/billing/billing_library_overview
  */
-object BillingManager : LifecycleObserver {
+object BillingManager : DefaultLifecycleObserver {
 
     internal var activity: FragmentActivity? = null
 
@@ -76,8 +88,7 @@ object BillingManager : LifecycleObserver {
         billingClient.acknowledgePurchase(acknowledgePurchaseParams, AcknowledgeListener)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
         activity = null
     }
 

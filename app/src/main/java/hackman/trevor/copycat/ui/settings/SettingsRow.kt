@@ -2,10 +2,11 @@ package hackman.trevor.copycat.ui.settings
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import android.widget.LinearLayout
+import android.view.LayoutInflater
+import android.widget.FrameLayout
 import androidx.core.view.setMargins
 import hackman.trevor.copycat.R
+import hackman.trevor.copycat.databinding.SettingsOptionRowBinding
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.FailureSound
 import hackman.trevor.copycat.logic.settings.NameId
@@ -15,23 +16,22 @@ import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.displayMinimum
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.system.sound.SoundManager
-import kotlinx.android.synthetic.main.settings_option_row.view.*
 
 @Suppress("LeakingThis")
 abstract class SettingsRow<T> @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     private val constants: Array<T>
-) : LinearLayout(context, attributeSet) where T : Enum<T>, T : NameId {
+) : FrameLayout(context, attributeSet) where T : Enum<T>, T : NameId {
 
     protected lateinit var settingsViewModel: SettingsViewModel
 
     protected var optionSelected: T = constants.first()
         set(value) {
             field = value
-            settings_option_value.text = getString(value.nameId)
-            settings_left_arrow.isEnabled = isLeftArrowEnabled()
-            settings_right_arrow.isEnabled = isRightArrowEnabled()
+            binding.settingsOptionValue.text = getString(value.nameId)
+            binding.settingsLeftArrow.isEnabled = isLeftArrowEnabled()
+            binding.settingsRightArrow.isEnabled = isRightArrowEnabled()
             saveValueSelected()
             if (::settingsViewModel.isInitialized) onChange()
         }
@@ -40,11 +40,12 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 
     private fun isRightArrowEnabled() = optionSelected != constants.last()
 
+    protected val binding = SettingsOptionRowBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
-        View.inflate(context, R.layout.settings_option_row, this)
-        (settings_option_row.layoutParams as LayoutParams).setMargins((displayMinimum() * 0.01).toInt())
-        settings_left_arrow.setOnClickListener { onLeftArrow() }
-        settings_right_arrow.setOnClickListener { onRightArrow() }
+        (binding.settingsOptionRow.layoutParams as LayoutParams).setMargins((displayMinimum() * 0.01).toInt())
+        binding.settingsLeftArrow.setOnClickListener { onLeftArrow() }
+        binding.settingsRightArrow.setOnClickListener { onRightArrow() }
     }
 
     private fun onLeftArrow() {
@@ -73,8 +74,8 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        settings_left_arrow.isEnabled = enabled && isLeftArrowEnabled()
-        settings_right_arrow.isEnabled = enabled && isRightArrowEnabled()
+        binding.settingsLeftArrow.isEnabled = enabled && isLeftArrowEnabled()
+        binding.settingsRightArrow.isEnabled = enabled && isRightArrowEnabled()
     }
 }
 
@@ -84,7 +85,7 @@ class SettingsSpeedRow @JvmOverloads constructor(
 ) : SettingsRow<Speed>(context, attributeSet, Speed.values()) {
 
     init {
-        settings_option.text = getString(R.string.settings_setting_speed)
+        binding.settingsOption.text = getString(R.string.settings_setting_speed)
     }
 
     override fun initializeValue() {
@@ -102,7 +103,7 @@ class SettingsColorRow @JvmOverloads constructor(
 ) : SettingsRow<ColorSet>(context, attributeSet, ColorSet.values()) {
 
     init {
-        settings_option.text = getString(R.string.settings_setting_color)
+        binding.settingsOption.text = getString(R.string.settings_setting_color)
     }
 
     override fun initializeValue() {
@@ -124,7 +125,7 @@ class SettingsFailureSoundRow @JvmOverloads constructor(
 ) : SettingsRow<FailureSound>(context, attributeSet, FailureSound.values()) {
 
     init {
-        settings_option.text = getString(R.string.settings_setting_failure_sound)
+        binding.settingsOption.text = getString(R.string.settings_setting_failure_sound)
     }
 
     override fun initializeValue() {

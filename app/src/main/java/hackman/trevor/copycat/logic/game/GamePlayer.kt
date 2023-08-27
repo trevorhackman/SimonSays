@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class GamePlayer(
     private val gameViewModel: GameViewModel,
     private val failureViewModel: FailureViewModel,
-    private val lifecycle: Lifecycle
+    override val lifecycle: Lifecycle
 ) : LifecycleOwner {
 
     private lateinit var game: Game
@@ -174,8 +174,6 @@ class GamePlayer(
             correctButton = response.correct
         }
     }
-
-    override fun getLifecycle() = lifecycle
 
     companion object {
         private const val startGameDelay = 1000L

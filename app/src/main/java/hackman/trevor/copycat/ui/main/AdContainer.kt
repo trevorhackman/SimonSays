@@ -16,7 +16,7 @@ class AdContainer @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : FrameLayout(context, attributeSet), LifecycleOwner {
 
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
     private var initial = true
 
@@ -27,7 +27,7 @@ class AdContainer @JvmOverloads constructor(
     private var onMeasureHeightMeasureSpec = 0
 
     init {
-        if (AdManager.isEnabled) addView(AdManager.getBannerAd())
+        if (AdManager.isEnabled) AdManager // addView(AdManager.getBannerAd())
     }
 
     fun setup(lifecycle: Lifecycle) {
@@ -55,7 +55,7 @@ class AdContainer @JvmOverloads constructor(
     private fun onInitial() {
         rememberSize()
         initial = false
-        if (childCount == 0) addViewIfNotNull(AdManager.getBannerAd())
+        if (childCount == 0) AdManager // addViewIfNotNull(AdManager.getBannerAd())
     }
 
     private fun rememberSize() {
@@ -68,13 +68,11 @@ class AdContainer @JvmOverloads constructor(
 
     private fun onScreenSizeChanged() {
         rememberSize()
-        AdManager.buildBannerAd()
-        addViewIfNotNull(AdManager.getBannerAd())
+        // AdManager.buildBannerAd()
+        // addViewIfNotNull(AdManager.getBannerAd())
     }
 
     private fun addViewIfNotNull(view: View?) {
         view?.let { addView(it) }
     }
-
-    override fun getLifecycle() = lifecycle
 }

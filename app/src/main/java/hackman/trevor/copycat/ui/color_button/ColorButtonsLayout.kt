@@ -2,38 +2,35 @@ package hackman.trevor.copycat.ui.color_button
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import hackman.trevor.copycat.R
+import hackman.trevor.copycat.databinding.ColorGridBinding
 import hackman.trevor.copycat.logic.game.GameButton
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.sound.SoundManager
-import kotlinx.android.synthetic.main.color_grid.view.*
 
 class ColorButtonsLayout @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : ConstraintLayout(context, attributeSet), LifecycleOwner {
+) : FrameLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var gameViewModel: GameViewModel
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
-    init {
-        View.inflate(context, R.layout.color_grid, this)
-    }
+    private val binding = ColorGridBinding.inflate(LayoutInflater.from(context), this, true)
 
     private val buttons = listOf(
-        color_button_top_left,
-        color_button_top_right,
-        color_button_bottom_left,
-        color_button_bottom_right
+        binding.colorButtonTopLeft,
+        binding.colorButtonTopRight,
+        binding.colorButtonBottomLeft,
+        binding.colorButtonBottomRight
     )
 
     fun setup(settingsViewModel: SettingsViewModel, gameViewModel: GameViewModel, lifecycle: Lifecycle) {
@@ -50,17 +47,17 @@ class ColorButtonsLayout @JvmOverloads constructor(
     }
 
     private fun setupInfoText() {
-        info_text_left_switcher.setup(gameViewModel, lifecycle)
-        info_text_right_switcher.setup(gameViewModel, lifecycle)
+        binding.infoTextLeftSwitcher.setup(gameViewModel, lifecycle)
+        binding.infoTextRightSwitcher.setup(gameViewModel, lifecycle)
     }
 
-    private fun setupMainButton() = main_button.setup(gameViewModel, lifecycle)
+    private fun setupMainButton() = binding.mainButton.setup(gameViewModel, lifecycle)
 
     private fun setSounds() {
-        color_button_top_left.sound = SoundManager.chip1
-        color_button_top_right.sound = SoundManager.chip2
-        color_button_bottom_left.sound = SoundManager.chip3
-        color_button_bottom_right.sound = SoundManager.chip4
+        binding.colorButtonTopLeft.sound = SoundManager.chip1
+        binding.colorButtonTopRight.sound = SoundManager.chip2
+        binding.colorButtonBottomLeft.sound = SoundManager.chip3
+        binding.colorButtonBottomRight.sound = SoundManager.chip4
     }
 
     private fun setListeners() = buttons.forEach(::setTouchListener)
@@ -91,10 +88,10 @@ class ColorButtonsLayout @JvmOverloads constructor(
     }
 
     private fun observeColorSettings() = observe(settingsViewModel.colorSet) {
-        color_button_top_left.setColorResource(it.colors.topLeft)
-        color_button_top_right.setColorResource(it.colors.topRight)
-        color_button_bottom_left.setColorResource(it.colors.bottomLeft)
-        color_button_bottom_right.setColorResource(it.colors.bottomRight)
+        binding.colorButtonTopLeft.setColorResource(it.colors.topLeft)
+        binding.colorButtonTopRight.setColorResource(it.colors.topRight)
+        binding.colorButtonBottomLeft.setColorResource(it.colors.bottomLeft)
+        binding.colorButtonBottomRight.setColorResource(it.colors.bottomRight)
     }
 
     private fun observeButtonPlayBack() = observe(gameViewModel.buttonPlayBack) { gameButton ->
@@ -114,6 +111,4 @@ class ColorButtonsLayout @JvmOverloads constructor(
     private fun enableButtons() = buttons.forEach { it.isEnabled = true }
 
     private fun disableButtons() = buttons.forEach { it.isEnabled = false }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 }

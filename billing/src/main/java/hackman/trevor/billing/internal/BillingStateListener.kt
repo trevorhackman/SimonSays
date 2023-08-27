@@ -5,7 +5,10 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
-import hackman.trevor.billing.*
+import hackman.trevor.billing.BillingManager
+import hackman.trevor.billing.NO_ADS_LIST
+import hackman.trevor.billing.Ownership
+import hackman.trevor.billing.model
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

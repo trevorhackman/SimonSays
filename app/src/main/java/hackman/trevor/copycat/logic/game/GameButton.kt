@@ -5,7 +5,8 @@ import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.system.StringResource
 
 /** @param buttonNumber IntRange from 0 to 3 representing the four game buttons */
-inline class GameButton(val buttonNumber: Int)
+@JvmInline
+value class GameButton(val buttonNumber: Int)
 
 fun GameButton?.name(colorSet: ColorSet) = when (colorSet) {
     ColorSet.Normal -> normalName()

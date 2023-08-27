@@ -1,13 +1,14 @@
 package hackman.trevor.copycat
 
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 fun MainActivity.activityInterface(): Lazy<ActivityInterface> = viewModels<ActivityFragmentInterfaceViewModel>()
-fun BaseFragment.fragmentInterface(): Lazy<FragmentInterface> = activityViewModels<ActivityFragmentInterfaceViewModel>()
+fun Fragment.fragmentInterface(): Lazy<FragmentInterface> = activityViewModels<ActivityFragmentInterfaceViewModel>()
 
 class ActivityFragmentInterfaceViewModel : ViewModel(), ActivityInterface, FragmentInterface {
     override var onBackPressed: (() -> BackEvent)? = null
@@ -54,8 +55,9 @@ interface FragmentInterface {
     fun setOrientation(orientation: Orientation)
 }
 
+@JvmInline
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-inline class BackEvent private constructor(val consumed: Boolean) {
+value class BackEvent private constructor(val consumed: Boolean) {
     companion object {
         val Consumed = BackEvent(true)
         val CallSuper = BackEvent(false)

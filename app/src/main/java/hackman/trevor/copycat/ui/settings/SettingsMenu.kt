@@ -2,11 +2,11 @@ package hackman.trevor.copycat.ui.settings
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.LayoutInflater
+import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import hackman.trevor.copycat.R
+import hackman.trevor.copycat.databinding.SettingsMenuBinding
 import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.displayHeight
@@ -14,20 +14,17 @@ import hackman.trevor.copycat.system.displayWidth
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
-import kotlinx.android.synthetic.main.settings_menu.view.*
 import kotlin.math.min
 
 class SettingsMenu @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : ConstraintLayout(context, attributeSet), LifecycleOwner {
+) : FrameLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var settingsViewModel: SettingsViewModel
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
-    init {
-        View.inflate(context, R.layout.settings_menu, this)
-    }
+    private val binding = SettingsMenuBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun setup(
         settingsViewModel: SettingsViewModel,
@@ -42,13 +39,13 @@ class SettingsMenu @JvmOverloads constructor(
         observeInBackground()
     }
 
-    private fun setupSpeedOption() = settings_option_speed.setup(settingsViewModel)
+    private fun setupSpeedOption() = binding.settingsOptionSpeed.setup(settingsViewModel)
 
-    private fun setupColorOption() = settings_option_color.setup(settingsViewModel)
+    private fun setupColorOption() = binding.settingsOptionColor.setup(settingsViewModel)
 
-    private fun setupFailureOption() = settings_option_failure.setup(settingsViewModel)
+    private fun setupFailureOption() = binding.settingsOptionFailure.setup(settingsViewModel)
 
-    private fun setOnCloseClickListener() = settings_close_button.setOnClickListener {
+    private fun setOnCloseClickListener() = binding.settingsCloseButton.setOnClickListener {
         settingsViewModel.setInBackground(true)
         SoundManager.click.play()
     }
@@ -62,10 +59,10 @@ class SettingsMenu @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        settings_option_speed.isEnabled = enabled
-        settings_option_color.isEnabled = enabled
-        settings_option_failure.isEnabled = enabled
-        settings_close_button.isEnabled = enabled
+        binding.settingsOptionSpeed.isEnabled = enabled
+        binding.settingsOptionColor.isEnabled = enabled
+        binding.settingsOptionFailure.isEnabled = enabled
+        binding.settingsCloseButton.isEnabled = enabled
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -74,6 +71,4 @@ class SettingsMenu @JvmOverloads constructor(
     }
 
     private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
-
-    override fun getLifecycle() = lifecycle
 }

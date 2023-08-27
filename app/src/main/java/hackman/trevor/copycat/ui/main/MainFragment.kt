@@ -7,6 +7,8 @@ import androidx.lifecycle.lifecycleScope
 import hackman.trevor.billing.Billing
 import hackman.trevor.billing.BillingResponse.*
 import hackman.trevor.copycat.*
+import hackman.trevor.copycat.databinding.MainFragmentBinding
+import hackman.trevor.copycat.databinding.TitleBinding
 import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.remove_ads.Prices
@@ -17,11 +19,8 @@ import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.getString
 import hackman.trevor.copycat.ui.*
 import hackman.trevor.copycat.ui.game_modes.popupText
-import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.title.*
 
-class MainFragment : BaseFragment() {
-    override val layout = R.layout.main_fragment
+class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBinding::inflate) {
 
     private val viewLifecycle by lazy {
         viewLifecycleOwner.lifecycle
@@ -49,7 +48,12 @@ class MainFragment : BaseFragment() {
     private var popInRan = false
     private var inGame = false
 
+    private var _includedTitleBinding: TitleBinding? = null
+    private val includedTitleBinding get() = _includedTitleBinding!!
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        _includedTitleBinding = TitleBinding.bind(binding.root)
+
         setupColorButtons()
         setupExtraButtons()
         setupSettingsMenu()
@@ -71,30 +75,30 @@ class MainFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         if (!popInRan) {
-            main_title.popIn()
+            includedTitleBinding.mainTitle.popIn()
             popInRan = true
         }
     }
 
-    private fun setupColorButtons() = color_buttons.setup(settingsViewModel, gameViewModel, viewLifecycle)
+    private fun setupColorButtons() = binding.colorButtons.setup(settingsViewModel, gameViewModel, viewLifecycle)
 
-    private fun setupExtraButtons() = extra_buttons_layout.setup(
+    private fun setupExtraButtons() = binding.extraButtonsLayout.setup(
         settingsViewModel,
         gameModesViewModel,
         removeAdsViewModel
     )
 
-    private fun setupSettingsMenu() = settings_menu.setup(settingsViewModel, viewLifecycle)
+    private fun setupSettingsMenu() = binding.settingsMenu.setup(settingsViewModel, viewLifecycle)
 
-    private fun setupGameModesMenu() = game_modes_menu.setup(gameModesViewModel, viewLifecycle)
+    private fun setupGameModesMenu() = binding.gameModesMenu.setup(gameModesViewModel, viewLifecycle)
 
-    private fun setupFailureMenu() = failure_menu.setup(failureViewModel, gameViewModel, viewLifecycle)
+    private fun setupFailureMenu() = binding.failureMenu.setup(failureViewModel, gameViewModel, viewLifecycle)
 
-    private fun setupRemoveAdsMenu() = remove_ads_menu.setup(removeAdsViewModel, viewLifecycle)
+    private fun setupRemoveAdsMenu() = binding.removeAdsMenu.setup(removeAdsViewModel, viewLifecycle)
 
-    private fun setupInstructions() = instructions.setup(lifecycleScope)
+    private fun setupInstructions() = binding.instructions.setup(lifecycleScope)
 
-    private fun setupAdContainer() = ad_container.setup(viewLifecycle)
+    private fun setupAdContainer() = binding.adContainer.setup(viewLifecycle)
 
     private fun observeBillingSkuDetails() = observe(Billing.liveData.skuDetails) {
         removeAdsViewModel.prices.value = Prices(it[0].price, it[1].price, it[2].price, it[3].price)
@@ -145,7 +149,7 @@ class MainFragment : BaseFragment() {
 
     private fun observeGameMode() = observe(gameModesViewModel.gameMode) {
         gameViewModel.gameMode.value = it
-        instructions.text = getString(it.popupText())
+        binding.instructions.text = getString(it.popupText())
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
@@ -168,14 +172,14 @@ class MainFragment : BaseFragment() {
         failureViewModel.setInBackground(false)
         cancelInstructions()
         SaveData.gamesCompleted++
-        if (AdManager.isEnabled && !wouldBeBadInitialExperience()) AdManager.showInterstitialAd(0.30)
+        if (AdManager.isEnabled && !wouldBeBadInitialExperience()) AdManager // AdManager.showInterstitialAd(0.30)
     }
 
     // Would be bad initial experience to show ad on first several games
     private fun wouldBeBadInitialExperience() = SaveData.gamesCompleted < 6
 
     // Cancel instructions in case they're still up
-    private fun cancelInstructions() = instructions.apply {
+    private fun cancelInstructions() = binding.instructions.apply {
         cancelAnimation()
         fadeOut()
     }
@@ -184,28 +188,28 @@ class MainFragment : BaseFragment() {
         if (!inGame) {
             inGame = true
             fadeTitleAndExtraButtons(false, outSpeed = fade_out_900)
-            instructions.animateInstructions()
+            binding.instructions.animateInstructions()
             gamePlayer.startGame()
             setInGameBackBehavior()
         }
     }
 
     private fun fadeTitleAndExtraButtons(fadeIn: Boolean, inSpeed: Long = fade_in_500, outSpeed: Long = fade_out_300) {
-        fade_top.pivotY = fade_top.y
+        binding.fadeTop.pivotY = binding.fadeTop.y
         if (fadeIn) {
-            main_title.fadeIn().duration = inSpeed
-            extra_buttons_layout.animate { fadeIn().setDuration(inSpeed) }
-            fade_top.animate().scaleY(1f).duration = inSpeed
+            includedTitleBinding.mainTitle.fadeIn().duration = inSpeed
+            binding.extraButtonsLayout.animate { fadeIn().setDuration(inSpeed) }
+            binding.fadeTop.animate().scaleY(1f).duration = inSpeed
         } else {
-            main_title.fadeOut().duration = outSpeed
-            extra_buttons_layout.animate { fadeOut().setDuration(outSpeed) }
-            fade_top.animate().scaleY(0.5f).duration = outSpeed
+            includedTitleBinding.mainTitle.fadeOut().duration = outSpeed
+            binding.extraButtonsLayout.animate { fadeOut().setDuration(outSpeed) }
+            binding.fadeTop.animate().scaleY(0.5f).duration = outSpeed
         }
     }
 
     private fun fadeAdContainer(fadeIn: Boolean) =
-        if (fadeIn) ad_container.fadeIn()
-        else ad_container.fadeOut()
+        if (fadeIn) binding.adContainer.fadeIn()
+        else binding.adContainer.fadeOut()
 
     private fun setInGameBackBehavior() = fragmentInterface.setBackBehavior {
         if (inLongGame()) {

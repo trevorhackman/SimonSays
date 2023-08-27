@@ -2,9 +2,8 @@ package hackman.trevor.copycat.system.sound
 
 import android.media.SoundPool
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.system.log
 import hackman.trevor.copycat.system.report
@@ -15,7 +14,7 @@ import hackman.trevor.copycat.system.report
 // This results in two instances of the same activity, going through different lifecycle states, to exist simultaneously.
 // This messes up and causes unexpected issues in a singleton lifecycle-dependent class like this. Tried on API 30.
 // Fixed by removing old observer.
-object SoundManager : LifecycleObserver {
+object SoundManager : DefaultLifecycleObserver {
 
     private var activity: AppCompatActivity? = null
 
@@ -52,30 +51,25 @@ object SoundManager : LifecycleObserver {
         activity.lifecycle.addObserver(this)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    private fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         buildSoundPoolIfNeeded()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    private fun onStart() {
+    override fun onStart(owner: LifecycleOwner) {
         buildSoundPoolIfNeeded()
         enableAllSounds()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
         buildSoundPoolIfNeeded()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    private fun onStop() {
+    override fun onStop(owner: LifecycleOwner) {
         releaseResources(initial = true)
         disableAllSounds()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
         releaseResources(initial = false) // For safety
         activity = null
     }

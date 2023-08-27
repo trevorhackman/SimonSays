@@ -2,33 +2,30 @@ package hackman.trevor.copycat.ui.remove_ads
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.LayoutInflater
+import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.billing.Billing
 import hackman.trevor.billing.Ownership
-import hackman.trevor.copycat.R
+import hackman.trevor.copycat.databinding.RemoveAdsMenuBinding
 import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.displayHeight
 import hackman.trevor.copycat.system.displayWidth
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
-import kotlinx.android.synthetic.main.remove_ads_menu.view.*
 import kotlin.math.min
 
 class RemoveAdsMenu @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : ConstraintLayout(context, attributeSet), LifecycleOwner {
+) : FrameLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var removeAdsViewModel: RemoveAdsViewModel
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
-    init {
-        View.inflate(context, R.layout.remove_ads_menu, this)
-    }
+    private val binding = RemoveAdsMenuBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun setup(removeAdsViewModel: RemoveAdsViewModel, lifecycle: Lifecycle) {
         this.removeAdsViewModel = removeAdsViewModel
@@ -39,9 +36,9 @@ class RemoveAdsMenu @JvmOverloads constructor(
         observeBillingOwnership()
     }
 
-    private fun setupButtons() = ads_menu_buttons.setup(removeAdsViewModel, lifecycle)
+    private fun setupButtons() = binding.adsMenuButtons.setup(removeAdsViewModel, lifecycle)
 
-    private fun setupCloseButton() = ads_menu_close_button.setOnClickListener {
+    private fun setupCloseButton() = binding.adsMenuCloseButton.setOnClickListener {
         removeAdsViewModel.closeClicked()
     }
 
@@ -59,8 +56,8 @@ class RemoveAdsMenu @JvmOverloads constructor(
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        ads_menu_close_button.isEnabled = enabled
-        ads_menu_buttons.isEnabled = enabled
+        binding.adsMenuCloseButton.isEnabled = enabled
+        binding.adsMenuButtons.isEnabled = enabled
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -69,6 +66,4 @@ class RemoveAdsMenu @JvmOverloads constructor(
     }
 
     private fun determineWidth() = min(displayWidth(), (displayWidth() + displayHeight()) / 2)
-
-    override fun getLifecycle() = lifecycle
 }

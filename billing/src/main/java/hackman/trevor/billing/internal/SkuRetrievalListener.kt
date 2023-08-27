@@ -11,7 +11,7 @@ import hackman.trevor.billing.model
 // Important to get prices to display which will vary by currency
 internal object SkuRetrievalListener : SkuDetailsResponseListener {
 
-    var isRetry = false
+    private var isRetry = false
 
     fun retrySkuRetrieval() {
         isRetry = true

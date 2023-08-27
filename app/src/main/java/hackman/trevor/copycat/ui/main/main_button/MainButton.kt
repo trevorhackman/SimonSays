@@ -2,21 +2,25 @@ package hackman.trevor.copycat.ui.main.main_button
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import hackman.trevor.copycat.R
+import hackman.trevor.copycat.databinding.MainButtonFrameLayoutBinding
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.viewmodels.GameViewModel
 import hackman.trevor.copycat.observe
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.ui.*
+import hackman.trevor.copycat.ui.fadeIn
+import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.copycat.ui.fade_in_900
+import hackman.trevor.copycat.ui.fade_out_900
 import hackman.trevor.copycat.ui.game_modes.name
 import hackman.trevor.copycat.ui.main.CircularTouchListener
-import kotlinx.android.synthetic.main.main_button_frame_layout.view.*
+import hackman.trevor.copycat.ui.plainFadeIn
+import hackman.trevor.copycat.ui.plainFadeOut
 
 class MainButton @JvmOverloads constructor(
     context: Context,
@@ -24,11 +28,9 @@ class MainButton @JvmOverloads constructor(
 ) : FrameLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var gameViewModel: GameViewModel
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
-    init {
-        View.inflate(context, R.layout.main_button_frame_layout, this)
-    }
+    private val binding = MainButtonFrameLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun setup(gameViewModel: GameViewModel, lifecycle: Lifecycle) {
         this.gameViewModel = gameViewModel
@@ -40,8 +42,8 @@ class MainButton @JvmOverloads constructor(
     }
 
     private fun observeGameMode() = observe(gameViewModel.gameMode) {
-        main_button_game_mode_text.text = getString(it.name())
-        main_button_game_mode_text.isVisible = it != GameMode.Normal
+        binding.mainButtonGameModeText.text = getString(it.name())
+        binding.mainButtonGameModeText.isVisible = it != GameMode.Normal
     }
 
     private fun observeGameState() = observe(gameViewModel.gameState) {
@@ -52,18 +54,18 @@ class MainButton @JvmOverloads constructor(
     }
 
     private fun onMainMenu() {
-        main_button_play_icon.fadeIn {
-            main_button_play_icon.gyrate()
+        binding.mainButtonPlayIcon.fadeIn {
+            binding.mainButtonPlayIcon.gyrate()
         }.scaleX(1f).scaleY(1f).duration = fade_in_900
-        main_button_game_mode_text.plainFadeIn()
-        main_button_round_text.isVisible = false
+        binding.mainButtonGameModeText.plainFadeIn()
+        binding.mainButtonRoundText.isVisible = false
         unshrink()
     }
 
     private fun onGame() {
-        main_button_play_icon.fadeOut().scaleX(0.45f).scaleY(0.45f).duration = fade_out_900
-        main_button_game_mode_text.plainFadeOut()
-        main_button_round_text.fadeIn()
+        binding.mainButtonPlayIcon.fadeOut().scaleX(0.45f).scaleY(0.45f).duration = fade_out_900
+        binding.mainButtonGameModeText.plainFadeOut()
+        binding.mainButtonRoundText.fadeIn()
         shrink()
     }
 
@@ -72,7 +74,7 @@ class MainButton @JvmOverloads constructor(
     private fun shrink() = animate().setDuration(1000).scaleX(0.90f).scaleY(0.90f)
 
     private fun observeRoundNumber() = observe(gameViewModel.roundNumber) {
-        main_button_round_text.text = it.roundNumber.toString()
+        binding.mainButtonRoundText.text = it.roundNumber.toString()
     }
 
     override fun performClick(): Boolean {
@@ -85,6 +87,4 @@ class MainButton @JvmOverloads constructor(
     private fun startGame() {
         gameViewModel.gameState.value = GameState.Watch
     }
-
-    override fun getLifecycle() = lifecycle
 }

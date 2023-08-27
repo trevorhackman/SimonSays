@@ -17,7 +17,7 @@ class RemoveAdsButtonLayout @JvmOverloads constructor(
 ) : ConstraintLayout(context, attributeSet), LifecycleOwner {
 
     private lateinit var removeAdsViewModel: RemoveAdsViewModel
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
     private val buttons: List<RemoveAdsProductButton>
         get() = listOf(
@@ -69,6 +69,4 @@ class RemoveAdsButtonLayout @JvmOverloads constructor(
         it.measure(widthSpec, heightSpec)
         it.measuredWidth
     }.maxOrNull()!!
-
-    override fun getLifecycle() = lifecycle
 }

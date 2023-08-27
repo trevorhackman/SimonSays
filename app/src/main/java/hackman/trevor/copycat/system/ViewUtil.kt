@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import hackman.trevor.copycat.BaseFragment
 import kotlin.math.min
 
 //region Resource Getters
@@ -29,9 +28,9 @@ fun View.getColor(resId: Int) = ContextCompat.getColor(context, resId)
 
 fun View.getDrawable(resId: Int) = context.getDrawable(resId)
 
-fun BaseFragment.getColor(colorResource: ColorResource) = getColor(colorResource.color)
+fun Fragment.getColor(colorResource: ColorResource) = getColor(colorResource.color)
 
-private fun BaseFragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
+private fun Fragment.getColor(resId: Int) = ContextCompat.getColor(requireContext(), resId)
 
 //endregion
 

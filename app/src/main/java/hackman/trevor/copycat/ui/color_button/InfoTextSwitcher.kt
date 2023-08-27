@@ -20,7 +20,7 @@ class InfoTextSwitcher @JvmOverloads constructor(
 ) : TextSwitcher(context, attributeSet), LifecycleOwner {
 
     private lateinit var gameViewModel: GameViewModel
-    private lateinit var lifecycle: Lifecycle
+    override lateinit var lifecycle: Lifecycle
 
     private val infoTextChildren: List<InfoText>
         get() = children.toList().map { it as InfoText }
@@ -44,6 +44,4 @@ class InfoTextSwitcher @JvmOverloads constructor(
     private fun observeInfoText() = observe(gameViewModel.infoText) {
         setText(getString(it))
     }
-
-    override fun getLifecycle() = lifecycle
 }
