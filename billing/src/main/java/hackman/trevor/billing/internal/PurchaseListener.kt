@@ -4,7 +4,11 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import hackman.trevor.billing.*
+import hackman.trevor.billing.BillingManager
+import hackman.trevor.billing.BillingResponse
+import hackman.trevor.billing.NO_ADS_LIST
+import hackman.trevor.billing.Ownership
+import hackman.trevor.billing.model
 
 internal object PurchaseListener : PurchasesUpdatedListener {
 
@@ -52,10 +56,14 @@ internal object PurchaseListener : PurchasesUpdatedListener {
 
         // Not sure why there would be more than one purchase updated at a time, but to be thorough we'll loop through the whole list
         purchases.forEach { purchase ->
-            when {
-                NO_ADS_LIST.contains(purchase.sku) -> onNoAdsPurchased()
-                else -> onUnknownPurchase(purchase)
+            var recognizePurchase = false
+            purchase.products.forEach { product ->
+                if (NO_ADS_LIST.contains(product)) {
+                    onNoAdsPurchased()
+                    recognizePurchase = true
+                }
             }
+            if (!recognizePurchase) onUnknownPurchase(purchase)
             if (!purchase.isAcknowledged) BillingManager.acknowledgePurchase(purchase)
         }
     }
@@ -66,7 +74,7 @@ internal object PurchaseListener : PurchasesUpdatedListener {
     }
 
     private fun onUnknownPurchase(purchase: Purchase) {
-        model.report.value = "This shouldn't happen. Unknown purchase : ${purchase.sku} ${purchase.purchaseToken}"
+        model.report.value = "This shouldn't happen. Unknown purchase : ${purchase.products} ${purchase.purchaseToken}"
         model.billingResponse.value = BillingResponse.UNKNOWN_ERROR.apply {
             errorMessage = "Sorry, unknown item purchased"
         }

@@ -5,6 +5,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.QueryPurchasesParams
 import hackman.trevor.billing.BillingManager
 import hackman.trevor.billing.NO_ADS_LIST
 import hackman.trevor.billing.Ownership
@@ -35,20 +36,17 @@ internal object BillingStateListener : BillingClientStateListener {
 
     // Make a non-network check to Google Play Store's cache for what purchases have been made
     private fun queryPurchases() {
-        val purchasesResult = BillingManager.billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+        BillingManager.billingClient.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
+        ) { billingResult: BillingResult, purchases: List<Purchase> ->
+            if (billingResult.isSuccessful()) "queryPurchases queryPurchasesAsync success : ${billingResponseToName(billingResult)}"
+            else "queryPurchases queryPurchasesAsync failed : ${billingResponseToName(billingResult)}"
 
-        val purchases = purchasesResult.purchasesList?.filterNotNull()
-
-        when {
-            purchases == null -> onNullPurchases(purchasesResult)
-            purchases.isEmpty() -> onEmptyPurchases()
-            else -> onSuccessfulPurchaseQuery(purchases)
+            when {
+                purchases.isEmpty() -> onEmptyPurchases()
+                else -> onSuccessfulPurchaseQuery(purchases)
+            }
         }
-    }
-
-    private fun onNullPurchases(purchasesResult: Purchase.PurchasesResult) {
-        model.report.value =
-            "Why are purchases null? : ${billingResponseToName(purchasesResult)} ${purchasesResult.billingResult.debugMessage}"
     }
 
     private fun onEmptyPurchases() {
@@ -58,8 +56,14 @@ internal object BillingStateListener : BillingClientStateListener {
 
     private fun onSuccessfulPurchaseQuery(purchases: List<Purchase>) {
         purchases.forEach { purchase ->
-            if (NO_ADS_LIST.contains(purchase.sku)) onFoundNoAdsPurchased(purchase)
-            else onFoundUnknownPurchase(purchase)
+            var recognizePurchase = false
+            purchase.products.forEach { product ->
+                if (NO_ADS_LIST.contains(product)) {
+                    onFoundNoAdsPurchased(purchase)
+                    recognizePurchase = true
+                }
+            }
+            if (!recognizePurchase) onFoundUnknownPurchase(purchase)
         }
     }
 
@@ -67,12 +71,12 @@ internal object BillingStateListener : BillingClientStateListener {
         if (!purchase.isAcknowledged) BillingManager.acknowledgePurchase(purchase)
 
         model.ownership.value = Ownership.Owned
-        model.flog.value = "${purchase.sku} owned"
+        model.flog.value = "${purchase.products} owned"
     }
 
     private fun onFoundUnknownPurchase(purchase: Purchase) {
         model.report.value =
-            "This shouldn't happen. Unknown queryPurchase result?: ${purchase.sku} ${purchase.purchaseToken}"
+            "This shouldn't happen. Unknown queryPurchase result?: ${purchase.products} ${purchase.purchaseToken}"
     }
 
     private fun onFailedConnection(billingResult: BillingResult) {

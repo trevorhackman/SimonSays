@@ -7,9 +7,11 @@ import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.ConsumeResponseListener
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import hackman.trevor.billing.internal.AcknowledgeListener
@@ -75,7 +77,7 @@ object BillingManager : DefaultLifecycleObserver {
     internal fun querySkuDetails() {
         val skuDetailsParams = SkuDetailsParams.newBuilder()
             .setSkusList(NO_ADS_LIST)
-            .setType(BillingClient.SkuType.INAPP)
+            .setType(BillingClient.ProductType.INAPP)
             .build()
 
         billingClient.querySkuDetailsAsync(skuDetailsParams, SkuRetrievalListener)
@@ -106,21 +108,27 @@ object BillingManager : DefaultLifecycleObserver {
         }
 
         // Get purchases if any
-        val purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP).purchasesList
-        if (purchases.isNullOrEmpty()) {
-            model.log.value = "No purchases to consume"
-        } else for (purchase in purchases) {
-            val consumeParams = ConsumeParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
-            billingClient.consumeAsync(
-                consumeParams,
-                listener
-            )
-            model.log.value = "Consuming ${purchase.sku}"
-        }
+        billingClient.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
+        ) { billingResult: BillingResult, purchases: List<Purchase> ->
+            if (billingResult.isSuccessful()) "forTestingConsumeAllPurchases queryPurchasesAsync success : ${billingResponseToName(billingResult)}"
+            else "forTestingConsumeAllPurchases queryPurchasesAsync failed : ${billingResponseToName(billingResult)}"
 
-        // Reset Keys
-        model.ownership.value = Ownership.Unknown
+            if (purchases.isEmpty()) {
+                model.log.value = "No purchases to consume"
+            } else for (purchase in purchases) {
+                val consumeParams = ConsumeParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient.consumeAsync(
+                    consumeParams,
+                    listener
+                )
+                model.log.value = "Consuming ${purchase.products}"
+            }
+
+            // Reset Keys
+            model.ownership.value = Ownership.Unknown
+        }
     }
 }

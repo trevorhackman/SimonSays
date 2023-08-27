@@ -2,7 +2,6 @@ package hackman.trevor.billing.internal
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.Purchase
 import hackman.trevor.billing.model
 
 internal fun BillingResult.isSuccessful() = responseCode == BillingClient.BillingResponseCode.OK
@@ -24,8 +23,10 @@ internal fun billingResponseToName(billingResponseCode: Int): String {
         6 -> return "ERROR"
         7 -> return "ITEM_ALREADY_OWNED"
         8 -> return "ITEM_NOT_OWNED"
+        12 -> return "NETWORK_ERROR"
         -1 -> return "SERVICE_DISCONNECTED"
         -2 -> return "FEATURE_NOT_SUPPORTED"
+        -3 -> return "SERVICE_TIMEOUT"
     }
     model.report.value = "ERROR : Invalid response code"
     return "ERROR : Invalid response code"
@@ -34,7 +35,3 @@ internal fun billingResponseToName(billingResponseCode: Int): String {
 // Overload
 internal fun billingResponseToName(billingResult: BillingResult): String =
     billingResponseToName(billingResult.responseCode)
-
-// Overload
-internal fun billingResponseToName(purchasesResult: Purchase.PurchasesResult): String =
-    billingResponseToName(purchasesResult.billingResult)
