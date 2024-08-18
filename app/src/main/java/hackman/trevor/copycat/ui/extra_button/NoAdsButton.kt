@@ -7,6 +7,7 @@ import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.R
 import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
 import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.getDrawable
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
@@ -27,6 +28,10 @@ class NoAdsButton @JvmOverloads constructor(
         DialogFactory.billingUnavailable()
     }
 
+    private val adsAreDisabledForThisVersion by lazy {
+        DialogFactory.adsAreDisabledForThisVersion()
+    }
+
     init {
         setBackground()
         setOnClickListener()
@@ -43,6 +48,7 @@ class NoAdsButton @JvmOverloads constructor(
     private fun setOnClickListener() = setOnClickListener {
         SoundManager.click.play()
         when {
+            !AdManager.IS_ENABLED -> adsAreDisabledForThisVersion.showCorrectly()
             SaveData.isNoAdsOwned == Ownership.Owned -> noAdsAlreadyPurchased.showCorrectly()
             !BillingManager.isReady -> billingUnavailable.showCorrectly()
             !removeAdsViewModel.isReadyToShow -> BillingManager.retryQuerySku()

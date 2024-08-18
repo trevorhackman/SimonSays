@@ -52,4 +52,9 @@
     <!-- Unknown error dialog -->
     <string name="dialog_unknown_error_title">Unknown Error</string>
     <!---->
+
+    <!-- Ads are disabled for this version of the app dialog -->
+    <string name="dialog_ads_disabled_for_this_version_of_the_app_title">Ads are disabled</string>
+    <string name="dialog_ads_disabled_for_this_version_of_the_app_message">Ads are disabled for this version of the app.</string>
+    <!---->
 </resources>
