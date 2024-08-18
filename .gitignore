@@ -6,6 +6,8 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/migrations.xml
 .DS_Store
 /build
 /captures
@@ -20,3 +22,4 @@
 # Private Keys
 AdKeys.kt
 BillingProductIds.kt
+SKUS.kt
