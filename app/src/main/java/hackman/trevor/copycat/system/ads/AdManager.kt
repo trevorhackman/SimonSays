@@ -1,7 +1,7 @@
 package hackman.trevor.copycat.system.ads
 
 object AdManager {
-    const val isEnabled = false // Disabling ads. Rewrite AdManager if I ever want to implement the latest AdMobs version.
+    const val IS_ENABLED = false // Disabling ads. Rewrite AdManager if I ever want to implement the latest AdMobs version.
 }
 
 /**

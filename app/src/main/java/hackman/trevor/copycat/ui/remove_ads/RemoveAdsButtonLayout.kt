@@ -39,7 +39,7 @@ class RemoveAdsButtonLayout @JvmOverloads constructor(
     }
 
     private fun setupButtons() = buttons.forEachIndexed { index, button ->
-        button.setup(removeAdsViewModel, Product.values()[index])
+        button.setup(removeAdsViewModel, Product.entries[index])
     }
 
     private fun observePrices() = observe(removeAdsViewModel.prices) {

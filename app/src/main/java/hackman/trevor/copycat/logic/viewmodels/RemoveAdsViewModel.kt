@@ -17,7 +17,7 @@ class RemoveAdsViewModelImpl : MenuViewModel(), RemoveAdsViewModel {
     override fun productClicked(product: Product) {
         SoundManager.click.play()
         val skuDetails = Billing.liveData.skuDetails.requireValue()
-        val skuDetail = skuDetails[Product.values().indexOf(product)]
+        val skuDetail = skuDetails[Product.entries.indexOf(product)]
         BillingManager.startPurchaseFlow(skuDetail)
     }
 

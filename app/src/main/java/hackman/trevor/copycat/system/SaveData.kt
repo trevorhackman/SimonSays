@@ -32,22 +32,22 @@ object SaveData {
 
     // Whether or not noAds has been purchased. Only show ads if not owned
     var isNoAdsOwned: Ownership
-        get() = Ownership.values()[preferences.safeGetInt(isNoAdsOwnedKey, Ownership.Unknown.ordinal)]
+        get() = Ownership.entries[preferences.safeGetInt(isNoAdsOwnedKey, Ownership.Unknown.ordinal)]
         set(value) = set(isNoAdsOwnedKey, value.ordinal)
 
     // Remember the game speed selected in the settings
     var speed: Speed
-        get() = Speed.values()[preferences.safeGetInt(speedKey, Speed.Normal.ordinal)]
+        get() = Speed.entries[preferences.safeGetInt(speedKey, Speed.Normal.ordinal)]
         set(value) = set(speedKey, value.ordinal)
 
     // Remember the color theme selected in the settings
     var colorSet: ColorSet
-        get() = ColorSet.values()[preferences.safeGetInt(colorSetKey, ColorSet.Normal.ordinal)]
+        get() = ColorSet.entries[preferences.safeGetInt(colorSetKey, ColorSet.Normal.ordinal)]
         set(value) = set(colorSetKey, value.ordinal)
 
     // Remember the failure sound selected in the settings
     var failureSound: FailureSound
-        get() = FailureSound.values()[preferences.safeGetInt(failureSoundKey, FailureSound.BitGenerated.ordinal)]
+        get() = FailureSound.entries[preferences.safeGetInt(failureSoundKey, FailureSound.BitGenerated.ordinal)]
         set(value) = set(failureSoundKey, value.ordinal)
 
     // Whether or not rating dialog has been displayed before
@@ -57,7 +57,7 @@ object SaveData {
 
     // Remember the game mode last selected
     var gameMode: GameMode
-        get() = GameMode.values()[preferences.safeGetInt(gameModeKey, GameMode.Normal.ordinal)]
+        get() = GameMode.entries[preferences.safeGetInt(gameModeKey, GameMode.Normal.ordinal)]
         set(value) = set(gameModeKey, value.ordinal)
 
     // Track the number of games completed

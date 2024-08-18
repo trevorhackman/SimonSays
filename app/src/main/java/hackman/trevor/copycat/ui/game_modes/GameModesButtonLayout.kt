@@ -70,7 +70,7 @@ class GameModesButtonLayout @JvmOverloads constructor(
     }.maxOrNull()!!
 
     private fun setTextToAllButtons() = buttons.forEachIndexed { index, button ->
-        button.text = getString(GameMode.values()[index].name())
+        button.text = getString(GameMode.entries[index].name())
     }
 
     fun setup(gameModesViewModel: GameModesViewModel) {
@@ -84,13 +84,13 @@ class GameModesButtonLayout @JvmOverloads constructor(
     }
 
     private fun setupButtons() = buttons.forEachIndexed { index, button ->
-        button.setup(GameMode.values()[index])
+        button.setup(GameMode.entries[index])
     }
 
     private fun GameModesButton.setup(gameMode: GameMode) = setup(gameModesViewModel, gameMode)
 
     fun setSelectedMode(gameMode: GameMode) {
-        val highlightedIndex = GameMode.values().indexOf(gameMode)
+        val highlightedIndex = GameMode.entries.indexOf(gameMode)
         buttons.forEachIndexed { index, button ->
             button.highlighted = index == highlightedIndex
         }

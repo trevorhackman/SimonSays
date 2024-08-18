@@ -5,20 +5,44 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import hackman.trevor.billing.Billing
-import hackman.trevor.billing.BillingResponse.*
-import hackman.trevor.copycat.*
+import hackman.trevor.billing.BillingResponse.BILLING_UNAVAILABLE
+import hackman.trevor.billing.BillingResponse.NETWORK_ERROR
+import hackman.trevor.billing.BillingResponse.SUCCESSFUL_PURCHASE
+import hackman.trevor.billing.BillingResponse.UNKNOWN_ERROR
+import hackman.trevor.copycat.BackEvent
+import hackman.trevor.copycat.Orientation
+import hackman.trevor.copycat.ViewBindingFragment
 import hackman.trevor.copycat.databinding.MainFragmentBinding
 import hackman.trevor.copycat.databinding.TitleBinding
+import hackman.trevor.copycat.fragmentInterface
 import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.remove_ads.Prices
 import hackman.trevor.copycat.logic.settings.toSound
-import hackman.trevor.copycat.logic.viewmodels.*
+import hackman.trevor.copycat.logic.viewmodels.FailureViewModel
+import hackman.trevor.copycat.logic.viewmodels.FailureViewModelImpl
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
+import hackman.trevor.copycat.logic.viewmodels.GameModesViewModelImpl
+import hackman.trevor.copycat.logic.viewmodels.GameViewModel
+import hackman.trevor.copycat.logic.viewmodels.GameViewModelImpl
+import hackman.trevor.copycat.logic.viewmodels.Menu
+import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
+import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModelImpl
+import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
+import hackman.trevor.copycat.logic.viewmodels.SettingsViewModelImpl
+import hackman.trevor.copycat.observe
+import hackman.trevor.copycat.requireValue
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.ui.*
+import hackman.trevor.copycat.ui.DialogFactory
+import hackman.trevor.copycat.ui.fadeIn
+import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.copycat.ui.fade_in_500
+import hackman.trevor.copycat.ui.fade_out_300
+import hackman.trevor.copycat.ui.fade_out_900
 import hackman.trevor.copycat.ui.game_modes.popupText
+import hackman.trevor.copycat.ui.showCorrectly
 
 class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBinding::inflate) {
 
@@ -172,7 +196,7 @@ class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBindin
         failureViewModel.setInBackground(false)
         cancelInstructions()
         SaveData.gamesCompleted++
-        if (AdManager.isEnabled && !wouldBeBadInitialExperience()) AdManager // AdManager.showInterstitialAd(0.30)
+        if (AdManager.IS_ENABLED && !wouldBeBadInitialExperience()) AdManager // AdManager.showInterstitialAd(0.30)
     }
 
     // Would be bad initial experience to show ad on first several games

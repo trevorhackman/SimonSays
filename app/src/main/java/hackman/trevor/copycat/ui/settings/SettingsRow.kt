@@ -82,7 +82,7 @@ abstract class SettingsRow<T> @JvmOverloads constructor(
 class SettingsSpeedRow @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : SettingsRow<Speed>(context, attributeSet, Speed.values()) {
+) : SettingsRow<Speed>(context, attributeSet, Speed.entries.toTypedArray()) {
 
     init {
         binding.settingsOption.text = getString(R.string.settings_setting_speed)
@@ -100,7 +100,7 @@ class SettingsSpeedRow @JvmOverloads constructor(
 class SettingsColorRow @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : SettingsRow<ColorSet>(context, attributeSet, ColorSet.values()) {
+) : SettingsRow<ColorSet>(context, attributeSet, ColorSet.entries.toTypedArray()) {
 
     init {
         binding.settingsOption.text = getString(R.string.settings_setting_color)
@@ -122,7 +122,7 @@ class SettingsColorRow @JvmOverloads constructor(
 class SettingsFailureSoundRow @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
-) : SettingsRow<FailureSound>(context, attributeSet, FailureSound.values()) {
+) : SettingsRow<FailureSound>(context, attributeSet, FailureSound.entries.toTypedArray()) {
 
     init {
         binding.settingsOption.text = getString(R.string.settings_setting_failure_sound)
