@@ -13,7 +13,8 @@ object DialogFactory: DefaultLifecycleObserver {
     private var activity: AppCompatActivity? = null
 
     fun setup(activity: AppCompatActivity) {
-        this.activity?.lifecycle?.removeObserver(this) // Necessary to fix vulnerabilities from multiple activities
+        // Necessary to fix vulnerabilities from multiple activities.
+        this.activity?.lifecycle?.removeObserver(this)
         this.activity = activity
         activity.lifecycle.addObserver(this)
     }
@@ -22,8 +23,8 @@ object DialogFactory: DefaultLifecycleObserver {
         activity = null
     }
 
-    // Rarely activity can be destroyed after a button is pressed but before callback, previously crashing here
-    @Suppress("DEPRECATION") // THEME_HOLO_DARK is dank
+    // Rarely activity can be destroyed after a button is pressed but before callback, previously crashing here.
+    @Suppress("DEPRECATION") // THEME_HOLO_DARK is dank.
     private fun buildStyle() = activity?.let { AlertDialog.Builder(it, THEME_HOLO_DARK) }
 
     fun leaveCurrentGame(onExit: () -> Unit, onMainMenu: () -> Unit): AlertDialog? =
