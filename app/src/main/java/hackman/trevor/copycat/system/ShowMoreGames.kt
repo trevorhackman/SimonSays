@@ -5,24 +5,23 @@ import android.content.Intent
 import android.net.Uri
 
 /**
- * Show a page full of my other apps in the Google Play Store
- * Attempts to open in the market (Google Play Store)
- * If not possible attempts to open in a web browser
+ * Show a page full of my other apps in the Google Play Store.
+ * Attempts to open in the market (Google Play Store).
+ * If not possible attempts to open in a web browser.
  */
 class ShowMoreGames private constructor(private val context: Context) {
     companion object {
         // This will need to be adjusted if I ever change my developer name
-        private const val developerName = "Hackman"
-        private const val marketLink = "market://search?q=pub:$developerName"
-        private const val webLink =
-            "https://play.google.com/store/search?q=pub:$developerName&c=apps"
+        private const val DEVELOPER_NAME = "Hackman"
+        private const val MARKET_LINK = "market://search?q=pub:$DEVELOPER_NAME"
+        private const val WEB_LINK = "https://play.google.com/store/search?q=pub:$DEVELOPER_NAME&c=apps"
 
         private val marketIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(marketLink)
+            data = Uri.parse(MARKET_LINK)
         }
 
         private val webIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(webLink)
+            data = Uri.parse(WEB_LINK)
         }
 
         fun startMoreGamesIntent(context: Context) = ShowMoreGames(context).startMoreGamesIntent()
