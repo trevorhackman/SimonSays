@@ -4,12 +4,15 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import hackman.trevor.billing.Billing
 import hackman.trevor.billing.BillingManager
-import hackman.trevor.copycat.system.*
+import hackman.trevor.copycat.system.SaveData
+import hackman.trevor.copycat.system.TESTING
+import hackman.trevor.copycat.system.flog
+import hackman.trevor.copycat.system.log
+import hackman.trevor.copycat.system.report
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
 import hackman.trevor.copycat.ui.main.MainFragment
@@ -81,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         } else log("TESTING")
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (activityInterface.onBackPressed?.invoke() == BackEvent.Consumed) return
         super.onBackPressed()
