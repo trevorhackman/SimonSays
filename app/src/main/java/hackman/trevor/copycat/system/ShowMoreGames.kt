@@ -2,7 +2,7 @@ package hackman.trevor.copycat.system
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 
 /**
  * Show a page full of my other apps in the Google Play Store.
@@ -17,12 +17,14 @@ class ShowMoreGames private constructor(private val context: Context) {
         private const val WEB_LINK = "https://play.google.com/store/search?q=pub:$DEVELOPER_NAME&c=apps"
 
         private val marketIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(MARKET_LINK)
+            data = MARKET_LINK.toUri()
         }
 
         private val webIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(WEB_LINK)
+            data = WEB_LINK.toUri()
         }
+
+        private val emptyIntentChooser = Intent.createChooser(Intent(), null)
 
         fun startMoreGamesIntent(context: Context) = ShowMoreGames(context).startMoreGamesIntent()
     }
@@ -34,8 +36,7 @@ class ShowMoreGames private constructor(private val context: Context) {
             else -> openEmptyChooser()
         }
 
-    private fun canOpenWithGooglePlay() =
-        marketIntent.resolveActivity(context.packageManager) != null
+    private fun canOpenWithGooglePlay() = marketIntent.resolveActivity(context.packageManager) != null
 
     private fun openWithGooglePlay() = context.startActivity(marketIntent)
 
@@ -44,7 +45,7 @@ class ShowMoreGames private constructor(private val context: Context) {
     private fun openWithWebBrowser() = context.startActivity(webIntent)
 
     /**
-     * In the extremely rare case where a phone cannot open a market or web link,
+     * In the extremely rare case where a device cannot open a market or web link,
      * Should create an empty chooser with message "No apps can perform this action"
      */
     private fun openEmptyChooser() = context.startActivity(Intent.createChooser(webIntent, null))
