@@ -4,45 +4,22 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import hackman.trevor.billing.Billing
-import hackman.trevor.billing.BillingResponse.BILLING_UNAVAILABLE
-import hackman.trevor.billing.BillingResponse.NETWORK_ERROR
-import hackman.trevor.billing.BillingResponse.SUCCESSFUL_PURCHASE
-import hackman.trevor.billing.BillingResponse.UNKNOWN_ERROR
-import hackman.trevor.copycat.BackEvent
-import hackman.trevor.copycat.Orientation
-import hackman.trevor.copycat.ViewBindingFragment
+import hackman.trevor.copycat.*
 import hackman.trevor.copycat.databinding.MainFragmentBinding
 import hackman.trevor.copycat.databinding.TitleBinding
-import hackman.trevor.copycat.fragmentInterface
 import hackman.trevor.copycat.logic.game.GamePlayer
 import hackman.trevor.copycat.logic.game.GameState
 import hackman.trevor.copycat.logic.remove_ads.Prices
+import hackman.trevor.copycat.logic.remove_ads.Products
 import hackman.trevor.copycat.logic.settings.toSound
-import hackman.trevor.copycat.logic.viewmodels.FailureViewModel
-import hackman.trevor.copycat.logic.viewmodels.FailureViewModelImpl
-import hackman.trevor.copycat.logic.viewmodels.GameModesViewModel
-import hackman.trevor.copycat.logic.viewmodels.GameModesViewModelImpl
-import hackman.trevor.copycat.logic.viewmodels.GameViewModel
-import hackman.trevor.copycat.logic.viewmodels.GameViewModelImpl
-import hackman.trevor.copycat.logic.viewmodels.Menu
-import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
-import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModelImpl
-import hackman.trevor.copycat.logic.viewmodels.SettingsViewModel
-import hackman.trevor.copycat.logic.viewmodels.SettingsViewModelImpl
-import hackman.trevor.copycat.observe
-import hackman.trevor.copycat.requireValue
+import hackman.trevor.copycat.logic.viewmodels.*
 import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.getString
-import hackman.trevor.copycat.ui.DialogFactory
-import hackman.trevor.copycat.ui.fadeIn
-import hackman.trevor.copycat.ui.fadeOut
-import hackman.trevor.copycat.ui.fade_in_500
-import hackman.trevor.copycat.ui.fade_out_300
-import hackman.trevor.copycat.ui.fade_out_900
+import hackman.trevor.copycat.ui.*
 import hackman.trevor.copycat.ui.game_modes.popupText
-import hackman.trevor.copycat.ui.showCorrectly
+import hackman.trevor.tlibrary.billing.BillingResponse
+import hackman.trevor.tlibrary.billing.BillingResponse.FailToStartPurchase.*
 
 class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBinding::inflate) {
 
@@ -86,8 +63,7 @@ class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBindin
         setupRemoveAdsMenu()
         setupInstructions()
         setupAdContainer()
-        observeBillingSkuDetails()
-        observeBillingRetrySku()
+        observeBillingProductDetailsResponse()
         observeBillingResponse()
         observeMenusInBackground()
         observeFailureMenu()
@@ -124,26 +100,50 @@ class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBindin
 
     private fun setupAdContainer() = binding.adContainer.setup(viewLifecycle)
 
-    private fun observeBillingSkuDetails() = observe(Billing.liveData.skuDetails) {
-        removeAdsViewModel.prices.value = Prices(it[0].price, it[1].price, it[2].price, it[3].price)
+    private fun observeBillingProductDetailsResponse() = observe(removeAdsViewModel.billingViewModel.billingData.productDetailsBillingResponse) {
+        val productToDisplayPriceMap = removeAdsViewModel.billingViewModel.billingData.productToDisplayPriceMap
+        removeAdsViewModel.prices.value = Prices(
+            productToDisplayPriceMap[Products.RemoveAds1]?.displayPrice ?: "N/A",
+            productToDisplayPriceMap[Products.RemoveAds2]?.displayPrice ?: "N/A",
+            productToDisplayPriceMap[Products.RemoveAds3]?.displayPrice ?: "N/A",
+            productToDisplayPriceMap[Products.RemoveAds4]?.displayPrice ?: "N/A",
+        )
     }
 
-    private fun observeBillingRetrySku() = observe(Billing.liveData.retrySkuRetrievalSuccess) {
-        when {
-            gameViewModel.gameState.requireValue().inGame -> return@observe
-            it -> removeAdsViewModel.setInBackground(false)
-            else -> DialogFactory.failedNetwork().showCorrectly()
+    private fun observeBillingResponse() =
+        observe(removeAdsViewModel.billingViewModel.billingData.billingResponse) { billingResponse ->
+            when (billingResponse) {
+                is BillingResponse.FailToStartPurchase -> {
+                    when (billingResponse) {
+                        BillingClientIsConnecting -> DialogFactory.billingUnavailable().showCorrectly()
+                        BillingClientIsNotConnected -> DialogFactory.billingUnavailable().showCorrectly()
+                        NetworkError -> DialogFactory.failedNetwork().showCorrectly()
+                        ProductDetailsFeatureNotSupported -> DialogFactory.with(
+                            title = "Something went wrong: ProductDetailsFeatureNotSupported",
+                            message = "Your version of Google Play Store is outdated. Please update it and try again."
+                        ).showCorrectly()
+                        QueryingPreviousPurchases -> DialogFactory.with(
+                            title = "Something went wrong: QueryingPreviousPurchases",
+                            message = "Querying previous purchases, please try again."
+                        ).showCorrectly()
+                        QueryingProductDetails -> DialogFactory.with(
+                            title = "Something went wrong: QueryingProductDetails",
+                            message = "Querying product details, please try again."
+                        ).showCorrectly()
+                        is UnknownError -> DialogFactory.unknownError(
+                            "Unknown error: ${billingResponse.errorMessage}"
+                        ).showCorrectly()
+                    }
+                }
+                BillingResponse.SuccessfulPurchase -> {
+                    DialogFactory.successfulNoAdsPurchase().showCorrectly()
+                }
+                else -> {
+                    // Not messaging for all billing responses because Google's flow already does a good job messaging the
+                    // user if there's a failure within the purchase flow
+                }
+            }
         }
-    }
-
-    private fun observeBillingResponse() = observe(Billing.liveData.billingResponse) {
-        when (it) {
-            SUCCESSFUL_PURCHASE -> DialogFactory.successfulNoAdsPurchase().showCorrectly()
-            BILLING_UNAVAILABLE -> DialogFactory.billingUnavailable().showCorrectly()
-            NETWORK_ERROR -> DialogFactory.failedNetwork().showCorrectly()
-            UNKNOWN_ERROR -> DialogFactory.unknownError(it.errorMessage).showCorrectly()
-        }
-    }
 
     private fun observeMenusInBackground() =
         listOf(settingsViewModel, gameModesViewModel, removeAdsViewModel).forEach(::observeMenu)
@@ -218,7 +218,11 @@ class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBindin
         }
     }
 
-    private fun fadeTitleAndExtraButtons(fadeIn: Boolean, inSpeed: Long = fade_in_500, outSpeed: Long = fade_out_300) {
+    private fun fadeTitleAndExtraButtons(
+        fadeIn: Boolean,
+        inSpeed: Long = fade_in_500,
+        outSpeed: Long = fade_out_300
+    ) {
         binding.fadeTop.pivotY = binding.fadeTop.y
         if (fadeIn) {
             includedTitleBinding.mainTitle.fadeIn().duration = inSpeed
@@ -249,8 +253,8 @@ class MainFragment : ViewBindingFragment<MainFragmentBinding>(MainFragmentBindin
 
     // Not worth presenting dialog if just started game
     private fun inLongGame() =
-            gameViewModel.roundNumber.requireValue().roundNumber > 1 &&
-            gameViewModel.gameState.requireValue().inGame
+        gameViewModel.roundNumber.requireValue().roundNumber > 1 &&
+                gameViewModel.gameState.requireValue().inGame
 
     private var isInitial = true
 

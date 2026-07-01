@@ -4,12 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isEmpty
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import hackman.trevor.billing.Billing
-import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.observe
+import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.ads.AdManager
+import hackman.trevor.tlibrary.billing.Ownership
 
 class AdContainer @JvmOverloads constructor(
     context: Context,
@@ -36,7 +37,7 @@ class AdContainer @JvmOverloads constructor(
     }
 
     // Remove banner ads from current session when purchase is made
-    private fun observeBillingOwnership() = observe(Billing.liveData.ownership) {
+    private fun observeBillingOwnership() = observe(SaveData.isNoAdsOwnedObservable) {
         if (it == Ownership.Owned) {
             removeAllViews()
         }
@@ -55,7 +56,7 @@ class AdContainer @JvmOverloads constructor(
     private fun onInitial() {
         rememberSize()
         initial = false
-        if (childCount == 0) AdManager // addViewIfNotNull(AdManager.getBannerAd())
+        if (AdManager.IS_ENABLED && isEmpty()) AdManager // addViewIfNotNull(AdManager.getBannerAd())
     }
 
     private fun rememberSize() {

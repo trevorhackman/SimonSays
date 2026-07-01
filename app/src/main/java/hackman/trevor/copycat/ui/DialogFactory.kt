@@ -93,6 +93,14 @@ object DialogFactory: DefaultLifecycleObserver {
             ?.setMessage(R.string.dialog_ads_disabled_for_this_version_of_the_app_message)
             ?.setNeutralButton(R.string.dialog_ok_button, null)
             ?.create()
+
+    // Unlike the other pre-set ones, this is not using string resources.
+    fun with(title: String, message: String): AlertDialog? =
+        buildStyle()
+            ?.setTitle(title)
+            ?.setMessage(message)
+            ?.setNeutralButton(R.string.dialog_ok_button, null)
+            ?.create()
 }
 
 // Don't show status bar when dialog appears. Dialogs are so overly complicated. Foogle.

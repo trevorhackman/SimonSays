@@ -3,11 +3,22 @@ package hackman.trevor.copycat.system
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.logic.game.GameMode
 import hackman.trevor.copycat.logic.settings.ColorSet
 import hackman.trevor.copycat.logic.settings.FailureSound
 import hackman.trevor.copycat.logic.settings.Speed
+import hackman.trevor.tlibrary.billing.Ownership
+import hackman.trevor.tlibrary.observe.MutableObservable
+import hackman.trevor.tlibrary.observe.Observable
+
+object SaveDataSetup {
+
+    lateinit var application: Application
+
+    fun setup(application: Application) {
+        this.application = application
+    }
+}
 
 /**
  * Wrapper object handling persistent data via [SharedPreferences]
@@ -16,11 +27,7 @@ import hackman.trevor.copycat.logic.settings.Speed
  */
 object SaveData {
 
-    private lateinit var application: Application
-
-    fun setup(application: Application) {
-        this.application = application
-    }
+    private val application = SaveDataSetup.application
 
     private val preferences by lazy {
         application.getSharedPreferences("default", Context.MODE_PRIVATE)
@@ -31,9 +38,13 @@ object SaveData {
     }
 
     // Whether or not noAds has been purchased. Only show ads if not owned
+    // TODO, using ordinals is terrible b/c reordering the enum entries will change what's saved.
     var isNoAdsOwned: Ownership
-        get() = Ownership.entries[preferences.safeGetInt(isNoAdsOwnedKey, Ownership.Unknown.ordinal)]
+        get() = Ownership.entries[preferences.safeGetInt(isNoAdsOwnedKey, Ownership.Unconfirmed.ordinal)]
         set(value) = set(isNoAdsOwnedKey, value.ordinal)
+
+    private val _isNoAdsOwnedObservable = MutableObservable(isNoAdsOwned)
+    val isNoAdsOwnedObservable: Observable<Ownership> = _isNoAdsOwnedObservable
 
     // Remember the game speed selected in the settings
     var speed: Speed

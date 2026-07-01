@@ -20,5 +20,6 @@ interface Menu {
 
     val inBackground: LiveData<Boolean>
 
+    // TODO, weird ugly way of saying show() and hide()
     fun setInBackground(inBackground: Boolean)
 }

@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import hackman.trevor.billing.Billing
-import hackman.trevor.billing.Ownership
 import hackman.trevor.copycat.databinding.RemoveAdsMenuBinding
 import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
 import hackman.trevor.copycat.observe
@@ -15,6 +13,7 @@ import hackman.trevor.copycat.system.displayHeight
 import hackman.trevor.copycat.system.displayWidth
 import hackman.trevor.copycat.ui.fadeIn
 import hackman.trevor.copycat.ui.fadeOut
+import hackman.trevor.tlibrary.billing.Ownership
 import kotlin.math.min
 
 class RemoveAdsMenu @JvmOverloads constructor(
@@ -32,6 +31,7 @@ class RemoveAdsMenu @JvmOverloads constructor(
         this.lifecycle = lifecycle
         setupButtons()
         setupCloseButton()
+        setupDescription()
         observeInBackground()
         observeBillingOwnership()
     }
@@ -42,6 +42,10 @@ class RemoveAdsMenu @JvmOverloads constructor(
         removeAdsViewModel.closeClicked()
     }
 
+    private fun setupDescription() {
+        binding.adsMenuDescription.setup(removeAdsViewModel, lifecycle)
+    }
+
     private fun observeInBackground() = observe(removeAdsViewModel.inBackground) {
         if (it) fadeOut()
         else fadeIn(startAction = { removeAdsViewModel.isAnimatingIn = true }) {
@@ -50,7 +54,7 @@ class RemoveAdsMenu @JvmOverloads constructor(
     }
 
     // Close ad menu when purchase is made
-    private fun observeBillingOwnership() = observe(Billing.liveData.ownership) {
+    private fun observeBillingOwnership() = observe(removeAdsViewModel.billingViewModel.billingData.ownership) {
         if (it == Ownership.Owned) removeAdsViewModel.setInBackground(true)
     }
 

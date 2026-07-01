@@ -6,16 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import hackman.trevor.billing.Billing
-import hackman.trevor.billing.BillingManager
-import hackman.trevor.copycat.system.SaveData
-import hackman.trevor.copycat.system.TESTING
-import hackman.trevor.copycat.system.flog
-import hackman.trevor.copycat.system.log
-import hackman.trevor.copycat.system.report
+import hackman.trevor.copycat.system.*
+import hackman.trevor.copycat.system.ads.AdManager
 import hackman.trevor.copycat.system.sound.SoundManager
 import hackman.trevor.copycat.ui.DialogFactory
 import hackman.trevor.copycat.ui.main.MainFragment
+import hackman.trevor.tlibrary.billing.BillingViewModelImpl
+import hackman.trevor.tlibrary.billing.Ownership
+import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
     private val activityInterface: ActivityInterface by activityInterface()
@@ -46,34 +44,36 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun initSaveData() = SaveData.setup(applicationContext as Application)
+    private fun initSaveData() = SaveDataSetup.setup(applicationContext as Application)
 
     private fun initDialogFactory() = DialogFactory.setup(this)
 
     private fun initAdsIfNotOwned() {
-        // TODO Disabling ads for everyone
-        // if (SaveData.isNoAdsOwned != Ownership.Owned) AdManager.setup(this)
+        if (AdManager.IS_ENABLED && SaveData.isNoAdsOwned != Ownership.Owned) AdManager // AdManager.setup(this)
     }
 
     private fun initSounds() = SoundManager.setup(this)
 
     private fun initBilling() {
-        Billing.create()
-        Billing.liveData.apply {
-            observe(log) {
-                log(it)
-            }
-            observe(flog) {
-                flog(it)
-            }
-            observe(report) {
-                report(it)
-            }
-            observe(ownership) {
-                SaveData.isNoAdsOwned = it
-            }
-        }
-        BillingManager.setup(this)
+        BillingViewModelImpl.activityRef = WeakReference(this)
+
+        // OLD, TODO remove, once new billing library has logging that can replace this
+//        Billing.create()
+//        Billing.liveData.apply {
+//            observe(log) {
+//                log(it)
+//            }
+//            observe(flog) {
+//                flog(it)
+//            }
+//            observe(report) {
+//                report(it)
+//            }
+//            observe(ownership) {
+//                SaveData.isNoAdsOwned = it
+//            }
+//        }
+//        BillingManager.setup(this)
     }
 
     private fun initCrashlytics() {

@@ -2,4 +2,9 @@
 <resources>
     <string name="remove_ads_title">Remove Ads</string>
     <string name="remove_ads_description">Any purchase will permanently remove ads! Thank you for the support.</string>
+    <string name="remove_ads_donation_description">Ads are disabled for this version of the app! However, if you\'d still like to support me you may make any purchase, thank you!</string>
+
+    <string name="remove_ads_price_not_available">N/A</string>
+    <string name="remove_ads_price_network_error">Network Error: Please check your internet connection or try again later.</string>
+    <string name="remove_ads_price_unknown_error">Unknown Error: %s</string>
 </resources>

@@ -10,6 +10,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        // For consuming my library modules locally:
+        // Run ./gradlew publishToMavenLocal in local library.
+        // Then this lets this project add dependencies to them.
+        mavenLocal()
     }
 }
 rootProject.name = "Simon Says"

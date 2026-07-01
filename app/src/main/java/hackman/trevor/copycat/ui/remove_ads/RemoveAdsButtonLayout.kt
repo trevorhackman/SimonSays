@@ -7,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import hackman.trevor.copycat.R
-import hackman.trevor.copycat.logic.remove_ads.Product
+import hackman.trevor.copycat.logic.remove_ads.Products
 import hackman.trevor.copycat.logic.viewmodels.RemoveAdsViewModel
 import hackman.trevor.copycat.observe
 
@@ -39,10 +39,12 @@ class RemoveAdsButtonLayout @JvmOverloads constructor(
     }
 
     private fun setupButtons() = buttons.forEachIndexed { index, button ->
-        button.setup(removeAdsViewModel, Product.entries[index])
+        button.setup(removeAdsViewModel, Products.ALL_PRODUCTS[index])
     }
 
+    // Set text to prices
     private fun observePrices() = observe(removeAdsViewModel.prices) {
+        it ?: return@observe
         buttons[0].text = it.price1
         buttons[1].text = it.price2
         buttons[2].text = it.price3

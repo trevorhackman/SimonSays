@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/game_modes_buttons_margin"
+        android:text="@string/remove_ads_price_not_available"
         app:layout_constraintRight_toLeftOf="@id/remove_ads_vertical_guideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="$1.49" />
@@ -27,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/game_modes_buttons_margin"
+        android:text="@string/remove_ads_price_not_available"
         app:layout_constraintLeft_toRightOf="@id/remove_ads_vertical_guideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="$2.99" />
@@ -35,6 +37,7 @@
         android:id="@+id/remove_ads_product_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/remove_ads_price_not_available"
         android:layout_margin="@dimen/game_modes_buttons_margin"
         app:layout_constraintRight_toLeftOf="@id/remove_ads_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/remove_ads_product_1"
@@ -45,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/game_modes_buttons_margin"
+        android:text="@string/remove_ads_price_not_available"
         app:layout_constraintLeft_toRightOf="@id/remove_ads_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/remove_ads_product_2"
         tools:text="$9.99" />

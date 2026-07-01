@@ -1,24 +1,28 @@
 package hackman.trevor.copycat.logic.viewmodels
 
-import androidx.lifecycle.MutableLiveData
-import hackman.trevor.billing.Billing
-import hackman.trevor.billing.BillingManager
 import hackman.trevor.copycat.logic.remove_ads.Prices
-import hackman.trevor.copycat.logic.remove_ads.Product
-import hackman.trevor.copycat.requireValue
+import hackman.trevor.copycat.logic.remove_ads.Products
+import hackman.trevor.copycat.system.SaveData
 import hackman.trevor.copycat.system.sound.SoundManager
+import hackman.trevor.tlibrary.billing.BillingViewModel
+import hackman.trevor.tlibrary.billing.BillingViewModelImpl
+import hackman.trevor.tlibrary.billing.Product
+import hackman.trevor.tlibrary.observe.MutableObservable
 
 class RemoveAdsViewModelImpl : MenuViewModel(), RemoveAdsViewModel {
-    override val prices = MutableLiveData<Prices>()
 
-    override val isReadyToShow
+    override val billingViewModel = BillingViewModelImpl().apply {
+        onAppStart(SaveData.isNoAdsOwned, Products.ALL_PRODUCTS)
+    }
+
+    override val prices = MutableObservable<Prices?>(null)
+
+    override val isReadyToShowPrices
         get() = prices.value != null
 
     override fun productClicked(product: Product) {
         SoundManager.click.play()
-        val skuDetails = Billing.liveData.skuDetails.requireValue()
-        val skuDetail = skuDetails[Product.entries.indexOf(product)]
-        BillingManager.startPurchaseFlow(skuDetail)
+        billingViewModel.startPurchaseFlow(product)
     }
 
     override fun closeClicked() {
@@ -28,9 +32,12 @@ class RemoveAdsViewModelImpl : MenuViewModel(), RemoveAdsViewModel {
 }
 
 interface RemoveAdsViewModel : Menu {
-    val prices: MutableLiveData<Prices>
 
-    val isReadyToShow: Boolean
+    val billingViewModel: BillingViewModel
+
+    val prices: MutableObservable<Prices?>
+
+    val isReadyToShowPrices: Boolean
 
     fun productClicked(product: Product)
 
