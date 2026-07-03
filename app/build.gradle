@@ -1,13 +1,12 @@
 plugins {
     id "com.android.application"
-    id "org.jetbrains.kotlin.android"
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
 }
 
 android {
     namespace "hackman.trevor.copycat"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId "hackman.trevor.copycat"
@@ -53,7 +52,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.2.1"
 
     // Import the Firebase BoM.
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
     implementation("com.google.firebase:firebase-crashlytics")
 
     testImplementation "junit:junit:4.13.2"
