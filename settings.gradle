@@ -13,6 +13,7 @@ dependencyResolutionManagement {
 
         // For consuming my library modules locally:
         // Run ./gradlew publishToMavenLocal in local library.
+        // Then run Gradle Sync for this project.
         // Then this lets this project add dependencies to them.
         mavenLocal()
     }
